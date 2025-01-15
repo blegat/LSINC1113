@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.0
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -80,7 +80,11 @@ qa(
 md"## Le théorème fondamental de l'algèbre"
 
 # ╔═╡ 585e40db-66b5-45fc-8720-291810566ce4
+<<<<<<< HEAD
 md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles)."
+=======
+md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles). Dans cette liste de ``n`` racines, certaines apparaissent plusieurs fois. Mais qu'est-ce que ça signifie qu'une racine soit racine plusieurs fois ?"
+>>>>>>> 46b72a8e8b4728c74c4890996f39a78bf4cb8fd7
 
 # ╔═╡ 64777fee-6b30-417a-a705-279c710b67cf
 md"""
@@ -410,7 +414,7 @@ Polynomials = "~4.0.11"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.1"
+julia_version = "1.11.2"
 manifest_format = "2.0"
 project_hash = "c2c231bc7df08f9ebe667e016a851454a5c33c7e"
 
@@ -1749,8 +1753,8 @@ version = "1.4.1+1"
 # ╟─cf365493-4628-428a-9580-dda69cab9684
 # ╟─f5bd1e83-166d-46b5-a201-bc9ea0ae6e80
 # ╟─585e40db-66b5-45fc-8720-291810566ce4
-# ╟─58046703-4f7d-4668-9c4a-6875aec3f383
 # ╟─64777fee-6b30-417a-a705-279c710b67cf
+# ╟─bcbcd169-7cb1-4b68-9ac9-d8bd421f59a4
 # ╟─0ea1f264-d98e-4773-9ffd-5a070b7afc1b
 # ╟─3951bd8e-071c-416a-b4a3-a291d6e0a935
 # ╟─40de804e-0392-4389-9e75-cfc01681dd73
