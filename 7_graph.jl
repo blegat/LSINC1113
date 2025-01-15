@@ -844,7 +844,7 @@ Modifier l'implémentation pour utiliser cette formule. Est-ce plus rapide ? Pou
 """
 
 # ╔═╡ d8d21aa6-36b8-4498-82e5-5fcbbd9dbe46
-qa(md"Quelle est la complexité de cet algorithme ?", md"???")
+qa(md"Quelle est la complexité de cet algorithme ?", md"\( O(V + E) \)")
 
 # ╔═╡ 46192b0c-e856-4e96-94bc-d691d201b391
 qa(md"Trouve-t-il le plus court chemin ?", md"Non, l'algorithme DFS a d'autres utilité comme le calcul de composantes fortement connexes ou tri topologique mais pas le calcul de plus court chemin. Un exception est le calcul de plus cours chemin dans un DAG. On peut alors le calculer en top-down avec memoïsation ce qui ressemble à un DFS.")
@@ -853,13 +853,13 @@ qa(md"Trouve-t-il le plus court chemin ?", md"Non, l'algorithme DFS a d'autres u
 md"L'algorithme BFS résoud le problème de shortest path dans un graphe dirigé dont tous les poids sont 1."
 
 # ╔═╡ 18e81794-8275-4f90-a18a-8052aaf34bc6
-qa(md"Quelle est la complexité de l'algorithme BFS ?", md"???")
+qa(md"Quelle est la complexité de l'algorithme BFS ?", md"\( O(V + E) \)")
 
 # ╔═╡ 2b1634c2-71fd-4fc3-afda-04721bef791d
 md"L'algorithme de Dijkstra résoud le problème de shortest path dans un graph dirigé quand tous les poids sont positifs."
 
 # ╔═╡ f34ffdae-4c4f-4358-9b7d-4125e82e781d
-qa(md"Quelle est la complexité de l'algorithme Dijkstra ?", md"???")
+qa(md"Quelle est la complexité de l'algorithme Dijkstra ?", md"\( O((V + E) \log V) \)")
 
 # ╔═╡ e37ed884-1fd7-4fbe-ac7f-9931d595b3d3
 qa(md"Un fois qu'un noeud `v` est retourné par `dequeue!`, peut-il encore satisfaire `d < dist[next]` pour `v == next` par la suite ?", md"Non, les noeuds suivant retournés par `dequeue!` auront une valeur dans `dist` plus élevée donc `d` sera encore plus élevé donc on aura `d > d[v]` durant le reste de l'algorithme.")
