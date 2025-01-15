@@ -82,27 +82,45 @@ md"## Le théorème fondamental de l'algèbre"
 # ╔═╡ 585e40db-66b5-45fc-8720-291810566ce4
 md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles)."
 
-# ╔═╡ 58046703-4f7d-4668-9c4a-6875aec3f383
-md"### La multiplicité"
-
 # ╔═╡ 64777fee-6b30-417a-a705-279c710b67cf
-md"## Propriété des paires conjuguées
-
-Si \( P(x) \) a des coefficients réels et qu'une racine complexe \( z = a + ib \) (avec \( a, b \in \mathbb{R} \)) est une solution, alors la racine conjuguée \( \overline{z} = a - ib \) est également une solution.
-
+md"""
 ### Multiplicité
 
-La multiplicité d'une racine \( z \) est définie comme le nombre de fois où \( z \) apparaît comme solution de \( P(x) = 0 \).  
-Cela revient à l'exposant du facteur \( (x - z) \) dans la factorisation du polynôme. Par exemple, si :  
-\[
+Une valeur ``z`` est une racine du polynôme ``P(x)`` si ``P(z) = 0``.
+Si ``z`` est également une racine de la dérivée, c'est à dire ``P'(z) = 0`` alors ``z`` est une racine double.
+En général, ``z`` est une racine de multiplicité ``m`` si ``P(z) = P'(z) = \cdots = P^{(m)}(z) = 0`` où ``P^{(k)}`` est la dérivée ``m``ième de ``P``.
+
+De façon équivalente, ça revient à l'exposant du facteur ``(x - z)`` dans la factorisation du polynôme. Par exemple, si :
+```math
 P(x) = (x - z)^m \cdot Q(x),
-\]
-où \( Q(z) \neq 0 \), alors \( z \) est une racine de multiplicité \( m \).
+```
+où ``Q(z) \neq 0``, alors ``z`` est une racine de multiplicité ``m``.
 
-### Cas des paires conjuguées
+### Propriété des paires conjuguées
 
-Si \( z = a + ib \) est une racine de multiplicité \( m \), alors la racine conjuguée \( \overline{z} = a - ib \) possède également une multiplicité \( m \).
-"
+Si ``z = a + ib`` est une racine de multiplicité ``m``, alors la racine conjuguée ``\overline{z} = a - ib`` possède également une multiplicité ``m``.
+"""
+
+# ╔═╡ bcbcd169-7cb1-4b68-9ac9-d8bd421f59a4
+qa(
+	html"Preuve",
+	md"""
+Comme les coefficients ``a_i`` sont réel, ils sont leur propre conjugués donc ``\overline{a_i} = a_i``.
+Si ``P^{(k)}(z) = 0``, on a donc:
+```math
+\begin{align}
+P^{(k)}(\bar{z})
+& = a_0 + a_1\bar{z} + a_2\bar{z}^2 + \cdots + a_d\bar{z}^d\\
+	& = a_0 + a_1\bar{z} + a_2\overline{z^2} + \cdots + a_d\overline{z^d}\\
+& = \overline{\overline{a_0} + \overline{a_1}z + \overline{a_2}z^2 + \cdots + \overline{a_d}z^d}\\
+& = \overline{a_0 + a_1z + a_2z^2 + \cdots + a_dz^d}\\
+& = \overline{P(z)}
+= \bar{0}
+= 0.
+\end{align}
+```
+""",
+)
 
 # ╔═╡ 0ea1f264-d98e-4773-9ffd-5a070b7afc1b
 md"### Le cas quadratique"
