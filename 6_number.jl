@@ -48,8 +48,10 @@ md"""
 """
 
 # ╔═╡ 7bad8c6c-45c7-402f-ad59-6857e9268901
-qa(md"Comment prouver que l'égalité ``ax + by = c`` implique que ``\text{gcd}(x, y)`` divise ``c`` ?",
+qa(md"Comment prouver que l'égalité ``ax + by = c`` implique que ``\text{gcd}(a, b)`` divise ``c`` ?",
 md"""
+Soit ``g = \text{gcd}(a, b)``. Par définition, il existe ``\alpha, \beta`` tels que ``a = \alpha g`` et ``b = \beta g``.
+On a alors ``c = ax + by = (\alpha x + \beta y) g`` ce qui implique que ``c`` est un multiple de ``g``.
 """,)
 
 # ╔═╡ cd481f6c-66f4-4ebf-9769-c3edc24f403b
