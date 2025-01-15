@@ -93,7 +93,7 @@ Si \( P(x) \) a des coefficients réels et qu'une racine complexe \( z = a + ib 
 ### Multiplicité
 
 La multiplicité d'une racine \( z \) est définie comme le nombre de fois où \( z \) apparaît comme solution de \( P(x) = 0 \).  
-Cela revient à l'exposant du facteur \( (x - z) \) dans la décomposition factorielle du polynôme. Par exemple, si :  
+Cela revient à l'exposant du facteur \( (x - z) \) dans la factorisation du polynôme. Par exemple, si :  
 \[
 P(x) = (x - z)^m \cdot Q(x),
 \]
