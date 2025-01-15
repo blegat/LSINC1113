@@ -80,11 +80,7 @@ qa(
 md"## Le théorème fondamental de l'algèbre"
 
 # ╔═╡ 585e40db-66b5-45fc-8720-291810566ce4
-<<<<<<< HEAD
-md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles)."
-=======
 md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles). Dans cette liste de ``n`` racines, certaines apparaissent plusieurs fois. Mais qu'est-ce que ça signifie qu'une racine soit racine plusieurs fois ?"
->>>>>>> 46b72a8e8b4728c74c4890996f39a78bf4cb8fd7
 
 # ╔═╡ 64777fee-6b30-417a-a705-279c710b67cf
 md"""
