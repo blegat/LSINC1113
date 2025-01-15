@@ -266,8 +266,8 @@ md"""
 La transformée de Fourier continue et son inverse:
 ```math
 \begin{align}
-  F(\xi) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi\xi t} \text{d}\xi\\
-  f(t) & = \int_{-\infty}^\infty F(\xi) e^{i 2\pi\xi t} \text{d}t
+  F(\xi) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi\xi t} \text{d}t\\
+  f(t) & = \int_{-\infty}^\infty F(\xi) e^{i 2\pi\xi t} \text{d}\xi
 \end{align}
 ```
 La transformée de Fourier discrète et son inverse:
