@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.0
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -80,29 +80,47 @@ qa(
 md"## Le théorème fondamental de l'algèbre"
 
 # ╔═╡ 585e40db-66b5-45fc-8720-291810566ce4
-md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles)."
-
-# ╔═╡ 58046703-4f7d-4668-9c4a-6875aec3f383
-md"### La multiplicité"
+md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a ``n`` racines complexes (ce qui n'exclut pas que certaines d'entre elles aient une partie imaginaire nulle et donc soient réelles). Dans cette liste de ``n`` racines, certaines apparaissent plusieurs fois. Mais qu'est-ce que ça signifie qu'une racine soit racine plusieurs fois ?"
 
 # ╔═╡ 64777fee-6b30-417a-a705-279c710b67cf
-md"## Propriété des paires conjuguées
-
-Si \( P(x) \) a des coefficients réels et qu'une racine complexe \( z = a + ib \) (avec \( a, b \in \mathbb{R} \)) est une solution, alors la racine conjuguée \( \overline{z} = a - ib \) est également une solution.
-
+md"""
 ### Multiplicité
 
-La multiplicité d'une racine \( z \) est définie comme le nombre de fois où \( z \) apparaît comme solution de \( P(x) = 0 \).  
-Cela revient à l'exposant du facteur \( (x - z) \) dans la factorisation du polynôme. Par exemple, si :  
-\[
+Une valeur ``z`` est une racine du polynôme ``P(x)`` si ``P(z) = 0``.
+Si ``z`` est également une racine de la dérivée, c'est à dire ``P'(z) = 0`` alors ``z`` est une racine double.
+En général, ``z`` est une racine de multiplicité ``m`` si ``P(z) = P'(z) = \cdots = P^{(m)}(z) = 0`` où ``P^{(k)}`` est la dérivée ``m``ième de ``P``.
+
+De façon équivalente, ça revient à l'exposant du facteur ``(x - z)`` dans la factorisation du polynôme. Par exemple, si :
+```math
 P(x) = (x - z)^m \cdot Q(x),
-\]
-où \( Q(z) \neq 0 \), alors \( z \) est une racine de multiplicité \( m \).
+```
+où ``Q(z) \neq 0``, alors ``z`` est une racine de multiplicité ``m``.
 
-### Cas des paires conjuguées
+### Propriété des paires conjuguées
 
-Si \( z = a + ib \) est une racine de multiplicité \( m \), alors la racine conjuguée \( \overline{z} = a - ib \) possède également une multiplicité \( m \).
-"
+Si ``z = a + ib`` est une racine de multiplicité ``m``, alors la racine conjuguée ``\overline{z} = a - ib`` possède également une multiplicité ``m``.
+"""
+
+# ╔═╡ bcbcd169-7cb1-4b68-9ac9-d8bd421f59a4
+qa(
+	html"Preuve",
+	md"""
+Comme les coefficients ``a_i`` sont réel, ils sont leur propre conjugués donc ``\overline{a_i} = a_i``.
+Si ``P^{(k)}(z) = 0``, on a donc:
+```math
+\begin{align}
+P^{(k)}(\bar{z})
+& = a_0 + a_1\bar{z} + a_2\bar{z}^2 + \cdots + a_d\bar{z}^d\\
+	& = a_0 + a_1\bar{z} + a_2\overline{z^2} + \cdots + a_d\overline{z^d}\\
+& = \overline{\overline{a_0} + \overline{a_1}z + \overline{a_2}z^2 + \cdots + \overline{a_d}z^d}\\
+& = \overline{a_0 + a_1z + a_2z^2 + \cdots + a_dz^d}\\
+& = \overline{P(z)}
+= \bar{0}
+= 0.
+\end{align}
+```
+""",
+)
 
 # ╔═╡ 0ea1f264-d98e-4773-9ffd-5a070b7afc1b
 md"### Le cas quadratique"
@@ -392,7 +410,7 @@ Polynomials = "~4.0.11"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.1"
+julia_version = "1.11.2"
 manifest_format = "2.0"
 project_hash = "c2c231bc7df08f9ebe667e016a851454a5c33c7e"
 
@@ -1731,8 +1749,8 @@ version = "1.4.1+1"
 # ╟─cf365493-4628-428a-9580-dda69cab9684
 # ╟─f5bd1e83-166d-46b5-a201-bc9ea0ae6e80
 # ╟─585e40db-66b5-45fc-8720-291810566ce4
-# ╟─58046703-4f7d-4668-9c4a-6875aec3f383
 # ╟─64777fee-6b30-417a-a705-279c710b67cf
+# ╟─bcbcd169-7cb1-4b68-9ac9-d8bd421f59a4
 # ╟─0ea1f264-d98e-4773-9ffd-5a070b7afc1b
 # ╟─3951bd8e-071c-416a-b4a3-a291d6e0a935
 # ╟─40de804e-0392-4389-9e75-cfc01681dd73
