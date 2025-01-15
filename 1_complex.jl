@@ -86,7 +86,23 @@ md"Tout polynome ``a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n`` de degré ``n`` a 
 md"### La multiplicité"
 
 # ╔═╡ 64777fee-6b30-417a-a705-279c710b67cf
-md"TODO"
+md"## Propriété des paires conjuguées
+
+Si \( P(x) \) a des coefficients réels et qu'une racine complexe \( z = a + ib \) (avec \( a, b \in \mathbb{R} \)) est une solution, alors la racine conjuguée \( \overline{z} = a - ib \) est également une solution.
+
+### Multiplicité
+
+La multiplicité d'une racine \( z \) est définie comme le nombre de fois où \( z \) apparaît comme solution de \( P(x) = 0 \).  
+Cela revient à l'exposant du facteur \( (x - z) \) dans la factorisation du polynôme. Par exemple, si :  
+\[
+P(x) = (x - z)^m \cdot Q(x),
+\]
+où \( Q(z) \neq 0 \), alors \( z \) est une racine de multiplicité \( m \).
+
+### Cas des paires conjuguées
+
+Si \( z = a + ib \) est une racine de multiplicité \( m \), alors la racine conjuguée \( \overline{z} = a - ib \) possède également une multiplicité \( m \).
+"
 
 # ╔═╡ 0ea1f264-d98e-4773-9ffd-5a070b7afc1b
 md"### Le cas quadratique"
