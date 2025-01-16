@@ -36,7 +36,7 @@ md"""
 """
 
 # ╔═╡ 1613da6a-5f4e-49ca-be11-e367ccb6748c
-md"Polaire : facile pour multiplier, diviser. Géométriquement : **rotation** d'angle ``\theta``"
+md"Exponentielle: facile pour multiplier, diviser. Géométriquement : **rotation** d'angle ``\theta``"
 
 # ╔═╡ 2dd30440-e56e-4673-b455-e028e0d7ce1e
 md"""
@@ -71,7 +71,7 @@ qa(
 	md"""```math
 \begin{aligned}
     \text{(Cartésienne)} \quad & (a + bi)(a - bi) = a^2 - b^2 i^2 = a^2 + b^2\\
-	\text{(Polaire)} \quad & re^{i\theta}re^{-i\theta} = r^2e^{i(\theta - \theta)} = r^2
+	\text{(Exponentielle)} \quad & re^{i\theta}re^{-i\theta} = r^2e^{i(\theta - \theta)} = r^2
 \end{aligned}
 ```""",
 )
