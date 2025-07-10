@@ -11,10 +11,7 @@ using Polynomials, LinearAlgebra, PlutoUI, Plots
 include("utils.jl")
 
 # ╔═╡ b8949a96-8d97-4048-8022-ab8fabf326a1
-md"# Thème 1 : à la fréquence de Fourier"
-
-# ╔═╡ 3b8c660c-f983-4b3f-b94d-9da74954b91d
-md"## 1.2 Les nombres complexes"
+md"# Les nombes complexes"
 
 # ╔═╡ dfb5823d-19ee-47e3-9a5a-84dcb7b110f0
 md"""
@@ -1734,7 +1731,6 @@ version = "1.4.1+1"
 # ╟─b8949a96-8d97-4048-8022-ab8fabf326a1
 # ╟─175e6d18-e522-4a39-8635-59ad558df3b8
 # ╟─db3299a8-06ff-4b70-94ed-88192743d036
-# ╟─3b8c660c-f983-4b3f-b94d-9da74954b91d
 # ╟─dfb5823d-19ee-47e3-9a5a-84dcb7b110f0
 # ╟─92bfdadf-7c3d-4b1f-95cc-3a031ce1d7e1
 # ╟─d8c754cd-d509-4ad2-bd16-5645cfbc484e

@@ -24,10 +24,10 @@ using PlutoUI, FFTW, PortAudio, Images, TestImages, ImageFiltering
 using Polynomials, LinearAlgebra
 
 # ╔═╡ b8949a96-8d97-4048-8022-ab8fabf326a1
-md"# Thème 1 : à la fréquence de Fourier"
+md"# À la fréquence de Fourier"
 
 # ╔═╡ 4309cf1d-2a7a-4a84-996b-ecc99d62dad1
-md"## 1.2 La Transformée de Fourier"
+md"## 1.1 La Transformée de Fourier"
 
 # ╔═╡ df7fa000-70ce-462b-af19-fb9c4b022012
 md"""
@@ -40,7 +40,7 @@ Un monde parallèle ou les choses deviennent plus simples (ou plus compliquées)
 """
 
 # ╔═╡ 58d25489-0d99-4c33-ad22-5ffb2751c3c6
-md"### 1.2.1 Illustration : séparation des fréquences"
+md"### 1.1.1 Illustration : séparation des fréquences"
 
 # ╔═╡ 5010b40e-86c1-4ed1-b7ae-25086ad45205
 md"#### Audio"
@@ -125,7 +125,7 @@ end
 
 # ╔═╡ 279e5f5e-4fc6-475f-8dab-c5740a470b0e
 md"""
-### 1.2.2 Calcul rapide de convolution
+### 1.1.2 Calcul rapide de convolution
 
 La convolution continue:
 ```math
@@ -161,7 +161,7 @@ f \ast g = \mathcal{F}^{-1}(\mathcal{F}(f) \cdot \mathcal{F}(g))
 """
 
 # ╔═╡ 7cdf9587-af9f-4346-b619-ba8bdf6d6799
-md"#### 1.2.2.1 Illustration: convolution d'images"
+md"#### 1.1.2.1 Illustration: convolution d'images"
 
 # ╔═╡ d4ac67de-9442-464c-be8b-e8ff468dd996
 mandrill = testimage("mandrill")
@@ -222,7 +222,7 @@ imfilter(mandrill, Kernel.Laplacian())
 md"Différents kernels permettent d'analyser des aspects différents d'une image. Le kernel à utilisé peut aussi être **appris**, c'est la base des **Convolutional Neural Networks** (CNNs) !"
 
 # ╔═╡ 66fd9f77-6c2a-418d-9650-39033396b584
-md"#### 1.2.2.2 Illustration : Le produit de polynômes"
+md"#### 1.1.2.2 Illustration : Le produit de polynômes"
 
 # ╔═╡ 0230ce41-bf49-4363-b344-3c475ef6474d
 deg = 4
@@ -261,7 +261,7 @@ end
 
 # ╔═╡ 44f73082-7cdb-47b9-bb86-f952ac7c4498
 md"""
-### 1.2.2 Définition de la transformée de Fourier
+### 1.1.2 Définition de la transformée de Fourier
 
 La transformée de Fourier continue et son inverse:
 ```math
@@ -287,7 +287,7 @@ md"TODO : même dimension en temporel et fréquentiel"
 
 # ╔═╡ d29773c7-a413-46a9-8c62-2f54d4de1730
 md"""
-### 1.2.3 Le replis spectral
+### 1.1.3 Le replis spectral
 
 On vient de voir que le signal est extrapolé périodiquement par la transformée de fourier discrète.
 Si on prend un signal de `0` à `t_max` et qu'on divise la fréquence d'échantillonnage de sa transformée de fourier par 2.
@@ -321,7 +321,7 @@ let
 end
 
 # ╔═╡ 78026d88-7051-11ef-29f0-67f85176a548
-md"## 1.3 Fast Fourier Transform"
+md"## 1.2 Fast Fourier Transform"
 
 # ╔═╡ dc4c4d53-feb2-40ce-b20e-3386aab2a45f
 md"""
