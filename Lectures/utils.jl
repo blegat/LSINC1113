@@ -89,7 +89,7 @@ begin
         if !('.' in file)
             file = file * ".png"
         end
-        return joinpath(joinpath(@__DIR__, "images", file))
+        return joinpath(joinpath(dirname(@__DIR__), "images", file))
     end
     function img(file, args...)
         LocalResource(imgpath(file), args...)
