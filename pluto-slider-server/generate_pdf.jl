@@ -2,7 +2,7 @@ import PlutoPDF
 
 function generate_pdfs(dir)
     for filename in readdir(dir)
-        if endswith(filename, ".jl")
+        if endswith(filename, ".jl") && filename != "utils.jl"
             PlutoPDF.pluto_to_pdf(joinpath(dir, filename))
         end
     end
