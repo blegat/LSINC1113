@@ -24,7 +24,7 @@ using Plots, OneHotArrays, PlutoUI
 md"""
 # Automatic Differentiation
 
-On peut calculer des dérivées partielles de différentes manières:
+On peut calculer des dérivées partielles de différentes manières :
 1. De façon symbolique, en fixant une des variables et en dérivant les autres soit à la main, soit par ordinateur.
 2. De façon numérique, avec la formule ``f'(x) \approx (f(x + h) - f(x)) / h``.
 3. De façon algorithmique, soit forward, soit reverse, c'est ce que nous verons ici.
@@ -51,13 +51,13 @@ md"En effet, les prédictions ne correspondent pas à `y`."
 md"On peut regrouper les erreurs des estimations de tous les points en les comparant avec `y`."
 
 # ╔═╡ af404768-0663-4bc3-81dd-6931b3a486be
-md"Essayons de trouver des poids `w` qui minimisent la somme des carrés des erreurs (aka MSE):"
+md"Essayons de trouver des poids `w` qui minimisent la somme des carrés des erreurs (aka MSE) :"
 
 # ╔═╡ 277bd2ce-fa7f-4288-be8a-0ddd8f23635c
 md"""
 ## Forward Differentiation
 
-Commençons par définir la forward differentiation. Cette différentiation algorithmique se base sur l'observation que la chain rule permet de calculer la dérivée de n'importe quelle fonction dès lors qu'on connait sont gradient et la dérivée de chacun de ses paramètres.
+Commençons par définir la forward differentiation. Cette différentiation algorithmique se base sur l'observation que la chain rule permet de calculer la dérivée de n'importe quelle fonction dès lors qu'on connait son gradient et la dérivée de chacun de ses paramètres.
 En d'autres mots, supposons qu'on doive calculer
 ```math
 \frac{\partial}{\partial x} f(g(x), h(x))
@@ -101,7 +101,7 @@ end
 md"Par la product rule ``(fg)' = f'g + fg'``:"
 
 # ╔═╡ c0caef28-d59a-43a1-af4f-6756c3b41903
-md"Pour l'exponentiation, on peut juste se rabatter sur le produit qu'on a déjà défini:"
+md"Pour l'exponentiation, on peut juste se rabattre sur le produit qu'on a déjà défini :"
 
 # ╔═╡ a2ac721c-700e-4bbf-8c13-3b06db292c00
 Base.:^(x::Dual, n::Integer) = Base.power_by_squaring(x, n)
@@ -156,7 +156,7 @@ d^\top \nabla f
 =
 d_1 \cdot \partial f/\partial x_1 + \cdots + d_n \cdot \partial f/\partial x_n
 ```
-Etant donné un gradient ``\nabla f``, la direction ``d`` telle que ``\|d\|_2 = 1`` qui a une dérivée minmale est ``d = -\nabla f``.
+Etant donné un gradient ``\nabla f``, la direction ``d`` telle que ``\|d\|_2 = 1`` qui a une dérivée minimale est ``d = -\nabla f``.
 """
 
 # ╔═╡ b025aa9e-1137-4201-b7b8-2b803f8aa17e
@@ -190,7 +190,7 @@ md"""
 La fonction ``|x|`` n'est pas différentiable lorsque ``x = 0``.
 Si on s'approche par la gauche (c'est à dire ``x < 0``, la fonction est ``-x``) donc la dérivée vaut ``-1``.
 Si on s'approche par la droite (c'est à dire ``x > 0``, la fonction est ``x``) donc la dérivée vaut ``1``.
-Il n'y a pas de gradient valide!
+Il n'y a pas de gradient valide !
 Par contre, n'importe quel nombre entre ``-1`` et ``1`` est un **subgradient** valide ! Alors que le gradient est la normale à la tangente **unique**, le subgradient est un élément du **cone tangent**.
 """
 
@@ -204,7 +204,7 @@ md"`num_iters_L1` = $(@bind num_iters_L1 Slider(1:400, default=200, show_value =
 md"""
 ## Reverse diff
 
-Le désavantage de la forward differentiation, c'est qu'il faut recommencer tout le calcul pour calculer la dérivée par rapport à chaque variable. La *reverse differentiation*, aussi appelée *backpropagation*, résoud se problème en calculer la dérivée par rapport à toutes les variables en une fois!
+Le désavantage de la forward differentiation, c'est qu'il faut recommencer tout le calcul pour calculer la dérivée par rapport à chaque variable. La *reverse differentiation*, aussi appelée *backpropagation*, résoud ce problème en calculant la dérivée par rapport à toutes les variables en une fois !
 
 ### Chain rule
 
@@ -212,7 +212,7 @@ Le désavantage de la forward differentiation, c'est qu'il faut recommencer tout
 
 Commençons par un exemple univarié pour introduire le fait qu'il existe un choix dans l'ordre de la multiplication des dérivées. La liberté introduite par ce choix donne lieu à la différence entre la différentiation *forward* et *reverse*.
 
-Supposions qu'on veuille dériver la fonction ``\tan(\cos(\sin(x)))`` pour ``x = \pi/3``. La Chain Rule nous donne:
+Supposons qu'on veuille dériver la fonction ``\tan(\cos(\sin(x)))`` pour ``x = \pi/3``. La Chain Rule nous donne :
 ```math
 \begin{align}
   (\tan(\cos(\sin(x))))'
@@ -223,7 +223,7 @@ Supposions qu'on veuille dériver la fonction ``\tan(\cos(\sin(x)))`` pour ``x =
   & = \frac{1}{\cos^2(\cos(\sin(x)))} (-\sin(\sin(x))) \cos(x)
 \end{align}
 ```
-La dérivée pour ``x = \pi/3`` est donc:
+La dérivée pour ``x = \pi/3`` est donc :
 ```math
 \begin{align}
 \left. (\tan(\cos(\sin(x))))' \right|_{x = \pi/3}
@@ -262,22 +262,22 @@ La deuxième possibilité (qui correspond à reverse diff) est de commencer par 
 puis de le multiplier avec ``\cos(\pi/3)``.
 
 Vous remarquerez que dans l'équation ci-dessus, comme mis en évidence en rouge, les valeurs auxquelles les dérivées doivent être évaluées dépendent de ``\sin(\pi/3)``.
-L'approche utilisée par reverse diff de multiplier de gauche à droite ne peut donc pas être effectuer sans prendre en compte la valeur qui doit être évaluée de droite à gauche.
+L'approche utilisée par reverse diff de multiplier de gauche à droite ne peut donc pas être effectuée sans prendre en compte la valeur qui doit être évaluée de droite à gauche.
 
-Pour appliquer reverse diff, il faut donc commencer par une *forward pass* de droite à gauche qui calcule ``\sin(\pi/3)`` puis ``\cos(\sin(\pi/3))`` puis ``\tan(\cos(\sin(\pi/3)))``. On peut ensuite faire la *backward pass* qui multipliée les dérivée de gauche à droite. Afin d'être disponibles pour la backward pass, les valeurs calculées lors de la forward pass doivent être **stockées** ce qui implique un **coût mémoire**.
-En revanche, comme forward diff calcule la dérivée dans le même sens que l'évaluation, les dérivées et évaluations peuvent être calculées en même temps afin de ne pas avoir besoin de stocker les évaluations. C'est effectivement ce qu'on a implémenter avec `Dual` précédemment.
+Pour appliquer reverse diff, il faut donc commencer par une *forward pass* de droite à gauche qui calcule ``\sin(\pi/3)`` puis ``\cos(\sin(\pi/3))`` puis ``\tan(\cos(\sin(\pi/3)))``. On peut ensuite faire la *backward pass* qui multiplie les dérivées de gauche à droite. Afin d'être disponibles pour la backward pass, les valeurs calculées lors de la forward pass doivent être **stockées** ce qui implique un **coût mémoire**.
+En revanche, comme forward diff calcule la dérivée dans le même sens que l'évaluation, les dérivées et évaluations peuvent être calculées en même temps afin de ne pas avoir besoin de stocker les évaluations. C'est effectivement ce qu'on a implémenté avec `Dual` précédemment.
 
 Au vu de ce coût mémoire supplémentaire de reverse diff par rapport à forward diff,
 ce dernier paraît préférable en pratique.
-On va voir maintenant que dans le cas multivarié, dans certains cas, ce désavantage est contrebalancé par une meilleure complexité temporelle qui rend reverse diff indispensable!
+On va voir maintenant que dans le cas multivarié, dans certains cas, ce désavantage est contrebalancé par une meilleure complexité temporelle qui rend reverse diff indispensable !
 """
 
 # ╔═╡ 494fc7d7-c622-41d1-91d8-3dc1fbd2f244
 md"""
 #### Exemple multivarié
 
-Prenons maintenant un example multivarié, supposons qu'on veuille calculer le gradient de la fonction ``f(g(h(x_1, x_2)))`` qui compose 3 fonctions ``f``, ``g`` et ``h``.
-Le gradient est obtenu via la chain rule comme suit:
+Prenons maintenant un exemple multivarié, supposons qu'on veuille calculer le gradient de la fonction ``f(g(h(x_1, x_2)))`` qui compose 3 fonctions ``f``, ``g`` et ``h``.
+Le gradient est obtenu via la chain rule comme suit :
 ```math
 \begin{align}
 \frac{\partial}{\partial x_1} f(g(h(x_1, x_2)))
@@ -302,7 +302,7 @@ Le gradient est obtenu via la chain rule comme suit:
 \end{bmatrix}
 \end{align}
 ```
-On voit que c'est le produit de 3 matrices. Forward diff va exécuter ce produit de droite à gauche:
+On voit que c'est le produit de 3 matrices. Forward diff va exécuter ce produit de droite à gauche :
 ```math
 \begin{align}
 \nabla_{x_1, x_2} f(g(h(x_1, x_2)))
@@ -366,14 +366,14 @@ L'idée de reverse diff c'est d'effectuer le produit de gauche à droite:
 # ╔═╡ 4e1ac5fc-c684-42e1-9c99-3120021eb19a
 md"""
 Pour calculer ``\partial f / \partial x_1`` via forward diff, on part donc de ``\partial x_1 / \partial x_1 = 1`` et ``\partial x_2 / \partial x_1 = 0`` et on calcule ensuite ``\partial h / \partial x_1``, ``\partial g / \partial x_1`` puis ``\partial f / \partial x_1``.
-Effectuer la reverse diff est un peu moins intuitif. L'idée est de partir de la dérivée du résultat par rapport à lui même ``\partial f / \partial f = 1`` et de calculer ``\partial f / \partial g`` puis ``\partial f / \partial h`` et ensuite ``\partial f / \partial x_1``. L'avantage de reverse diff c'est qu'il n'y a que la dernière étape qui est sécifique à ``x_1``. Tout jusqu'au calcul de ``\partial f / \partial h`` peut être réutilisé pour calculer ``\partial f / \partial x_2``, il n'y a plus cas multiplier ! Reverse diff est donc plus efficace pour calculer le gradient d'une fonction qui a une seul output par rapport à beaucoup de paramètres comme détaillé dans la discussion à la fin de ce notebook.
+Effectuer la reverse diff est un peu moins intuitif. L'idée est de partir de la dérivée du résultat par rapport à lui-même ``\partial f / \partial f = 1`` et de calculer ``\partial f / \partial g`` puis ``\partial f / \partial h`` et ensuite ``\partial f / \partial x_1``. L'avantage de reverse diff c'est qu'il n'y a que la dernière étape qui est spécifique à ``x_1``. Tout jusqu'au calcul de ``\partial f / \partial h`` peut être réutilisé pour calculer ``\partial f / \partial x_2``, il n'y a plus qu'à multiplier ! Reverse diff est donc plus efficace pour calculer le gradient d'une fonction qui a une seule output par rapport à beaucoup de paramètres, comme détaillé dans la discussion à la fin de ce notebook.
 """
 
 # ╔═╡ 56b32132-113f-459f-b1d9-abb8f439a40b
 md"""
 ### Forward pass : Construction de l'expression graph
 
-Pour implémenter reverse diff, il faut construire l'expression graph pour garder en mémoire les valeurs des différentes expressions intermédiaires afin de pouvoir calculer les dérivées locales ``\partial f / \partial g`` et ``\partial g / \partial h``. Le code suivant défini un noeud de l'expression graph. Le field `derivative` correspond à la valeur de ``\partial f_{\text{final}} / \partial f_{\text{node}}`` où ``f_\text{final}`` est la dernière fonction de la composition et ``f_{\text{node}}`` est la fonction correspondant au node.
+Pour implémenter reverse diff, il faut construire l'expression graph pour garder en mémoire les valeurs des différentes expressions intermédiaires afin de pouvoir calculer les dérivées locales ``\partial f / \partial g`` et ``\partial g / \partial h``. Le code suivant définit un noeud de l'expression graph. Le field `derivative` correspond à la valeur de ``\partial f_{\text{final}} / \partial f_{\text{node}}`` où ``f_\text{final}`` est la dernière fonction de la composition et ``f_{\text{node}}`` est la fonction correspondant au node.
 """
 
 # ╔═╡ 4931adf1-8771-4708-833e-d05c05884969
@@ -390,7 +390,7 @@ end
 
 # ╔═╡ 0b07b9cf-83b4-46e9-9a75-cf2cadbbb011
 md"""
-L'operateur overloading suivant sera sufficant pour construire l'expression graph dans le cadre de ce notebook, vous l'étendrez pendant la séance d'exercice.
+L'opérateur overloading suivant sera sufficant pour construire l'expression graph dans le cadre de ce notebook, vous l'étendrez pendant la séance d'exercice.
 """
 
 # ╔═╡ b814dc16-37de-45d1-9c7c-4eec45d3f956
@@ -450,7 +450,7 @@ L1_loss(w, X, y) = sum(abs.(X * w - y)) / length(y)
 
 # ╔═╡ 1572f901-c688-435e-81b9-d6e39bb82201
 md"""
-On crée les leafs correspondant aux variables ``x_1`` et ``x_2`` de valeur ``1`` et ``2`` respectivement. Les valeurs correspondent aux valeurs de ``x_1`` et ``x_2`` auxquelles on veut dériver la fonction. On a choisi 1 et 2 pour pouvoir les reconnaitre facilement dans le graphe.
+On crée les leafs correspondant aux variables ``x_1`` et ``x_2`` de valeurs ``1`` et ``2`` respectivement. Les valeurs correspondent aux valeurs de ``x_1`` et ``x_2`` auxquelles on veut dériver la fonction. On a choisi 1 et 2 pour pouvoir les reconnaitre facilement dans le graphe.
 """
 
 # ╔═╡ b7faa3b7-e0b6-4f55-8763-035d8fc5ac93
@@ -499,7 +499,7 @@ end
 
 # ╔═╡ 7578be43-8dbe-4041-adc7-275f06057bfe
 md"""
-Pour le visualiser, on le converti en graphe utilisant la structure de donnée de Graphs.jl pour pouvoir utiliser `gplot`
+Pour le visualiser, on le convertit en graphe en utilisant la structure de données de Graphs.jl pour pouvoir utiliser `gplot`.
 """
 
 # ╔═╡ 69298293-c9fc-432f-9c3c-5da7ce710334
@@ -512,7 +512,7 @@ gplot(expr_graph, nodelabel = labels)
 md"""
 #### Combinaison des dérivées
 
-Que faire si plusieurs expressions dépendent d'une même variable.
+Que faire si plusieurs expressions dépendent d'une même variable ?
 Considérons l'exemple ``f(x) = \sin(x)\cos(x)`` qui correspond à ``f(g,h) = gh``, ``g(x) = \sin(x)`` et ``h(x) = \cos(x)``.
 La chain rule donne
 ```math
@@ -542,7 +542,7 @@ md"### Backward pass : Calcul des dérivées"
 # ╔═╡ d8052188-f2fa-4ad8-935f-581eea164bda
 md"""
 La fonction suivante propage la dérivée ``\partial f_{\text{final}} / \partial f_{\text{node}}`` à la dérivée des arguments de la fonction ``f_{\text{node}}``.
-Comme les arguments peuvent être utilisés à par d'autres fonction, on somme la dérivée avec `+=`.
+Comme les arguments peuvent être utilisés par d'autres fonction, on somme la dérivée avec `+=`.
 """
 
 # ╔═╡ 1e08b49d-03fe-4fb3-a8ba-3a00e1374b32
@@ -570,8 +570,8 @@ end
 
 # ╔═╡ 44442c34-e088-493a-bfd6-9c095c499100
 md"""
-La fonction `_backward!` ne doit être appelée que sur un noeud pour lequel `f.derivative` a déjà été calculé. Pour cela, `_backward!` doit avoir été appelé sur tous les noeuds qui représente des fonctions qui dépendent directement ou indirectement du résultat du noeud.
-Pour trouver l'ordre dans lequel appeler `_backward!`, on utilise donc on tri topologique (nous reviendrons sur les tris topologique dans la partie graphe).
+La fonction `_backward!` ne doit être appelée que sur un noeud pour lequel `f.derivative` a déjà été calculé. Pour cela, `_backward!` doit avoir été appelé sur tous les noeuds qui représentent des fonctions qui dépendent directement ou indirectement du résultat du noeud.
+Pour trouver l'ordre dans lequel appeler `_backward!`, on utilise donc un tri topologique (nous reviendrons sur les tris topologiques dans la partie graphe).
 """
 
 # ╔═╡ 86872f35-d62d-40e5-8770-4585d3b0c0d7
@@ -613,7 +613,7 @@ x_nodes
 md"""
 ### Comparaison avec Forward Diff dans l'exemple moon
 
-Revenons sur l'exemple utilisé pour illustrer la forward diff et essayons de calculer la même dérivée mais à présent en utiliser reverse diff.
+Revenons sur l'exemple utilisé pour illustrer la forward diff et essayons de calculer la même dérivée mais à présent en utilisant reverse diff.
 """
 
 # ╔═╡ 5ce7fbad-af38-4ff6-adca-b1991f3be455
@@ -631,10 +631,10 @@ function reverse_diff(loss, w, X, y)
 end
 
 # ╔═╡ a610dc3c-803a-4489-a84b-8bff415bc0a6
-md"We execute it a second time to get rid of the compilation time:"
+md"On l'exécute une seconde fois, pour éliminer le temps de compilation :"
 
 # ╔═╡ 0e99048d-5696-43ab-8896-301f37a20a5d
-md"On remarque que reverse diff est plus lent! IL y a un certain coût mémoire lorsqu'on consruit l'expression graph. Pour cette raison, si on veut calculer plusieurs dérivées consécutives pour différentes valeurs de ``x_1`` et ``x_2``, on a intérêt à garder le graphe et à uniquement changer la valeur des variables plutôt qu'à reconstruire le graphe à chaque fois qu'on change les valeurs. Alternativement, on peut essayer de condenser le graphe en exprimant les opérations sur des large matrices ou même tenseurs, c'est l'approche utilisée par pytorch ou tensorflow."
+md"On remarque que reverse diff est plus lent ! Il y a un certain coût mémoire lorsqu'on construit l'expression graph. Pour cette raison, si on veut calculer plusieurs dérivées consécutives pour différentes valeurs de ``x_1`` et ``x_2``, on a intérêt à garder le graphe et à uniquement changer la valeur des variables plutôt qu'à reconstruire le graphe à chaque fois qu'on change les valeurs. Alternativement, on peut essayer de condenser le graphe en exprimant les opérations sur des larges matrices ou même tenseurs, c'est l'approche utilisée par pytorch ou tensorflow."
 
 # ╔═╡ bd012d84-a79f-4043-961e-f7825b7e0d6c
 md"`num_data` = $(@bind(num_data, Slider(1:100, default = 32, show_value = true)))"
