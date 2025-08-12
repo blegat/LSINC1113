@@ -1,0 +1,46 @@
+\titledquestion{Théorie des nombres}
+
+En cette début d'année 2025, une question vous taraude. Quel peut bien être le résultat de $3^n \pmod{7}$
+pour $n = 2025$ ?
+\begin{parts}
+    \part En utilisant un langage utilisant des entiers signés sur 64-bits, vous commencez par calculer
+    $3^{2025}$ et vous obtenez $-7783937752544673437$.
+    Cela vous parait-il correct ? Si non, que s'est-il passé ?
+\begin{solutionbox}{5.5cm}
+    Ça a dépassé la valeur maximum d'un entier 64-bits, il y a eu un int overflow.
+\end{solutionbox}
+    \part Vous calculez à présent $3^{2025}$ en utilisant des entiers à précision arbitraire et obtenez
+    un résultat de prêt de 1000 chiffres.
+    En prenant le résultat modulo $7$, vous avez la réponse qui n'a plus qu'un chiffre.
+    Vous vous demandez alors s'il n'y avait pas moyen de s'en sortir pour calculer
+    $3^{2025}$ juste en utilisant des entiers 64-bits.
+    Qu'en pensez-vous ?
+\begin{solutionbox}{9cm}
+    Étant donné que $ab \pmod{7}$ est égal à $a(b\pmod{7})\pmod{7}$, on peut appliquer le reste modulo 7 après
+    chaque multiplication ce qui gardera les nombres en dessous de $7^2$. On pourrait donc même faire le calcul
+    avec des entiers sur 8-bits.
+\end{solutionbox}
+    \part Vous êtes content d'arriver au résultat mais vous aimeriez avoir un algorithme plus efficace au cas où
+    vous vouliez utiliser le nombre d'année depuis la création de l'univers pour $n$ au lieu de 2025.
+    Expliquez comment calculer cette exponentiation avec une complexité proportionnelle au logarithme de $n$.
+\begin{solutionbox}{7.5cm}
+    En binaire, 2025 vaut 11111101001.
+    On a donc $3^2025 = 3^1 + 3^8 + 3^{32} + 3^{128} + 3^{256} + 3^{512} + 3^{1024}$.
+    Il suffit alors de calculer les puissances $3^{2^k}$ l'une après l'autre jusque $k=10$ en utilisant le fait que
+    $3^{2^{k+1}} \equiv (3^{2^k})^2 \pmod{7}$.
+    Il suffit ensuite de sommes celles qui correspondent à un 1 dans la représentation binaire.
+    C'est l'algorithme de fast powering.
+    De façon équivalent, on peut aussi utiliser l'implémentation récursive de cet algorithme.
+\end{solutionbox}
+    \part Cela vous parait toujours long et fastidieux à faire à la main et vous vous demandez comment
+    Pierre de Fermat répondait à ce genre de question existentielle le jour de nouvel an au 17ième siècle, bien avant l'invention de l'ordinateur.
+    Vous remarquez alors que 7 est un nombre premier.
+    Expliquer comment ça peut vous significativement simplifier votre calcul.
+\begin{solutionbox}{7.5cm}
+    Le petit théorème de Fermat nous dit que $3^6 \equiv 1 \pmod{7}$.
+    2022 est pair car il termine par un 2 et est un multiple de 3 comme la somme de ses chiffres vaut 6 qui est un multiple de 3.
+    2022 est donc un multiple de 6.
+    On a donc $2025 \equiv 2025 - 2022 \equiv 3 \pmod{7}$.
+    Dès lors, $3^{2025} \equiv 3^{2022} \cdot 3^3 \equiv 3^3 \equiv 27 \equiv 6 \pmod{7}$.
+\end{solutionbox}
+\end{parts}
