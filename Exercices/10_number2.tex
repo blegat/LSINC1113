@@ -1,0 +1,126 @@
+\session{TP10 - Théorie des nombres}
+
+\section*{Rappels Théoriques}
+
+\textbf{1. Petit théorème de Fermat et Fast Power Algorithm} \\
+Le petit théorème de Fermat indique que, pour un nombre premier \( p \) :
+\[
+a^{p-1} \equiv 1 \pmod{p}.
+\]
+Ainsi, l’inverse modulaire peut être calculé comme :
+\[
+a^{-1} \equiv a^{p-2} \pmod{p}.
+\]
+Le calcul de \( a^{p-2} \mod p \) est optimisé grâce à l’algorithme d’exponentiation rapide (Fast Power Algorithm), basé sur la décomposition binaire de l’exposant.\\
+
+
+\textbf{2. Déterminer \( (\mathbb{Z}/m\mathbb{Z})^* \)} \\
+L’ensemble \( (\mathbb{Z}/m\mathbb{Z})^* \) (groupe multiplicatif modulaire) est constitué des entiers \( a \in \{0, 1, \dots, m-1\} \) tels que :
+\[
+\text{pgcd}(a, m) = 1.
+\]
+
+\begin{itemize}
+    \item La taille de \( (\mathbb{Z}/m\mathbb{Z})^* \) est donnée par la **fonction d’Euler \( \phi(m) \)**, qui compte les entiers entre \( 1 \) et \( m-1 \) premiers avec \( m \).
+    \item Si \( m \) est un nombre premier \( p \), alors \( (\mathbb{Z}/p\mathbb{Z})^* = \{1, 2, \dots, p-1\} \). \\
+\end{itemize}
+
+\textbf{3. Racines primitives modulo \( p \)}\\
+Un entier \( g \) est une racine primitive modulo \( p \) si les puissances successives \( g^1, g^2, \dots, g^{p-1} \mod p \) génèrent tous les éléments de \( (\mathbb{Z}/p\mathbb{Z})^* \).
+
+\begin{itemize}
+    \item Le nombre total de racines primitives modulo \( p \) est \( \phi(p-1) \), où \( p-1 \) est la taille de \( (\mathbb{Z}/p\mathbb{Z})^* \).
+    \item Pour tester si \( g \) est une racine primitive modulo \( p \), vérifiez que \( g^k \not\equiv 1 \pmod{p} \) pour tous \( k < p-1 \), sauf \( k = 0 \). \\
+\end{itemize}
+
+\textbf{4. Valeur de \( 2^{(p-1)/2} \mod p \)} \\
+Pour un entier \( a \) et un nombre premier \( p \), le critère d’Euler indique :
+\[
+a^{(p-1)/2} \equiv
+\begin{cases}
+1 \pmod{p}, & \text{si \( a \) est un résidu quadratique modulo \( p \)}, \\
+-1 \equiv p-1 \pmod{p}, & \text{sinon}.
+\end{cases}
+\]
+
+Un entier \( a \) est un résidu quadratique modulo \( p \) s’il existe un \( x \) tel que :
+\[
+x^2 \equiv a \pmod{p}.
+\]
+Pour \( 2^{(p-1)/2} \mod p \), vérifiez si \( 2 \) est un résidu quadratique. \\
+
+\newpage
+\textbf{5. Résolution de récurrences linéaires} \\
+\textit{Méthode de l’équation caractéristique} \\
+Pour une récurrence linéaire homogène :
+\[
+a_n + c_1a_{n-1} + c_2a_{n-2} + \cdots = 0,
+\]
+l’équation caractéristique associée est donnée par :
+\[
+r^k + c_1r^{k-1} + c_2r^{k-2} + \cdots = 0.
+\]
+\begin{itemize}
+    \item Les solutions \( r_1, r_2, \dots \) déterminent la forme générale de \( a_n \).
+    \item Si \( r \) est une racine double, une solution supplémentaire \( n \cdot r^n \) est ajoutée.
+\end{itemize}
+
+\textit{Principe de superposition} \\
+Pour une récurrence non homogène :
+\[
+a_n + c_1a_{n-1} + c_2a_{n-2} + \cdots = f(n),
+\]
+- La solution générale est donnée par :
+\[
+a_n = a_n^{\text{hom}} + a_n^{\text{part}},
+\]
+où :
+\begin{itemize}
+    \item \( a_n^{\text{hom}} \) est la solution de l’équation homogène,
+    \item \( a_n^{\text{part}} \) est une solution particulière, souvent devinée selon \( f(n) \).
+\end{itemize}
+
+\section*{1. Inverses, unités et générateurs}
+
+\begin{exercise}
+    Pour chacun des nombres premiers $p$ et nombre $a$, calculer $a^{-1}$ mod $p$ en utilisant (i) l'algorithme d'Euclide étendu et (ii) le fast power algorithm et le petit théorème de Fermat.
+    \begin{enumerate}[label=(\alph*)]
+        \item $p=47$ et $a=11$.
+        \item $p=587$ et $a=345$.
+        \item $p=104801$ et $a=78467$.
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Déterminer l'espace $(\Z/m\Z)^*$ pour $m = \{ 7, 10, 13, 24 \}$.
+\end{exercise}
+
+\begin{exercise}
+    Rappelons que $g$ est appelé une racine primitive module $p$, si la puissance de $g$ donne tous éléments non-nuls de $\mathbb{F}_p \coloneqq (\Z/p\Z)^*$ :
+    \begin{enumerate}[label=(\alph*)]
+        \item Pour lequel des nombres premiers suivants $2$ est-il une racine primitive modulo $p$ ?\\
+        (i)\quad$p = 7$ \qquad (ii)\quad$p=13$ \qquad (iii)\quad$p=19$ \qquad (iv) $p=23$
+        \item Pour lequel des nombres premiers suivants $3$ est-il une racine primitive modulo $p$ ?\\
+        (i)\quad$p = 5$ \qquad (ii)\quad$p=7$ \qquad (iii)\quad$p=11$ \qquad (iv) $p=17$
+        \item Trouvez une racine primitive pour chacun des nombres premiers suivants.\\
+        (i)\quad$p = 23$ \qquad (ii)\quad$p=29$ \qquad (iii)\quad$p=41$ \qquad (iv) $p=43$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Déterminer la valeur de 
+    $$2^{(p-1)/2}\quad(\text{mod } p)$$
+    pour tous les nombres premiers $3 \leq p < 20$. Faites une conjecture sur les valeurs possibles de $2^{(p-1)/2} (\text{mod } p)$ lorsque $p$ est premier et prouvez que votre conjecture est correcte.
+\end{exercise}
+
+\section*{2. Récurrences}
+
+\begin{exercise}
+    En utilisant la méthode de l'équation caractéristique et le principe de superposition, résoudre les trois récurrences suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $v_{n+2} = 2(v_{n+1}-v_n)$, avec $v_0=1,v_1=2$
+        \item $x_{n+2}+3\cdot x_{n+1}+2\cdot x_{n}=5\cdot 3^n$, avec $x_0=0,x_1=1$
+        \item $y_{n+2}-4\cdot y_{n+1}+4\cdot y_{n}=1$, avec $y_0=0, y_1=3$
+        \item $z_n+6\cdot z_{n-1}+9\cdot z_{n-2}=16\cdot n$, avec $z_0=2, z_1=2$
+    \end{enumerate}
+\end{exercise}

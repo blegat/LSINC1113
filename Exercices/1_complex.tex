@@ -1,0 +1,187 @@
+\session{TP1 - Nombres complexes}
+
+\section*{Rappels théoriques}
+\subsection*{1. Nombres Complexes}
+
+Les nombres complexes sont une extension des nombres réels et sont notés sous la forme :
+\[
+z = a + ib,
+\]
+où \( a \) et \( b \) sont des nombres réels, et \( i \) est l'unité imaginaire, définie par \( i^2 = -1 \). Dans cette représentation : \( a \) est appelé la partie réelle de \( z \) (notée \( \Re(z) \)) et \( b \) est la partie imaginaire de \( z \) (notée \( \Im(z) \)). \\
+
+Le module d’un nombre complexe \( z = a + ib \) est la distance entre \( z \) et l’origine dans le plan complexe, donnée par :
+\[
+|z| = r = \sqrt{a^2 + b^2}.
+\]
+
+L'argument de \( z \), noté \( \arg(z) \), est l'angle (en radians) entre le vecteur représentant \( z \) et l'axe des réels. Il peut être calculé avec :
+\[
+\arg(z) = \theta = \arctan\left(\frac{b}{a}\right).
+\]
+
+\textbf{Forme Trigonométrique et Forme Exponentielle}
+
+Un nombre complexe \( z = a + ib \) peut aussi s’écrire sous forme trigonométrique :
+\[
+z = r \left( \cos \theta + i \sin \theta \right) = r \cis \theta,
+\]
+et on peut retomber sur la forme cartésienne grâce \( a = r \cos \theta \) et \( b = r \sin \theta \). \\
+En utilisant la formule d'Euler, on peut exprimer \( z \) sous forme exponentielle :
+\[
+z = r e^{i \theta}.
+\]
+
+\textbf{Conjugaison}
+
+Le conjugué d'un nombre complexe \( z = a + ib \) est noté \( \overline{z} \) et défini par :
+\[
+\overline{z} = a - ib.
+\]
+Le conjugué permet de simplifier les calculs impliquant des divisions de nombres complexes, car on a :
+\[
+z \cdot \overline{z} = r^2.
+\]
+
+\textbf{Polynômes et Racines Complexes}
+
+Pour un polynôme de degré \( n \) à coefficients réels ou complexes,
+\[
+P(x) = x^n + a_{n-1}x^{n-1} + \cdots + a_1 x + a_0,
+\]
+les racines complexes de \( P(x) = 0 \) peuvent être trouvées en utilisant des méthodes analytiques ou numériques, en fonction du degré et des coefficients du polynôme. \\
+
+Si les coefficients du polynôme sont réels, alors les racines complexes apparaissent par paires conjuguées. Autrement dit, si \( z = a + ib \) est une racine, alors \( \overline{z} = a - ib \) est aussi une racine.
+
+\subsection*{2. La matrice compagnon}
+
+La matrice compagnon est une représentation matricielle d'un polynôme, souvent utilisée pour étudier les racines d’un polynôme en tant que valeurs propres d’une matrice. \\
+
+Soit un polynôme univarié de degré \(n\) donné par :
+\[
+P(x) = x^n + a_{n-1}x^{n-1} + a_{n-2}x^{n-2} + \dots + a_1x + a_0
+\]
+où \( a_{n-1}, a_{n-2}, \dots, a_1, a_0 \) sont les coefficients du polynôme. \\
+
+La matrice compagnon associée à ce polynôme est une matrice carrée de dimension \(n \times n\), définie comme suit :
+\[
+C = 
+\begin{pmatrix}
+0 & 0 & 0 & \dots & 0 & -a_0 \\
+1 & 0 & 0 & \dots & 0 & -a_1 \\
+0 & 1 & 0 & \dots & 0 & -a_2 \\
+0 & 0 & 1 & \dots & 0 & -a_3 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & 0 & \dots & 1 & -a_{n-1}
+\end{pmatrix}
+\]
+
+Les valeurs propres de la matrice compagnon \(C\) sont les racines du polynôme \(P(x)\) dans le corps des complexes. La matrice compagnon permet de réduire la recherche des racines d'un polynôme à un problème de calcul de valeurs propres.
+
+\section*{1. Conversion de formes}
+
+\begin{exercise}
+    Déterminer la partie réelle et la partie imaginaire des complexes suivants.
+    
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds z = 2 + i6$
+        \item $\ds z = 45 - i\pi$
+        \item $\ds z = \frac{4i + 2}{3}$
+        \item $\ds z = \frac{-12 - 7i}{7}$
+        \item $\ds z = 2\cis{(\frac\pi4)}$
+        \item $\ds z = \frac12\cis{(\frac\pi3)}$
+        \item $\ds z = 5e^{-i\frac\pi3}$
+        \item $\ds z = e^{i\frac\pi2}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\section*{2. Opérations sur les complexes}
+
+\begin{exercise}
+    \label{ex:complexes04}
+    Effectuer les opérations suivantes pour simplifier le nombre complexe au maximum. La réponse finale doit être dans la forme initiale de l'exercice : si vous effectuez une conversion durant l'exercice, revenez à la forme du début, une fois l'opération terminée.
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds z = (2 - i) + (1 + 2i)$
+        \item $\ds z = (\sqrt2\cis{(45^\circ)})(\sqrt2\cis{(300^\circ)})$
+        \item $\ds z = \frac{12\cis{(330^\circ)}}{4\cis{(210^\circ)}}$
+        \item $\ds z = (3\cis{(60^\circ)})^4$
+        \item $\ds z = (2 - i)(1 + 2i)$
+        \item $\ds z = (2 + i)^3$
+        \item $\ds z = 2\cis{(\frac\pi3)} + 4\cis{(\frac{5\pi}3)}$
+        \item $\ds z = (\sqrt3 + i)^3$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Calculer le complexe conjugué des nombres de l'exercice~\ref{ex:complexes04}.
+\end{exercise}
+
+\section*{3. Équations dans les complexes}
+\begin{exercise}
+    Résoudre les équations dans $\C$ Vous pouvez utiliser votre ordinateur mais pas le package Polynomials.jl.
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds (1 + i)z = -2 + 5i$
+        \item $\ds \frac1z = \frac{i}{1+i}$
+        \item $\ds 4 + x^2 = 0$
+        \item $\ds 3x^2 - 4x + 2 = 0$
+        \item $\ds x^2 - 5ix = 6$
+        \item $\ds z^4 + 5z^2 + 4 = 0$
+        \item $\ds 2z^2 + 5iz - 3 = 0$
+        \item $\ds x^4 - 6x^3 + 5ix^2 - 8x + 2i = 0$
+        \item $\ds 2x^5 + 3ix^4 - 4x^3 + 5ix^2 - 6x + 7 = 0$
+        \item $\ds z^7 - iz^6 + 2z^5 - 5iz^4 + 6z^3 - 4iz^2 + z - i = 0$
+    \end{enumerate}
+\end{exercise}
+
+\section*{4. Exercices théoriques}
+\begin{exercise}
+    Montrer que la multiplication complexe est \emph{(i)} associative, \emph{(ii)} commutative, \emph{(iii)} distributive et \emph{(iv)} absorbée par l'élément nul.
+\end{exercise}
+
+\begin{exercise}
+    Montrer que le conjugué du produit de deux complexes est le produit des conjugués.
+\end{exercise}
+
+\section*{5. Exercices supplémentaires}
+
+\begin{exercise}
+    \label{ex:complexe01}
+    Convertir les expressions suivantes dans les deux autres formes possibles.
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds z = 1 - i$
+        \item $\ds z = 1 + i$
+        \item $\ds z = \sqrt{3} + i$
+        \item $\ds z = 1 - i\sqrt3$
+        \item $\ds z = i$
+        \item $\ds z = \frac{-1}2 + \frac{\sqrt3}2i$
+        \item $\ds z = 5 \cis{(\frac\pi3)}$
+        \item $\ds z = 2 \cis{(\frac\pi6)}$
+        \item $\ds z = e^{i\frac\pi4}$
+        \item $\ds z = 4e^{i\frac{5\pi}3}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Représenter les complexes de l'exercice~\ref{ex:complexe01} dans le plan cartésien.
+\end{exercise}
+
+\begin{exercise}
+    Simplifier les expressions suivantes.
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds \frac1{1+i}$
+        \item $\ds \frac{i}{i-1}$
+        \item $\ds \frac{i+1}{2j}$
+        \item $\ds \frac{1+i}{1-i} + \frac{1-i}{1+i}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Montrer que $\ds i^3 = \frac1i$.
+\end{exercise}

@@ -1,0 +1,194 @@
+\session{TP8 - Logique}
+
+\section*{Rappels Théoriques}
+
+\textbf{Logique Booléenne et Opérateurs} \\
+La logique booléenne est basée sur des opérations logiques simples appliquées à des variables binaires (0 ou 1). Les principaux opérateurs sont :
+\begin{itemize}
+    \item \textbf{ET} ($\cdot$ ou parfois $AB$) : l'opération ET entre deux variables $A$ et $B$ est vraie uniquement si $A$ et $B$ sont tous deux vrais.
+    \item \textbf{OU} ($+$) : l'opération OU entre $A$ et $B$ est vraie si $A$, $B$, ou les deux sont vrais.
+    \item \textbf{NON} ($\overline{A}$) : l'opérateur NON inverse la valeur d'une variable.
+    \item \textbf{XOR} ($\oplus$) : le OU exclusif est vrai uniquement si une des variables est vraie et l'autre est fausse.
+\end{itemize} 
+
+\textbf{Tables de Vérité} \\
+Une table de vérité est un tableau qui montre toutes les combinaisons possibles des valeurs d'entrée et les résultats pour une expression logique donnée. Par exemple, pour $F = \overline{A}(B + C) + \overline{B}\,\overline{C}$, on crée une table montrant les valeurs de $A$, $B$, $C$, et les valeurs de $F$ en fonction de ces combinaisons. \\
+
+\textbf{Formes Standard : Produit de Sommes (PDS) et Somme de Produits (SDP)} \\
+Les expressions logiques peuvent être représentées sous forme \emph{Produit de Sommes} (PDS) ou \emph{Somme de Produits} (SDP) :
+\begin{itemize}
+    \item \textbf{Produit de Sommes (PDS)} : Une expression sous la forme d'un produit d'ensembles de sommes, par exemple $(A + B)(\overline{A} + C)$.
+    \item \textbf{Somme de Produits (SDP)} : Une expression sous la forme d'une somme de produits, par exemple $AB + \overline{A}C$.
+\end{itemize}
+La forme SDP est souvent utilisée lorsque l'on souhaite simplifier une expression en une somme de termes, tandis que la PDS est utile pour des expressions minimisées par ensembles de conditions. \\
+
+\textbf{Simplification d'Expressions Logiques} \\
+La simplification d'expressions logiques peut être réalisée en utilisant des lois et théorèmes :
+\begin{itemize}
+    \item \textbf{Identité} : $A + 0 = A$ et $A \cdot 1 = A$
+    \item \textbf{Néant} : $A + 1 = 1$ et $A \cdot 0 = 0$
+    \item \textbf{Idempotence} : $A + A = A$ et $A \cdot A = A$
+    \item \textbf{Involution} : $\overline{\overline{A}} = A$
+    \item \textbf{Absorption} : $A + AB = A$ et $A(A + B) = A$
+    \item \textbf{Complément} : $A + \overline{A} = 1$ et $A \cdot \overline{A} = 0$
+\end{itemize}
+Ces lois permettent de réduire le nombre de termes et de simplifier les circuits électroniques associés. \\
+
+\textbf{Théorèmes de De Morgan} \\
+Les théorèmes de De Morgan permettent de transformer les expressions logiques pour les simplifier :
+\begin{align*}
+    \overline{A + B} &= \overline{A} \cdot \overline{B} \\
+    \overline{A \cdot B} &= \overline{A} + \overline{B}
+\end{align*}
+Ces théorèmes sont souvent utilisés pour transformer les expressions contenant des opérations ET ou OU sous une forme complémentaire. \\
+
+\textbf{Portes Logiques et Schémas Électroniques} \\
+Les circuits électroniques peuvent être représentés avec des portes logiques pour implémenter des expressions booléennes. Les portes les plus courantes sont :
+\begin{itemize}
+    \item \textbf{Porte ET} : Donne la valeur 1 si toutes les entrées sont à 1.
+    \item \textbf{Porte OU} : Donne la valeur 1 si au moins une des entrées est à 1.
+    \item \textbf{Porte NON} : Inverse la valeur de l'entrée.
+    \item \textbf{Porte NAND et NOR} : Sont les inverses respectifs des portes ET et OU.
+    \item \textbf{Porte XOR} : Sortie vraie si une seule des entrées est vraie.
+\end{itemize}
+Pour simplifier un schéma électronique, on peut souvent réduire le nombre de portes en utilisant des simplifications booléennes. \\
+
+\textbf{Équivalences et Simplifications Spécifiques aux XOR} \\
+L'opérateur XOR a des propriétés spécifiques :
+\begin{itemize}
+    \item $A \oplus A = 0$
+    \item $A \oplus 0 = A$
+    \item $A \oplus 1 = \overline{A}$
+    \item $A \oplus B = B \oplus A$ (commutativité)
+    \item $(A \oplus B) \oplus C = A \oplus (B \oplus C)$ (associativité)
+\end{itemize}
+
+Ces propriétés permettent de simplifier des expressions comportant des XOR en éliminant des termes redondants ou en réduisant des inversions. \\
+
+\textbf{Table de Vérité d'une Expression Simplifiée} \\
+Une fois l'expression simplifiée, on peut établir sa table de vérité pour vérifier que le résultat simplifié est équivalent à l'expression initiale. On aligne toutes les combinaisons de valeurs des variables et on calcule la valeur de la fonction pour chaque combinaison.
+
+
+\section*{1. Tables de vérité et simplification}
+
+\begin{exercise}
+    \label{ex:logique00}
+    Donner les tables de vérité des expressions logiques suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $F = \overline{A}(B+C) + \overline{B}\,\overline{C}$
+        \item $G = \overline{AC + \overline{B}} + B\overline{C}$
+    \end{enumerate}
+    Donner ensuite les représentations \emph{Produit de Somme} (PDS) ou \emph{Somme de Produit} (SDP).
+\end{exercise}
+
+\begin{exercise}
+    Simplifier les expressions comportant des portes XOR suivantes : 
+    \begin{enumerate}[label=(\alph*)]
+        \item $A \oplus (A+B)$ 
+        \item $AB \oplus A$
+        \item $\overline{A \oplus B} A$
+        \item $\overline{AB \oplus C}$
+    \end{enumerate}
+\end{exercise}
+
+
+\section*{2. Théorèmes de De Morgan et schémas électroniques}
+\begin{exercise}
+    Simplifier les expressions suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $\overline{\overline X(\overline Z + Y)}$
+        
+        \item $\overline{(A+B)(A+C)}$
+        
+        \item $\overline{(\overline X + Z)(Z + X \overline Y)}$
+        
+        \item $\overline{(X + Y\overline Z)(Y + \overline{XZ})}$
+        
+        \item $\overline{\overline{X + \overline Y Z} + \overline{\overline X + YZ}}$
+        
+        \item $\overline{A + \overline B C} + \overline{AC + B(\overline A + C)} + \overline{AB\overline C}$
+        
+        \item $\overline{X(Y \oplus Z)} + \overline{\overline X(Z \oplus X) + Z(X \oplus Y)}$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Écrire la fonction logique correspondant aux schémas électroniques suivants. Ensuite, simplifiez l'expression et dessinez le schéma simplifié.
+    
+    \begin{center}
+    \begin{circuitikz}
+        \draw (6,0) node[not port](notF){};
+        \draw (notF.out) --++(1,0) node[anchor=west]{F};
+        \draw (notF.in 1) --++ (-1,0) node[xor port,anchor=out](xor){};
+        \draw (xor.in 1) --++ (-1,0) node[not port,anchor=out](notA){};
+        \draw (notA.in) --++(-1,0) node[anchor=east](A){A};
+        \draw (xor.in 2) --++(-1,0) --++(0,-.5) --++(-2.4,0) node[anchor=east](B){B};
+    \end{circuitikz}
+    
+    Circuit (a)
+    \end{center}
+    
+    \begin{center}
+    \begin{circuitikz}
+        \draw (0,0) node[anchor=west](F){G};
+        \draw (F) --++ (-1,0) node[or port,anchor=out](orF){};
+        \draw (orF.in 2) --++(-1,0) node[nand port,anchor=out](nand){};
+        \draw (nand.in 1) --++ (0,.5) --++(-1,0) node[or port,anchor=out](orAB){};
+        \draw (nand.in 2) --++(0,-.5) --++(-1,0) node[or port,anchor=out](orBC){};
+        
+        \draw (orAB.in 1) --++(-1,0) node[anchor=east](A){A};
+        \draw (orBC.in 1) --++(-1,0) node[anchor=east](B){B};
+        \draw (orBC.in 2) --++(-1,0) node[anchor=east](C){C};
+        
+        \draw (orF.in 1) --++(0,1.2) -| (orAB.in 1) node{$\bullet$};
+        \draw (orBC.in 1) node{$\bullet$} -- (orAB.in 2);
+    \end{circuitikz}
+    
+    Circuit (b)
+    \end{center}
+\end{exercise}
+
+
+\section*{3. Exercices supplémentaires}
+
+\begin{exercise}
+    \label{ex:logique02}
+    Simplifier au maximum les expressions suivantes, puis donner leurs tables de vérité.
+    \begin{enumerate}[label=(\alph*)]
+        \item $(A + C \overline B)(\overline A + B + \overline C \, \overline B)$
+        \item $ABC + A\overline B C + \overline A BC + A(B + AC + \overline B C)$
+        \item $AB \overline C + A \overline B C + ABC + A\overline B \, \overline C$
+        \item $(Y + XZ)\overline Z + \overline Y Z + \overline Y$
+        \item $(\overline X + YZ) \overline Y + X + YZ + Y \overline Z$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Donner, si c'est judicieux, la meilleure représentation standard (SDP ou PDS) des expressions de l'exercice~\ref{ex:logique02}.
+\end{exercise}
+
+\begin{exercise}
+    \label{ex:logique03}
+    Donner les tables de vérité des expressions suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $(A \oplus \overline{B})(\overline{A}+B)$
+        \item $\overline{A \oplus B}C + \overline{C}\,\left(\overline{A + \overline{B}}\right)$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Représenter les schémas électroniques des expressions simplifiées de l'exercice \ref{ex:logique03}. En bonus, vous pouvez aussi vous amuser à représenter les schémas des expressions non-simplifiées.
+\end{exercise}
+
+
+\begin{exercise}
+    \label{ex:logique01}
+    Simplifier au maximum les expressions suivantes, puis donner leurs tables de vérité.
+    \begin{enumerate}[label=(\alph*)]
+        \item $A(A+B)$
+        \item $AB(A+C)$
+        \item $(A+B)(A+\overline B)$
+        \item $\overline A + B(A+ \overline B)$
+        \item $(A+B)(A + \overline A B)$
+    \end{enumerate}
+\end{exercise}
