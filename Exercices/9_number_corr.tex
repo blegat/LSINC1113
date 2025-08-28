@@ -1,0 +1,261 @@
+\session{TP9 - Théorie des nombres}
+
+\section*{1. Divisions et congruences}
+
+\begin{solution}
+    $34787 \div 353$, si on fait $34787 - 353$ dans une calculette et que l'on compte le nombre de fois qu'on peut faire cette soustraction, on trouve le quotient et le reste. Le quotient est donc $98$ et le reste est $r=34787 - (353 \cdot q) = 193$.
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item \( \text{pgcd}(291, 252) = 3\)\\
+        1. \( 291 \div 252 = 1 \), reste \( 291 - 252 = 39 \) \\
+        2. \( 252 \div 39 = 6 \), reste \( 252 - 39 \times 6 = 18 \) \\
+        3. \( 39 \div 18 = 2 \), reste \( 39 - 18 \times 2 = 3 \) \\
+        4. \( 18 \div 3 = 6 \), reste \( 18 - 3 \times 6 = 0 \) \\
+        \item \( \text{pgcd}(16261, 85652) = 161 \) \\
+        1. \( 85652 \div 16261 = 5 \), reste \( 85652 - 16261 \times 5 = 4347 \) \\
+        2. \( 16261 \div 4347 = 3 \), reste \( 16261 - 4347 \times 3 = 3220 \) \\
+        3. \( 4347 \div 3220 = 1 \), reste \( 4347 - 3220 \times 1 = 1127 \) \\
+        4. \( 3220 \div 1127 = 2 \), reste \( 3220 - 1127 \times 2 = 966 \) \\
+        5. \( 1127 \div 966 = 1 \), reste \( 1127 - 966 \times 1 = 161 \) \\
+        6. \( 966 \div 161 = 6 \), reste \( 966 - 161 \times 6 = 0 \) \\
+        \item \( \text{pgcd}(139024789, 93278890) = 1 \)\\
+        1. \( 139024789 \div 93278890 = 1\), reste \( 139024789 - 93278890 \times 1 = 45745899 \) \\
+        2. \( 93278890 \div 45745899 = 2\), reste \( 93278890 - 45745899 \times 2 = 1787092 \) \\
+        3. \( 45745899 \div 1787092 = 25\), reste \( 45745899 - 1787092 \times 25 = 1068599 \) \\
+        4. \( 1787092 \div 1068599 = 1\), reste \( 1787092 - 1068599 \times 1 = 718493 \) \\
+        5. \( 1068599 \div 718493 = 1\), reste \( 1068599 - 718493 \times 1 = 350106 \) \\
+        6. \( 718493 \div 350106 = 2\), reste \( 718493 - 350106 \times 2 = 18281 \) \\
+        7. \( 350106 \div 18281 = 19\), reste \( 350106 - 18281 \times 19 = 2767 \) \\
+        8. \( 18281 \div 2767 = 6\), reste \( 18281 - 2767 \times 6 = 1679 \) \\
+        9. \( 2767 \div 1679 = 1\), reste \( 2767 - 1679 \times 1 = 1088 \) \\
+        10. \( 1679 \div 1088 = 1\), reste \( 1679 - 1088 \times 1 = 591 \) \\
+        11. \( 1088 \div 591 = 1\), reste \( 1088 - 591 \times 1 = 497 \) \\
+        12. \( 591 \div 497 = 1\), reste \( 591 - 497 \times 1 = 94 \) \\
+        13. \( 497 \div 94 = 5\), reste \( 497 - 94 \times 5 = 27 \) \\
+        14. \( 94 \div 27 = 3\), reste \( 94 - 27 \times 3 = 13 \) \\
+        15. \( 27 \div 13 = 2\), reste \( 27 - 13 \times 2 = 1 \) \\
+        16. \( 13 \div 1 = 13\), reste \( 13 - 1 \times 13 = 0 \) \\
+        \item \( \text{pgcd}(16534528044, 8332745927) = 43\) \\
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    Pour \( 3066p + 713q = 1 \), utiliser l’algorithme d’Euclide étendu. \\
+    On remonte les étapes pour écrire \( 1 \) comme combinaison linéaire de \( 3066 \) et \( 713 \).
+    
+    \[
+    \begin{aligned}
+        3066 &\div 713 = 4, \text{, reste 214} \\
+        713 &\div 214 = 3, \text{, reste 71} \\
+        214 &\div 71 = 3, \text{, reste 1} \\
+        71 &\div 1 = 71, \text{, reste 0} \\
+    \end{aligned}
+    \]
+
+    Le \( \text{pgcd}(3066, 713) = 1\). On peut donc remonter et appliquer le théorème d'Euclide étendu :\\
+    \[ 
+    \begin{aligned}
+        1 &= 214 - 71 \cdot 3 \\
+        1 &= 214 - (716 - 214 \cdot 3) \cdot 3 \\
+        1 &= 214 \cdot 10 - 716 \cdot 3 \\
+        1 &= (3066 - 716 \cdot 4) \cdot 10 - 716 \cdot 3 \\
+        1 &= 3066 \cdot 10 - 716 \cdot 43 \\
+    \end{aligned}
+    \]
+    On trouve donc \(q = -43\) et p \(p = 10\).
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item \( x + 17 \equiv 23 \pmod{37} \)
+        \[
+        x \equiv 23 - 17 \pmod{37} \quad \Rightarrow \quad x \equiv 6 \pmod{37}.
+        \]
+        \item \( x + 42 \equiv 19 \pmod{51} \)
+        \[
+        x \equiv 19 - 42 \pmod{51} \quad \Rightarrow \quad x \equiv -23 \pmod{51}.
+        \]
+        Ajouter \( 51 \) pour obtenir une solution positive :
+        \[
+        x \equiv 28 \pmod{51}.
+        \]
+    \end{enumerate}
+\end{solution}
+
+\section*{2. Inverses, unités et générateurs}
+
+\begin{solution}
+    \text{ } \\
+    \[ x \equiv 4 \pmod{7} \text{ et } x \equiv 3 \pmod{9} \]
+
+    \begin{enumerate}
+        \item Les conditions du théorème des restes Chinois \\
+        $\rightarrow$ 7 et 9 sont premiers entre eux (\(\text{pgcd}(9,7) = 1 \)). Une solution unique existe donc \(7 \cdot 9 = 63\)
+        
+        \item \(x = a_1 \cdot N_{1} \cdot N_{1}^{-1} + a_2 \cdot N_{2} \cdot N_{2}^{-1}\)
+        
+        \item Calculs des inverses \\
+        \(N_1 = \frac{63}{7} = 9 \pmod{7}\) $\rightarrow$ $9-7 \cdot 1 = 2$ \\
+        $9 \equiv 2 \pmod{7}$ \\
+        On cherche l'inverse de $2 \pmod{7}$. Pour se faire, on utilise Euclide étendu : \\
+        \( 2 x + 7 k = 1 \rightarrow 7 = 2 \cdot 3 + 1\) \\
+        On trouve donc finalement $x = -3$ et $k = 1$. \\
+    
+        \(N_1 = \frac{63}{9} = 7 \pmod{9}\) \\
+        On ne sait pas réduire plus, \\
+        On cherche l'inverse de $7 \pmod{9}$. Pour se faire, on utilise Euclide étendu : \\
+        \(
+        \begin{aligned}
+            7 z + 9 k = 1 &\rightarrow 9 = 7 \cdot 1 + 2 \\
+                          &\rightarrow 7 = 2 \cdot 3 + 1 \\
+                          &\rightarrow 2 = 1 \cdot 2 + 0 \\
+        \end{aligned}
+        \) \\
+        Ensuite, \\
+        \( \begin{aligned}
+            7 - 2 \cdot 3 = 1 \\
+            7 - (9 - 7 \cdot 1) \cdot 3 = 1 \\
+            7 \cdot 4 - 9 \cdot 3 = 1 \\
+            z = 4 \text{ et } k = -3
+        \end{aligned}
+        \)
+        
+        \item Finalement, \\
+        \( \begin{aligned}
+            x = 4 \cdot 9 \cdot 4 + 3 \cdot 7 \cdot 4 &= 144 + 84 \pmod{63} \\
+            &= 18 + 21 \pmod{63} \\
+            &= 39 \pmod{63} \\
+        \end{aligned}
+        \)
+    \end{enumerate}
+
+\end{solution}
+
+
+\begin{solution}
+    \text{ } \\
+    \[ x \equiv 13 \pmod{71} \text{ et } x \equiv 41 \pmod{97} \]
+
+    \begin{enumerate}
+        \item Les conditions du théorème des restes Chinois \\
+        $\rightarrow$ 71 et 97 sont premiers entre eux (\(\text{pgcd}(97,71) = 1 \)). Une solution unique existe donc \(71 \cdot 97 = 6887\)
+        
+        \item \(x = a_1 \cdot N_{1} \cdot N_{1}^{-1} + a_2 \cdot N_{2} \cdot N_{2}^{-1}\)
+        
+        \item Calculs des inverses \\
+        \(N_1 = \frac{6887}{71} = 97 \pmod{71}\) $\rightarrow$ $97-71 \cdot 1 = 26$ \\
+        $97 \equiv 26 \pmod{71}$ \\
+        On cherche l'inverse de $26 \pmod{71}$. Pour se faire, on utilise Euclide étendu : \\
+        \( 
+        \begin{aligned}
+            26 x + 71 k = 1 \rightarrow 5 - 2 \cdot 2 &= 1 \\
+                                        5 - (7 - 5 \cdot 1) \cdot 2 &= 1 \\
+                                        5 \cdot 3 - 7 \cdot 2 &= 1 \\
+                                        (19 - 7 \cdot 2) \cdot 3 - 7 \cdot 2 &= 1 \\
+                                        19 \cdot 3 - 7 \cdot 8 &= 1 \\
+                                        19 \cdot 3 - (26 - 19 \cdot 1) \cdot 8 &= 1 \\
+                                        19 \cdot 11 - 26 \cdot 8 &= 1 \\
+                                        (71 - 26 \cdot 2) \cdot 11 - 26 \cdot 8 &= 1 \\
+                                        71 \cdot 11 - 26 \cdot 30 &= 1 \\
+        \end{aligned}
+        \)
+        
+        On trouve donc finalement $x = -30$ mais qu'on rapporte à $x = 41 \pmod{71}$. \\
+    
+        \(N_2 = \frac{6887}{97} = 71 \pmod{97}\) $\rightarrow$ On ne sait pas réduire plus. \\
+        On cherche l'inverse de $71 \pmod{97}$. Pour se faire, on utilise Euclide étendu : \\
+        \( 
+        \begin{aligned}
+            71 z + 97 k = 1 \rightarrow \text{on reprend la dernière ligne d'après} \\
+                                        71 \cdot 11 - 26 \cdot 30 &= 1 \\
+                                        71 \cdot 11 - (97 - 26) \cdot 30 &= 1 \\
+                                        71 \cdot 41 - 97 \cdot 30 &= 1 \\
+        \end{aligned}
+        \)
+
+        On trouve donc finalement $z = 41$ mais qu'on rapporte à $z = 41 \pmod{97}$. \\
+
+        \item Finalement, \\
+        \( \begin{aligned}
+            x = 13 \cdot 97 \cdot 41 + 41 \cdot 71 \cdot 41 &= 51701 + 119351 \pmod{6887} \\
+            &= 3492 + 2272 \pmod{6887} \\
+            &= 5764 \pmod{6887} \\
+        \end{aligned}
+        \)
+    \end{enumerate}
+
+\end{solution}
+
+\begin{solution}
+    \text{ } \\
+    \[ x \equiv 4 \pmod{7} \text{ et } x \equiv 5 \pmod{8} \text{ et } x \equiv 11 \pmod{15} \]
+
+    \begin{enumerate}
+        \item Les conditions du théorème des restes Chinois \\
+        $\rightarrow$ 7, 8 et 15 sont premiers entre eux (\(\text{pgcd}(7,8) = 1 \), \(\text{pgcd}(7,15) = 1 \) and \(\text{pgcd}(8,15) = 1 \)). Une solution unique existe donc \(7 \cdot 8 \cdot 15 = 840 \)
+
+        \item \(x = a_1 \cdot N_{1} \cdot N_{1}^{-1} + a_2 \cdot N_{2} \cdot N_{2}^{-1} + a_3 \cdot N_{3} \cdot N_{3}^{-1}\)
+
+        \item Calculs des inverses \\
+        \(N_1 = \frac{840}{7} = 120 \pmod{7}\) $\rightarrow$ $120 - 7 \cdot 17 = 1$ \\
+        $120 \equiv 1 \pmod{7}$ \\
+        On cherche l'inverse de $1 \pmod{7}$. Pour se faire, on utilise Euclide étendu : \\
+         \( 
+        \begin{aligned}
+            1 x + 7 k = 1 \rightarrow 7 - 7 \cdot 1 = 0 \\
+        \end{aligned}
+        \)
+
+        On trouve donc finalement $x = 1 \pmod{7}$. \\
+        
+        \(N_2 = \frac{840}{8} = 105 \pmod{8}\) $\rightarrow$ $105 - 8 \cdot 13 = 1$ \\
+        $105 \equiv 1 \pmod{8}$ \\
+        On cherche l'inverse de $1 \pmod{8}$. Pour se faire, on utilise Euclide étendu : \\
+        \( 
+        \begin{aligned}
+            1 z + 8 k = 1 \rightarrow 8 - 8 \cdot 1 = 0 \\
+        \end{aligned}
+        \)
+        
+        On trouve donc finalement $z = 1 \pmod{8}$. \\
+
+        \(N_3 = \frac{840}{15} = 56 \pmod{15}\) $\rightarrow$ $56 - 15 \cdot 3 = 11$ \\
+        $56 \equiv 11 \pmod{15}$ \\
+        On cherche l'inverse de $11 \pmod{15}$. Pour se faire, on utilise Euclide étendu : \\
+        \( 
+        \begin{aligned}
+            11 y + 15 k = 1 \rightarrow 15 - 11 \cdot 1 &= 4 \\
+                                        11 - 4 \cdot 2 &= 3 \\
+                                        4 - 3 \cdot 1 &= 1 \\
+                                        3 - 3 \cdot 1 &= 1 \\
+        \end{aligned}
+        \)
+
+        \(
+        \begin{aligned}
+            4 - 3 \cdot 1 &= 1 \\
+            4 - (11 - 4 \cdot 2) \cdot 1 &= 1 \\
+            4 \cdot 3 - 11 \cdot 1 &= 1 \\
+            (15 - 11 \cdot 1) \cdot 3 - 11 \cdot 1 &= 1 \\
+            15 \cdot 3 - 11 \cdot 4 &= 1
+        \end{aligned}
+        \)
+
+        On trouve donc finalement $y = -4 \pmod{15}$ $y = 11 \pmod{15}$. \\
+
+        \item Finalement, \\
+        \( \begin{aligned}
+            x &= (4 \cdot 120 \cdot 1) + (5 \cdot 105 \cdot 1) + (11 \cdot 56 \cdot 11) \pmod{840} \\
+            &= 480 + 525 + 6784 \pmod{840} \\
+            &= 7789 \pmod{840} \\
+            &= 469 \pmod{840} \\
+        \end{aligned} 
+        \)
+        
+    \end{enumerate}
+    
+\end{solution}

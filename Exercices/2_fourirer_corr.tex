@@ -1,0 +1,199 @@
+\session{TP2 - La transformée de Fourier}
+
+\section*{1. Signaux de base}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = \cos(2t)+\sin(3t)$ \\
+        La période de $cos(2t)$ est $T = \pi$ et la période de $cos(3t)$ est $T = \frac{2\pi}{3}$. \\
+        $PPCM(\pi,\frac{2\pi}{3}) = 2\pi$. La période est donc $2\pi$. \\
+        La fréquence est $f = \frac{1}{T} = \frac{1}{2\pi}$ et la vitesse angulaire est $\omega = 2 \pi f = 1$.
+        
+        \item $x(t) = \cos(t)u(t)$ \\
+        $\cos(t)$ a une période $T = 2\pi$ par contre $u(t)$ est la fonction échelon valant 0 avant 0 et 1 après. Cela rend donc $x(t)$ non périodique.
+        
+        \item $x(t) = v(t) + v(-t)$ avec $v(t) = \sin(t)u(t)$ \\ 
+         $x(t) = \sin(t)u(t) + \sin(-t)u(-t)$ \\
+         Lorsque $t<0$, $x(t) = -\sin(t)$ et quand $t>0$, $x(t) = \sin(t)$. $\sin(t)$ et $-\sin(t)$ ont une période de $2\pi$. \\
+         $f = \frac{1}{2\pi}$ et $\omega = 1$.
+    \end{enumerate}
+\end{solution}
+
+\section*{2. Transformée de Fourier}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = e^{-t}\cos(2\pi t)u(t)$
+        \[
+        \begin{aligned}
+            X(i\omega) &= \int_{-\infty}^{\infty} e^{-t}\cos(2\pi t)u(t) e^{-i\omega t} \, \mathrm{d}t \\
+                       &= \int_{-\infty}^{\infty} \cos(2\pi t)u(t) e^{-t(i\omega + 1)} \, \mathrm{d}t \\
+                       &= \int_{0}^{\infty} \cos(2\pi t) e^{-t(i\omega + 1)} \, \mathrm{d}t \\
+                       &= \int_{0}^{\infty} \frac{1}{2}(e^{2\pi t i} + e^{-2\pi t i}) e^{-t(i\omega + 1)} \, \mathrm{d}t \\
+                       &= \int_{0}^{\infty} \frac{1}{2}(e^{-t(i\omega - 2\pi i + 1)} + e^{-t(i\omega + 2\pi i + 1)}) \, \mathrm{d}t \\
+                       &= \frac{1}{2}\left(\frac{1}{(i\omega - 2\pi i + 1)} + \frac{1}{(i\omega + 2\pi i + 1)}\right)
+        \end{aligned}
+        \]
+         
+        \item $x(t) = e^{-t+2}u(t-2)$
+        \[
+        \begin{aligned}
+        X(i\omega) &= \int_{-\infty}^{\infty} e^{-t+2}u(t-2) e^{-i\omega t} \, \mathrm{d}t \\
+                   &= e^{2} \int_{-\infty}^{\infty} e^{-t}u(t-2) e^{-i\omega t} \, \mathrm{d}t \\
+                   &= e^{2} \int_{2}^{\infty} e^{-t(i\omega + 1)} \, \mathrm{d}t \\
+                   &= e^{2} \frac{1}{i\omega + 1} e^{-2(i\omega + 1)} = \frac{e^{2}}{i\omega + 1} e^{-2i\omega}
+        \end{aligned}
+        \]
+        
+        \item $x(t) = e^{-at}u(t)$, \ $a>0$ 
+        \[
+        \begin{aligned}
+            X(i\omega) &= \int_{-\infty}^{\infty} e^{-at}u(t)e^{-i\omega t} \, \mathrm{d}t \\
+                       &= \int_{0}^{\infty} e^{-t (i\omega + a)} \, \mathrm{d}t \\
+                       &= \frac{1}{i\omega + a}
+        \end{aligned}
+        \]
+        
+        \item $x(t) = e^{-a|t|}$ \\
+        \[
+        \begin{aligned}
+            \text{Si } t > 0, \quad X(i\omega) &= \int_{-\infty}^{0} e^{-at} e^{-i\omega t} \, \mathrm{d}t \\
+                                               &= \int_{-\infty}^{0} e^{-t (i\omega + a)} \, \mathrm{d}t \\
+                                               &= \frac{1}{a + i\omega}
+        \end{aligned}
+        \]
+        \[
+        \begin{aligned}
+            \text{Si } t < 0, \quad X(i\omega) &= \int_{0}^{\infty} e^{at} e^{-i\omega t} \, \mathrm{d}t \\
+                                               &= \int_{0}^{\infty} e^{-t (i\omega - a)} \, \mathrm{d}t \\
+                                               &= \frac{1}{i\omega - a}
+        \end{aligned}
+        \]
+        
+        \item $x(t) = 
+            \begin{cases}
+                1 & \text{pour } |t| < T_1 \\
+                0 & \text{pour } |t| > T_1
+            \end{cases}
+        	$ \\
+        \[
+        \begin{aligned}
+            X(i\omega) &= \int_{-T_1}^{T_1} e^{-i\omega t} \, \mathrm{d}t \\
+                       &= \frac{-1}{i\omega} \left(e^{-i\omega T_1} - e^{i\omega T_1}\right)
+        \end{aligned}
+        \]
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+        
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        $
+        X(i\omega) = e^{-2\omega}u(\omega)
+        $
+        \[
+        \begin{aligned}
+            x(t) &= \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-2\omega} u(\omega) e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{2\pi} \int_{0}^{\infty} e^{\omega (-2 + it)} \, \mathrm{d}\omega \\
+                 &= \frac{1}{2\pi} \cdot \frac{-1}{-2 + it} \\
+                 &= \frac{1}{2\pi} \cdot \frac{-1}{-2 + it} \cdot \frac{-2 - it}{-2 - it} \\
+                 &= \frac{1}{2\pi} \cdot \frac{2 + it}{4 + t^2}
+        \end{aligned}
+        \]
+    
+        \item 
+        $
+        X(i\omega) = 
+        \begin{cases}
+            \cos(2\omega) & \text{si } |\omega| < \pi/4 \\
+            0 & \text{sinon}.
+        \end{cases}
+        $
+        \[
+        \begin{aligned}
+            x(t) &= \frac{1}{2\pi} \int_{-\pi/4}^{\pi/4} \cos(2\omega) e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{4\pi} \int_{-\pi/4}^{\pi/4} (e^{2i\omega} + e^{-2i\omega}) e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{4\pi} \int_{-\pi/4}^{\pi/4} \left( e^{(2i + it)\omega} + e^{(-2i + it)\omega} \right) \, \mathrm{d}\omega \\
+                 &= \frac{1}{4\pi} \left[ \frac{1}{(2 + t)i} \left( e^{i(2 + t)\frac{\pi}{4}} - e^{-i(2 + t)\frac{\pi}{4}} \right) + \frac{1}{(-2 + t)i} \left( e^{i(-2 + t)\frac{\pi}{4}} - e^{-i(-2 + t)\frac{\pi}{4}} \right) \right] \\
+                 &= \frac{1}{2\pi} \left( \frac{1}{2 + t} \sin\left((2 + t)\frac{\pi}{4}\right) + \frac{1}{-2 + t} \sin\left((-2 + t)\frac{\pi}{4}\right) \right)
+        \end{aligned}
+        \]
+    
+        \item 
+        $
+        X(i\omega) = 
+        \begin{cases}
+            1 & \text{pour } |\omega| < W \\
+            0 & \text{pour } |\omega| > W
+        \end{cases}
+        $
+        \[
+        \begin{aligned}
+            x(t) &= \frac{1}{2\pi} \int_{-W}^{W} e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{2it\pi} \left( e^{it W} - e^{-it W} \right) \\
+                 &= \frac{1}{t\pi} \sin(t W)
+        \end{aligned}
+        \]
+    
+    \end{enumerate}
+\end{solution}
+    
+\section*{3. Exercices Supplémentaires}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item Ce signal est une somme de deltas de Dirac espacés de 2, alternant en signe pour chaque impulsion. Ce motif répété confirme donc que le signal est périodique, avec une période fondamentale de 2. La fréquence fondamentale est $f = \frac{1}{T} = \frac{1}{2} Hz$. La vitesse angulaire $\omega = 2*\pi*f = \pi$ rad/s.
+        
+        \begin{center}
+        \includegraphics[width=0.7\linewidth]{2024/output.png}
+        \end{center}
+
+        \item $v(t)=\cos(t)u(t)$ est une fonction cosinus pour $t \geq 0$, multipliée par une fonction échelon qui annule $v(t)$ pour $t<0$. $v(-t) = \cos(-t) u(t) = \cos(t) u(-t)$, qui est la même cosinus mais définie pour $t \leq 0$. \\
+        Le signal $x(t) = v(-t) + v(t)$ forme un signal symétrique autour de $t=0$ qui ressemble à une cosinus complet pour $t \in (-\infty, \infty)$. \\
+        Cependant, en raison de la multiplication par la fonction échelon, $x(t)$ n'est pas strictement périodique, car la fonction échelon introduit une discontinuité dans le domaine temporel.
+        
+        \begin{center}
+        \includegraphics[width=0.8\linewidth]{2024/output2.png}
+        \end{center}
+        
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $X(i\omega) = \frac{1}{2i} \left( \frac{1}{2 - i(3\pi - \omega)} - \frac{1}{2 - i(3\pi + \omega)} \right)$
+        \item $X(i\omega) = \frac{1}{2} \left( \frac{1}{i\omega - (3 + i5\pi)} + \frac{1}{i\omega - (3 - i5\pi)} \right)$
+        \item $X(i\omega) = \sqrt{\pi} e^{-\omega^2 / 4}$
+        \item $X(i\omega) = \frac{1}{(1 + i\omega)^2}$
+        \item $X(i\omega) = e^{-i 3\omega}$
+        \item $X(i\omega) = \pi e^{-|\omega|}$
+        \item $X(i\omega) = \frac{1}{b + i\omega}$
+        \item $X(i\omega) = \frac{\pi}{\pi^2 + \omega^2}$
+        \item $X(i\omega) = \frac{e^{-i\omega}}{2} \left( \frac{1}{1 + i(\omega - 2\pi)} + \frac{1}{1 + i(\omega + 2\pi)} \right)$
+        \item $X(i\omega) = i\omega$
+    \end{enumerate}
+    \end{multicols}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = \frac{1}{6} e^{-3|t|}$
+        \item $x(t) = \sqrt{\pi} e^{-t^2 / 4}$
+        \item $x(t) = e^{-t} u(t)$
+        \item $x(t) = \frac{-1}{\pi (t^2 - 4)}$
+        \item $x(t) = \frac{1}{2\pi} e^{i5t}$
+        \item $x(t) = \frac{1}{2a} e^{-a|t|}$
+        \item $x(t) = \frac{1}{2\pi} \cdot \frac{1 + it}{1 + t^2}$
+        \item $x(t) = \frac{1}{2} \cdot e^{-|t|}$
+    \end{enumerate}
+    \end{multicols}
+\end{solution}

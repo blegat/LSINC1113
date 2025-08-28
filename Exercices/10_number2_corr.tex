@@ -1,0 +1,436 @@
+\session{TP10 - Théorie des nombres}
+
+\section*{1. Inverses, unités et générateurs}
+
+\begin{solution}
+    \begin{enumerate}[label=(\alph*)]
+        \item $a = 11$ and $p = 47$, on cherche l'inverse de $11 \pmod{47}$. \\
+        1. Euclide étendu : $11 x + 47 k = 1$ \\
+
+        \(
+        \begin{aligned}
+            47 - 11 \cdot 4 &= 3 \\
+            11 - 3 \cdot 3 &= 2 \\
+            3 - 2 \cdot 1 &= 1 \\
+            2 - 1 \cdot 2 &= 0 \\
+        \end{aligned}
+        \)
+
+        11 est inversible modulo 47. \\
+
+        \(
+        \begin{aligned}
+            3 - 2 \cdot 1 = 1 \\
+            3 - (11 - 3 \cdot 3) \cdot 1 &= 1 \\
+            3 \cdot 4 - 11 \cdot 3 &= 1 \\
+            (47 - 11 \cdot 4) \cdot 4 - 11 \cdot 3 &= 1 \\
+            47 \cdot 4 - 11 \cdot 17 &= 1 \\
+        \end{aligned}
+        \)
+
+        On a $ x = -30$ qu'on transforme en $x = 30 \pmod{47}$. \\
+
+        2. Fermat \\
+        \(
+        \begin{aligned}
+            11^{47-2} \pmod{47} \\
+            11^{2} \equiv 121 \equiv 27  \pmod{47} \\
+            11^{4} \equiv 27^{2} \equiv 729 \equiv 25  \pmod{47} \\
+            11^{8} \equiv 25^{2} \equiv 625 \equiv 16  \pmod{47} \\
+            11^{16} \equiv 16^{2} \equiv 256 \equiv 21  \pmod{47} \\
+            11^{32} \equiv 21^{2} \equiv 441 \equiv 19  \pmod{47} \\
+        \end{aligned}
+        \)
+
+        \( 11^{45} = 11^{32} \cdot 11^{8} \cdot 11^{4} \cdot 11 = 19 \cdot 16 \cdot 25 \cdot 11 = 83600 = 30 \pmod{47} \)
+
+        \item $a = 345$ and $p = 587$, on cherche l'inverse de $345 \pmod{587}$. \\
+        1. Euclide étendu : $345 x + 587 k = 1$ \\
+
+        \(
+        \begin{aligned}
+            587 - 345 \cdot 1 &= 242 \\
+            345 - 242 \cdot 1 &= 103 \\
+            242 - 103 \cdot 2 &= 36 \\
+            103 - 36 \cdot 2 &= 31 \\
+            36 - 31 \cdot 1 &= 5 \\
+            31 - 5 \cdot 6 &= 1 \\
+            5 - 1 \cdot 5 &= 0 \\
+        \end{aligned}
+        \)
+
+        345 est inversible modulo 587. \\
+
+        \(
+        \begin{aligned}
+            31 - 5 \cdot 6 &= 1 \\
+            31 - (36 - 31) \cdot 6 = 1 &\rightarrow 31 \cdot 7 - 36 \cdot 6 = 1\\
+            (103 - 36 \cdot 2) \cdot 7 - 36 \cdot 6 = 1 &\rightarrow 103 \cdot 7 - 36 \cdot 20 = 1\\
+            103 \cdot 7 - (242 - 103 \cdot 2) \cdot 20 = 1 &\rightarrow 103 \cdot 47 - 242 \cdot 20 = 1 \\
+            (345 - 242) \cdot 47 - 242 \cdot 20 = 1 &\rightarrow 345 \cdot 47 - 242 \cdot 67 = 1 \\
+            345 \cdot 47 - (587 - 345) \cdot 77 = 1 &\rightarrow 345 \cdot 114 - 587 \cdot 77 = 1
+        \end{aligned}
+        \)
+
+        On a $ x = 114 \pmod{587}$. \\
+
+        2. Fermat \\
+        \(
+        \begin{aligned}
+            345^{587 -2 } \pmod{587} \\
+            345^{2} \equiv 119025 \equiv 451  \pmod{587} \\
+            345^{4} \equiv 451^{2} \equiv 299  \pmod{587} \\
+            345^{8} \equiv 299^{2} \equiv 177  \pmod{587} \\
+            345^{16} \equiv 177^{2} \equiv 218  \pmod{587} \\
+            345^{32} \equiv 218^{2} \equiv 564  \pmod{587} \\
+            345^{64} \equiv 564^{2} \equiv 529  \pmod{587} \\
+            345^{128} \equiv 529^{2} \equiv 429  \pmod{587} \\
+            345^{256} \equiv 429^{2} \equiv 310  \pmod{587} \\
+            345^{512} \equiv 310^{2} \equiv 419  \pmod{587} \\
+        \end{aligned}
+        \)
+
+        \( 345^{585} = 345^{512} \cdot 345^{64} \cdot 345^{8} \cdot 345 = 419 \cdot 529 \cdot 177 \cdot 345 = 114 \pmod{587} \)
+
+        \item $a = 78467$ et $p = 104801$ on cherche l'inverse de $78467 \pmod{104801}$ \\
+        1. Euclide étendu : $78467 \cdot x + 104801 \cdot y = 1$\\
+        
+        \(
+        \begin{aligned}
+            104801 &= 1 \cdot 78467 + 26334 \\
+            78467 &= 2 \cdot 26334 + 25799 \\
+            26334 &= 1 \cdot 25799 + 535 \\
+            25799 &= 48 \cdot 535 + 79 \\
+            535 &= 6 \cdot 79 + 61 \\
+            79 &= 1 \cdot 61 + 18 \\
+            61 &= 3 \cdot 18 + 7 \\
+            18 &= 2 \cdot 7 + 4 \\
+            7 &= 1 \cdot 4 + 3 \\
+            4 &= 1 \cdot 3 + 1 \\
+            3 &= 3 \cdot 1 + 0 \\
+        \end{aligned}
+        \)
+
+        78467 est inversible modulo 104801. \\
+
+        \(
+        \begin{aligned}
+            1 &= 4 - 1 \cdot 3 \\
+            1 &= 4 - 1 \cdot (7 - 1 \cdot 4) = 2 \cdot 4 - 1 \cdot 7 \\
+            1 &= 2 \cdot (18 - 2 \cdot 7) - 1 \cdot 7 = 2 \cdot 18 - 5 \cdot 7 \\
+            1 &= 2 \cdot 18 - 5 \cdot (61 - 3 \cdot 18) = 17 \cdot 18 - 5 \cdot 61 \\
+            1 &= 17 \cdot (79 - 1 \cdot 61) - 5 \cdot 61 = 17 \cdot 79 - 22 \cdot 61 \\
+            1 &= 17 \cdot 79 - 22 \cdot (535 - 6 \cdot 79) = 149 \cdot 79 - 22 \cdot 535 \\
+            1 &= 149 \cdot (25799 - 48 \cdot 535) - 22 \cdot 535 = 149 \cdot 25799 - 7194 \cdot 535 \\
+            1 &= 149 \cdot 25799 - 7194 \cdot (26334 - 1 \cdot 25799) = 7343 \cdot 25799 - 7194 \cdot 26334 \\
+            1 &= 7343 \cdot (78467 - 2 \cdot 26334) - 7194 \cdot 26334 = 7343 \cdot 78467 - 21880 \cdot 26334 \\
+            1 &= 7343 \cdot 78467 - 21880 \cdot (104801 - 1 \cdot 78467) = 29223 \cdot 78467 - 21880 \cdot 104801 \\
+        \end{aligned}
+        \)
+
+        On a $ x = 29223 \pmod{104801}$. \\
+
+        2. Fermat :  on fait comme précédemment et on tombe sur $ x = 29223 \pmod{104801}$. \\
+
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item \( m = 7 \rightarrow  \Z/7\Z = {1,2,3,4,5,6} \Phi(7) = 6\)
+        \item \( m = 10 \rightarrow  \Z/10\Z = {1,3,7,9} \Phi(10) = 4\)
+        \item \( m = 13 \rightarrow  \Z/13\Z = {1,2,3,4,5,6,7,8,9,10,11,12} \Phi(13) = 12\)
+        \item \( m = 24 \rightarrow  \Z/24\Z = {1,5,7,11,13,17,19,23} \Phi(24) = 8\)
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ } \\
+    (a) 
+    \begin{enumerate}[label=(\roman*)]
+        \item $p = 7$ \\
+        Pour vérifier que 2 est une racine primitive modulo p, il faut vérifier que l'ordre de 2 modulo p est p-1. Cela revient à $2^{k} \equiv 1 \pmod{p} \text{ pour } k < p - 1, k \neq 0$. 
+
+        \(
+            2^1 \equiv 2 \pmod{7} \\
+            2^2 \equiv 4 \pmod{7} \\
+            2^3 \equiv 8 \equiv 1 \pmod{7} \\
+        \)
+
+        2 n'est donc pas une racine primitive modulo 7.        
+
+        \item $p = 13$ 
+
+        \(
+            2^1 \equiv 2 \pmod{13} \\
+            2^2 \equiv 4 \pmod{13} \\
+            2^3 \equiv 8 \pmod{13} \\
+            2^4 \equiv 16 \equiv 3 \pmod{13} \\
+            2^5 \equiv 32 \equiv 6 \pmod{13} \\
+            2^6 \equiv 64 \equiv 12 \pmod{13} \\
+            2^7 \equiv 128 \equiv 11 \pmod{13} \\
+            2^8 \equiv 256 \equiv 9 \pmod{13} \\
+            2^9 \equiv 512 \equiv 5 \pmod{13} \\
+            2^{10} \equiv 1024 \equiv 10 \pmod{13} \\
+            2^{11} \equiv 2048 \equiv 7 \pmod{13} \\
+            2^{12} \equiv 4096 \equiv 1 \pmod{13} \\
+        \)
+
+        2 est une racine primitive modulo 13.
+
+        \item $p = 19$ 
+
+        \(
+            2^1 \equiv 2 \pmod{19} \\
+            2^2 \equiv 4 \pmod{19} \\
+            2^3 \equiv 8 \pmod{19} \\
+            2^4 \equiv 16 \pmod{19} \\
+            2^5 \equiv 32 \equiv 13 \pmod{19} \\
+            2^6 \equiv 64 \equiv 7 \pmod{19} \\
+            2^7 \equiv 128 \equiv 14 \pmod{19} \\
+            2^8 \equiv 256 \equiv 9 \pmod{19} \\
+            2^9 \equiv 512 \equiv 18 \pmod{19} \\
+            2^{10} \equiv 1024 \equiv 17 \pmod{19} \\
+            2^{11} \equiv 2048 \equiv 15 \pmod{19} \\
+            2^{12} \equiv 4096 \equiv 11 \pmod{19} \\
+            2^{13} \equiv 8192 \equiv 3 \pmod{19} \\
+            2^{14} \equiv 16384 \equiv 6 \pmod{19} \\
+            2^{15} \equiv 12 \pmod{19} \\
+            2^{16} \equiv 5 \pmod{19} \\
+            2^{17} \equiv 10 \pmod{19} \\
+            2^{18} \equiv 1 \pmod{19} \\
+        \)
+
+        2 est une racine primitive modulo 19.
+        
+        \item 2 est une racine primitive modulo 23. \\
+    \end{enumerate}
+
+    (b)
+    \begin{enumerate}[label=(\roman*)]
+        \item 3 est une racine primitive modulo 5.
+        \item 3 est une racine primitive modulo 7.
+        \item 3 n'est une racine primitive modulo 11.
+        \item 3 est une racine primitive modulo 17. \\
+    \end{enumerate}
+
+    (c)
+    \begin{enumerate}[label=(\roman*)]
+        \item 5 est la première racine primitive modulo 23.
+        \item 2 est une racine primitive modulo 29.
+        \item 6 n'est une racine primitive modulo 41.
+        \item 3 est une racine primitive modulo 43.
+    \end{enumerate}
+
+\end{solution}
+
+\begin{solution}
+    \text{ } \\
+    \(
+    2^{(p-1)/2} \pmod{p} 3 \leq p \leq 20 \rightarrow p \in [3, 5, 7, 11, 13, 17, 19] \\    
+    \text{Si } p = 3, 2^1 \equiv 2 \pmod{3} \rightarrow p-1 \\
+    \text{Si } p = 5, 2^2 \equiv 4 \pmod{5} \rightarrow p-1 \\
+    \text{Si } p = 7, 2^3 \equiv 8 \equiv 1 \pmod{7} \rightarrow 1 \\
+    \text{Si } p = 11, 2^5 \equiv 32 \equiv 10 \pmod{11} \rightarrow p-1 \\
+    \text{Si } p = 13, 2^6 \equiv 64 \equiv 12 \pmod{13} \rightarrow p-1 \\
+    \text{Si } p = 17, 2^8 \equiv 256 \equiv 1 \pmod{17} \rightarrow 1 \\
+    \text{Si } p = 19, 2^9 \equiv 512 \equiv 18 \pmod{19} \rightarrow p-1 \\
+    \)
+
+    $\rightarrow$ Si 2 est un résidu quadratique modulo p alors $2^{(p-1)/2} \equiv 1 \text{ sinon } \equiv p - 1$
+\end{solution}
+
+\newpage
+
+\section*{2. Récurrences}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item \(v_{n+2} = 2 (v_{n+1} - v_{n})\) avec $v_0 = 1$ et $v_1 = 2$ \\
+
+        L’équation caractéristique est :
+        \[
+        r^2 - 2r + 2 = 0.
+        \]
+        Résolvons cette équation quadratique :
+        \[
+        r = \frac{2 \pm \sqrt{2^2 - 4 \cdot 1 \cdot 2}}{2 \cdot 1} = \frac{2 \pm \sqrt{-4}}{2} = 1 \pm i.
+        \]
+        
+        Les racines complexes \( r_1 = 1 + i \) et \( r_2 = 1 - i \) donnent une solution de la forme :
+        \[
+        v_n = A (1 + i)^n + B (1 - i)^n.
+        \]
+
+        Pour \( n = 0 \) :
+        \[
+        v_0 = A \cdot (1+i)^0 + B \cdot (1-i)^0 = A + B = 1.
+        \]
+        
+        Pour \( n = 1 \) :
+        \[
+        v_1 = A \cdot (1+i)^1 + B \cdot (1-i)^1 = A \cdot (1+i) + B \cdot (1-i).
+        \]
+        Développons \( (1+i) \) et \( (1-i) \) pour \( n = 1 \) :
+        \[
+        v_1 = A(1+i) + B(1-i) = (A+B) + i(A-B).
+        \]
+        En séparant les parties réelle et imaginaire, on obtient :
+        \[
+        \text{Partie réelle : } A + B = 1,
+        \]
+        \[
+        \text{Partie imaginaire : } A - B = 2.
+        \]
+        
+        Résolvons ce système de deux équations :
+        1. \( A + B = 1 \),
+        2. \( A - B = 2 \).
+        
+        Ajoutons et soustrayons les deux équations :
+        \[
+        2A = 3 \implies A = \frac{3}{2},
+        \]
+        \[
+        2B = -1 \implies B = -\frac{1}{2}.
+        \]
+
+        Solution finale :
+        \[
+        v_n = \frac{3}{2} (1+i)^n - \frac{1}{2} (1-i)^n.
+        \]
+
+        \item \( x_{n+2} + 3x_{n+1} + 2x_n = 5 \cdot 3^n, \, x_0 = 0, \, x_1 = 1 \) \\
+        L’équation homogène est :
+        \[
+        x_{n+2} + 3x_{n+1} + 2x_n = 0.
+        \]
+        L’équation caractéristique est :
+        \[
+        r^2 + 3r + 2 = 0.
+        \]
+        Facteur :
+        \[
+        r^2 + 3r + 2 = (r + 1)(r + 2).
+        \]
+        Les racines sont \( r_1 = -1 \), \( r_2 = -2 \). \\
+        La solution homogène est :
+        \[
+        x_n^{\text{hom}} = A(-1)^n + B(-2)^n.
+        \]
+
+        Pour \( n = 0 \) :
+        \[
+        x_0 = A + B = 0
+        \]
+        
+        Pour \( n = 1 \) :
+        \[
+        x_1 = - A - 2B = 1 = - (A + 2 B) = 1
+        \]
+
+        Résolvons ce système de deux équations :
+        1. \( A + B = 0 \),
+        2. \( - (A + 2 B) = 1 \).
+        
+        Mettons ensemble les deux équations :
+        \[
+        A + B + B = - 1 \implies B = -1,
+        \]
+        \[
+        A + B = 0 \implies B = 1.
+        \]
+
+        Solution finale :
+        \[
+        x_n = (-1)^n - (-2)^n
+        \]
+
+        \item \( y_{n+2} - 4y_{n+1} + 4y_n = 1, \, y_0 = 0, \, y_1 = 3 \) \\
+        L’équation homogène est :
+        \[
+        y_{n+2} - 4y_{n+1} + 4y_n = 0.
+        \]
+        L’équation caractéristique est :
+        \[
+        r^2 - 4r + 4 = 0 \implies (r - 2)^2 = 0.
+        \]
+        La racine double est \( r = 2 \). La solution homogène est :
+        \[
+        y_n^{\text{hom}} = (A + Bn) \cdot 2^n.
+        \]
+
+        Pour \( n = 0 \) :
+        \[
+        y_0 = A = 0
+        \]
+        
+        Pour \( n = 1 \) :
+        \[
+        y_1 = (A + B) \cdot 2 = 3
+        \]
+
+        Résolvons ce système de deux équations :
+        1. \( A = 0 \),
+        2. \( (A + B) \cdot 2 = 3  \).
+
+        Mettons ensemble les deux équations :
+        \[
+        2 B = 3 \implies B = \frac{3}{2}.
+        \]
+
+        Solution finale :
+        \[
+        y_n^{\text{hom}} = \frac{3}{2}n \cdot 2^n.
+        \]
+
+        \item \( z_n + 6z_{n-1} + 9z_{n-2} = 16n \), avec \( z_0 = 2, z_1 = 2 \)
+
+        La récurrence homogène est :
+        \[
+        z_n + 6z_{n-1} + 9z_{n-2} = 0.
+        \]
+        
+        L'équation caractéristique associée est :
+        \[
+        r^2 + 6r + 9 = 0.
+        \]
+        
+        Facteur l'équation :
+        \[
+        (r + 3)^2 = 0.
+        \]
+        
+        La racine double est \( r = -3 \). La solution homogène est donc :
+        \[
+        z_n^{\text{hom}} = (A + Bn)(-3)^n,
+        \]
+
+        Pour \( n = 0 \) :
+        \[
+        z_0 = A = 2
+        \]
+        
+        Pour \( n = 1 \) :
+        \[
+        z_1 = (A + B) \cdot (-3) = 2
+        \]
+
+        Résolvons ce système de deux équations :
+        1. \( A = 2 \),
+        2. \( (A + B) \cdot (-3) = 2  \).
+
+        Mettons ensemble les deux équations :
+        \[
+        -6 - 3B = 2 \implies B = \frac{-8}{3}.
+        \]
+
+        Solution finale :
+        \[
+        y_n^{\text{hom}} = (2 - \frac{8}{3}n )\cdot (-3)^n.
+        \]
+ 
+    \end{enumerate}
+\end{solution}
