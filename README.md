@@ -1,27 +1,31 @@
 # LSINC1113 Compléments de mathématiques
 
 [<img src="https://plutojl.org/assets/favicon.svg" height="20"/>![](https://img.shields.io/badge/Materials-View-blue.svg)<img src="https://plutojl.org/assets/favicon.svg" height="20"/>](https://blegat.github.io/LSINC1113/)
-[<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/UCLouvain_logo.svg" height="20"/>](https://uclouvain.be/en-cours-2024-lsinc1113)
+[<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/UCLouvain_logo.svg" height="20"/>](https://uclouvain.be/en-cours-2025-lsinc1113)
 [<img src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Moodle-logo.svg" height="16"/>](https://moodle.uclouvain.be/enrol/index.php?id=5040)
-[Gitlab](https://forge.uclouvain.be/blegat/lsinc1113)
-[GitHub](https://github.com/blegat/LSINC1113)
 
-This repository contains the [Pluto](https://plutojl.org/) notebooks of the course. There are two options to visualize them.
+This repository contains different resources for the LSINC1113 courses given at UCLouvain.
+See the README in each subfolder for more details and troubleshooting:
 
-## Option 1 : Static version
+* [`Labs`](LabAD) : Materials for the lab sessions.
+* [`Lectures`](Lectures) : [Pluto](https://plutojl.org/) notebooks for lectures on LLMs and Diffusion Models. A static version of the notebooks is available [here](https://blegat.github.io/LSINC1113/). This static version allows you to visualize the slides in your web browser without the need to install [Julia](https://julialang.org/) nor [Pluto](https://plutojl.org/).
+* [`Exams`](Exams) : Previous exams.
 
-[<img src="https://raw.githubusercontent.com/fonsp/Pluto.jl/dd0ead4caa2d29a3a2cfa1196d31e3114782d363/frontend/img/logo_white_contour.svg" height="16"/> notebooks](https://blegat.github.io/LSINC1113/) ← Follow this link to access a static version of the notebooks that can be visualized in your web browser without the need to install [Julia](https://julialang.org/) nor [Pluto](https://plutojl.org/).
+## Schedule
 
-To visualize it as slides, open the javascript console of your web browser and enter `present()`. To leave this slide mode, enter `present()` again.
-To enter full screen mode, use `F11` on your keyboard.
-
-## Option 2 : Dynamic version
-
-First, download the `.jl` file in this repository (e.g., by [downloading a zip](https://docs.github.com/en/get-started/start-your-journey/downloading-files-from-github) or using [`git clone`](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)).
-
-Now, install [Julia](https://julialang.org/) (I recommend doing this using [juliaup](https://julialang.org/downloads/#juliaup_-_julia_version_manager)).
-Once this is completed, [install and then run Pluto](https://plutojl.org/#install).
-
-## 🏆 Gain bonus points by fixing typos
-
-If you find any typo or mistakes, feel free to open an issue or make a pull requests, it will be rewarded by bonus points on your final grade of the course! Note that [you can make a pull request without having to leave your web browser](https://docs.github.com/en/repositories/working-with-files/managing-files/editing-files).
+| Week  |   Monday   |   Lecture     |   Exercise    |  Project  |
+|-------|------------|---------------|---------------|-----------|
+| S1    | 15/09/2025 | Complexes     | Complexes     | 🚀 roots  |
+| S2    | 22/09/2025 | Récurrence    | Récurrence    | 🏁 roots  |
+| S3    | 29/09/2025 | Th. nombres   | Th. nombres   | 🚀 crypto |
+| S4    | 06/10/2025 | Crypto        | Th. nombres   |           |
+| S5    | 13/10/2025 | Graphes       | Spanning      |           |
+| S6    | 20/10/2025 | Graphes       | DAG           | 🏁 crypto |
+|       | 27/10/2025 | 🎃            |               |           |
+| S7    | 03/11/2025 |               | Shortest Path |           |
+| S8    | 10/11/2025 |               | Max-Flow      |           |
+| S9    | 17/11/2025 | Fourier       | Fourier       | 🚀 FFTB   |
+| S10   | 24/11/2025 | Fourier       | Fourier       |           |
+| S11   | 01/12/2025 | Gradient      | Gradient      |           |
+| S12   | 08/12/2025 | AutoDiff      | LabAutoDiff   |           |
+| S13   | 15/12/2025 | Intégrale     | Intégrale     | 🏁 FFTB   |
