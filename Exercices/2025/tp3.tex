@@ -1,0 +1,163 @@
+\session{TP3 - Théorie des nombres}
+
+\section*{Rappels Théoriques}
+\textbf{0. Le modulo} \\
+Le modulo, c’est une façon de dire : “je ne m’intéresse qu’au reste de la division euclidienne.” \\
+
+Quand on écrit
+\[
+a \equiv b \pmod{m}
+\]
+on lit : a et b laissent le même reste quand on les divise par m. On peut aussi dire m divise $(a-b)$. \\
+
+Exemple : Si m = 5. $7 \equiv 12 \equiv 17 \equiv 22 \pmod{5}$ car leur division par 5 donne le même reste, 2. \\
+
+\textbf{1. Division Euclidienne} \\
+Pour deux entiers \( a \) (dividende) et \( d \) (diviseur, \( d \neq 0 \)), 
+il existe des entiers \( q \) (quotient) et \( r \) (reste) tels que :
+\[
+a = dq + r \quad \text{avec } 0 \le r < |d|.
+\]
+\begin{itemize}
+    \item Le quotient \( q \) est donné par \( q = \lfloor a / d \rfloor \)
+    \item Le reste \( r \) est obtenu par \( r = a - dq \)
+\end{itemize}
+
+En notation modulaire $a \equiv r \pmod{d}$. \\
+
+\textbf{2. Algorithme d'Euclide} \\
+Cet algorithme permet de calculer le \textit{plus grand commun diviseur} (\( \text{pgcd} \)) ou the \textit{greatest common divisor} (\( \text{gcd} \)) de deux nombres \( a \) et \( d \) (\( a > d > 0 \)). On applique la division euclidienne à répétition :
+\begin{enumerate}
+    \item Diviser \( a \) par \( d \), et noter le reste \( r \).
+    \item Remplacer \( a \) par \( d \), et \( d \) par \( r \).
+    \item Répéter jusqu'à ce que \( r = 0 \). 
+\end{enumerate}
+Le dernier reste non nul est le \( \text{pgcd}(a, d) \). \\
+
+Au lieu de tester tous les diviseurs possibles, on réduit le problème à des restes de plus en plus petits. Le pgcd est utile pour savoir si deux nombres sont premiers entre eux, ce qui conditionne la possibilité d’inverser un nombre modulo un autre. \\
+
+\textbf{3. Théorème de Bézout} \\
+Si \( \text{pgcd}(a, b) = c \), alors il existe des entiers \( x \) et \( y \) tels que :
+\[
+ax + by = \text{pgcd}(a,b).
+\]
+En notation modulaire,
+\[
+ax \equiv c \pmod{b} \quad \text{ et } \quad by \equiv c \pmod{a}
+\]
+Si $\text{pgcd}(a,b)=1$, on peut trouver un inverse modulo alors il existe $x$ tel que $ax \equiv 1 \pmod{b}$. Si le \text{pgcd} ne vaut pas 1, certaines congruences n'ont pas de solution. 
+L’algorithme d’Euclide étendu permet de trouver ces coefficients \( x \) et \( y \). \\
+
+\textit{Lemme}:
+\[
+\text{Si } a \equiv r \pmod{b} \text{ alors } \text{pgcd}(a, b) = \text{pgcd}(b, r)
+\]
+
+\textit{Arithmétique modulaire}: somme. 
+\[
+a \equiv \alpha \pmod{n} \quad b \equiv \beta \pmod{n}
+\quad \Rightarrow \quad a + b \equiv \alpha + \beta \pmod{n}
+\]
+
+\[
+a \equiv b \pmod{n} \quad a + k \equiv b + k \pmod{n}
+\]
+
+\textit{Arithmétique modulaire}: produit. 
+\[
+a \equiv \alpha \pmod{n} \quad \text{et} \quad b \equiv \beta \pmod{n}
+\quad \Rightarrow \quad a b \equiv \alpha \beta \pmod{n}
+\]
+
+\textbf{4. Euclide étendu}\\
+L’algorithme d’Euclide étendu permet de trouver une combinaison linéaire :
+\[
+a \cdot x + m \cdot y = 1,
+\]
+En réduisant cette égalité modulo $m$, le terme $my$ disparaît (car divisible par $m$) :
+\[
+ax \equiv 1 \pmod{m}
+\]
+où \( x \) (réduit modulo \( m \)) est l’inverse modulaire \( a^{-1} \pmod m \). Cela signifie aussi quel x donne un reste 1 quand on multiplie par 3 et divise par 7. \\
+
+C’est comme l’algorithme d’Euclide, mais on garde la trace des coefficients.
+Il te dit non seulement “le pgcd vaut 1”, mais aussi “comment le combiner pour obtenir 1”. \\
+
+\textbf{5. Congruences} \\
+Une congruence est une relation de la forme :
+\[
+ax \equiv b \pmod{m},
+\]
+Tu peux la réécrire comme : 
+\[
+ax - b = km \quad \Rightarrow \quad ax + m(-k) = b
+\]
+En utilisant l’algorithme d’Euclide étendu, tu peux déterminer si elle a une solution (si $\text{pgcd}(a,m)$ divise $b$) et la trouver explicitement.\\
+
+\textbf{5. Théorème des Restes Chinois} \\
+Pour résoudre un système de congruences, tu utilises le théorème des restes chinois. Pour appliquer le théorème des restes chinois (TRC), tu as besoin d’inverses modulaires entre les différents modules. Ces inverses se trouvent grâce à l'algorithme d'Euclide étendu.
+\[
+x \equiv a_1 \pmod{m_1} \quad \text{et} \quad x \equiv a_2 \pmod{m_2},
+\]
+si \( m_1 \) et \( m_2 \) sont premiers entre eux (\( \text{pgcd}(m_1, m_2) = 1 \)), il existe une solution unique modulo \( m_1 \cdot m_2 \). \\
+
+\textbf{6. Inverses Modulo} \\
+L’inverse modulo \( a \) par rapport à \( m \) (\( a^{-1} \)) est un entier \( x \) tel que :
+\[
+a \cdot x \equiv 1 \pmod{m}.
+\]
+Il existe si et seulement si \( \text{pgcd}(a, m) = 1 \), et peut être trouvé avec l'algorithme d'Euclide étendu. \\
+
+\textbf{7. La crypto} \\
+L'algorithme RSA à clé publique repose entièrement sur de l'arithmétique modulaire et donc sur les théorèmes / algorithmes cités ci-dessus. 
+
+\section*{1. Divisions et congruences}
+\begin{exercise} % BL : juste 1
+    En utilisant une calculatrice, déterminer le quotient et le reste de :
+    \begin{enumerate}[label=(\alph*)]
+        \item 34787 divisé par 353
+        % \item 238792 divisé par 7843
+        % \item 9829387493 divisé par 873485
+        % \item 1498387487 divisé par 76348
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise} % oui
+    Utiliser l'algorithme d'Euclide pour déterminer le plus grand commun diviseur des nombres suivants:
+    \begin{enumerate}[label=(\alph*)]
+        \item pgcd(291,252)
+        \item pgcd(16261,85652)
+        \item pgcd(139024789,93278890)
+        \item pgcd(16534528044,8332745927)
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise} % oui
+    En utilisant l'algorithme d'Euclide, trouver les entiers $p$ et $q$ tel que 
+    $$3066p+713q=1$$
+\end{exercise}
+
+\begin{exercise} % TO DO on a pas vu comment faire des carrés
+    Trouver toutes les valeurs de $x$ comprises entre $0$ et $m-1$ qui sont solutions des congruences suivantes:
+    \begin{enumerate}[label=(\alph*)]
+        \item $x+17\equiv23$ (mod 37)
+        \item $x+42\equiv19$ (mod 51)
+    \end{enumerate}
+\end{exercise}
+
+\section*{2. Inverses, unités et générateurs}
+
+\begin{exercise}
+    Trouver une unique valeur $x$ qui résoud simultanément les deux congruences suivantes :
+    $$x\equiv 4 \quad(\text{mod } 7) \qquad \text{ et } \qquad x\equiv3\quad(\text{mod } 9).$$
+\end{exercise}
+ 
+\begin{exercise}
+     Trouver une unique valeur $x$ qui résoud simultanément les deux congruences suivantes :
+     $$x\equiv 13 \quad(\text{mod } 71) \qquad \text{ et } \qquad x\equiv41\quad(\text{mod } 97).$$
+\end{exercise}
+ 
+\begin{exercise}
+    Trouver une unique valeur $x$ qui résoud simultanément les trois congruences suivantes :
+    $$x\equiv 4 \quad(\text{mod } 7) \qquad \text{ et } \qquad x\equiv5\quad(\text{mod } 8) \qquad \text{ et } \qquad x\equiv11\quad(\text{mod } 15).$$
+\end{exercise}

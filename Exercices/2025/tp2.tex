@@ -1,0 +1,152 @@
+\session{TP 2 - Principe de récurrence et ordre de grandeur}
+
+\section*{Rappels théoriques}
+
+\subsection*{1. Récurrences linéaires à coefficients constants}
+\textbf{Homogène d’ordre $r$:} 
+\[
+u_{n+r}+a_{r-1}u_{n+r-1}+\cdots+a_1u_{n+1}+a_0u_n=0.
+\]
+Polynôme caractéristique 
+\[
+p(\lambda)=\lambda^r+a_{r-1}\lambda^{r-1}+\cdots+a_1\lambda+a_0.
+\]
+\begin{itemize}
+  \item Racines simples $\lambda_1,\dots,\lambda_s$ (distinctes) : 
+  \[
+  u_n=\sum_{j=1}^{s} c_j\,\lambda_j^n.
+  \]
+  \item Racine $\lambda$ de multiplicité $m$ : 
+  \[
+  u_n=(c_0+c_1 n+\cdots+c_{m-1}n^{m-1})\,\lambda^n.
+  \]
+\end{itemize}
+
+\paragraph{Cas d’ordre $2$ (utile en pratique).}
+Pour $u_{n+2}+bu_{n+1}+cu_n=0$ :
+\[
+\lambda^2+b\lambda+c=0,\quad \Delta=b^2-4c.
+\]
+\begin{itemize}
+  \item $\Delta>0$ (deux racines réelles $\lambda_1\neq\lambda_2$) : $u_n=A\lambda_1^n+B\lambda_2^n$.
+  \item $\Delta=0$ (double racine $\lambda$) : $u_n=(A+Bn)\lambda^n$.
+  \item $\Delta<0$ (paires complexes $\lambda=\rho e^{\pm i\theta}$) : 
+  \[
+  u_n=\rho^n\big(A\cos(n\theta)+B\sin(n\theta)\big).
+  \]
+\end{itemize}
+
+\textbf{Non homogène :} \quad 
+\(
+u_{n+r}+a_{r-1}u_{n+r-1}+\cdots+a_0u_n=f(n).
+\)
+La solution générale s’écrit $u_n=u_n^{(h)}+u_n^{(p)}$ (superposition). 
+\textit{Essais usuels pour $u_n^{(p)}$} :
+\[
+\begin{array}{l|l}
+\text{Second membre } f(n) & \text{Essai pour } u_n^{(p)} \\ \hline
+c\,\alpha^n & A\,\alpha^n \quad (\text{si }\alpha \text{ racine de }p\text{ de mult. }s,\ \text{essayer } A\,n^s\alpha^n)\\
+\text{polynôme en } n \text{ de degré }d & \text{polynôme en } n \text{ de degré }d\\
+\alpha^n \times \text{polynôme en } n & \text{idem, multiplié par } \alpha^n
+\end{array}
+\]
+(\textit{Règle de résonance} : multiplier par $n^s$ si l’essai “entre en résonance” avec une racine de multiplicité $s$ de $p$.)
+
+\subsection*{2. Formulation matricielle et valeurs propres}
+Poser $X_n=\begin{pmatrix}u_{n+r-1}\\ u_{n+r-2}\\ \vdots\\ u_{n}\end{pmatrix}$. Alors 
+\[
+X_{n+1}=A\,X_n+B(n),
+\]
+où la \emph{matrice compagnon} de la partie homogène est
+\[
+A=\begin{pmatrix}
+ -a_{r-1} & -a_{r-2} & \cdots & -a_1 & -a_0\\
+ 1 & 0 & \cdots & 0 & 0\\
+ 0 & 1 & \cdots & 0 & 0\\
+ \vdots & \vdots & \ddots & \vdots & \vdots\\
+ 0 & 0 & \cdots & 1 & 0
+\end{pmatrix}.
+\]
+Si $B\equiv 0$, on a $X_n=A^n X_0$. Les valeurs propres de $A$ sont exactement les racines de $p$.
+Si $A$ est diagonalisable ($A=SDS^{-1}$), alors $A^n=SD^nS^{-1}$. 
+En cas non diagonalisable (blocs de Jordan), les facteurs $n^k\lambda^n$ réapparaissent, cohérents avec la multiplicité dans la partie “homogène”.
+
+\subsection*{3. Exponentiation rapide (fast powering)}
+Pour calculer $a^n$ ou $A^n$ en $O(\log n)$ :
+\[
+\text{si } n \text{ pair : } a^n=(a^2)^{n/2}, 
+\qquad 
+\text{si } n \text{ impair : } a^n=a\cdot a^{n-1}.
+\]
+Même principe pour les matrices (remplacer $1$ par l’identité $I$). 
+\textit{Intérêt} : accéder à $u_n$ via $X_n=A^nX_0$ même pour des $n$ très grands.
+
+\subsection*{4. Exemple clé : suite de Fibonacci}
+La suite de Fibonacci $(F_n)$ est définie par $F_{n+1}=F_n+F_{n-1}$, $F_0=0$, $F_1=1$. 
+Forme matricielle :
+\[
+\begin{pmatrix}F_{n+1}\\ F_n\end{pmatrix}
+=
+\underbrace{\begin{pmatrix}1&1\\1&0\end{pmatrix}}_{M}^{\;n}
+\begin{pmatrix}1\\0\end{pmatrix}.
+\]
+Le polynôme caractéristique de $M$ est $\lambda^2-\lambda-1$, de racines 
+\(
+\varphi=\frac{1+\sqrt5}{2},\ \psi=\frac{1-\sqrt5}{2}.
+\)
+
+
+\newpage
+
+\section*{1. Equation caractéristique et superposition}
+
+\begin{exercise}
+    En utilisant la méthode de l'équation caractéristique et le principe de superposition, résoudre les quatre récurrences suivantes :
+    \begin{enumerate}
+        \item $x_{n+2}+3\cdot x_{n+1}+2\cdot x_{n}=5\cdot 3^n$, avec $x_0=0,x_1=1$
+        \item $y_{n+2}-4\cdot y_{n+1}+4\cdot y_{n}=1$, avec $y_0=0, y_1=3$
+        \item $z_n+6\cdot z_{n-1}+9\cdot z_{n-2}=16\cdot n$, avec $z_0=2, z_1=2$
+        \item $v_{n+2} = 2(v_{n+1}-v_n)$, avec $v_0=1,v_1=2$
+    \end{enumerate}
+\end{exercise}
+
+
+\begin{exercise}
+    Pour quelles valeurs de $x_0$ la récurrence du premier ordre $x_n\cdot x_{n+1}+15=0$, avec $n\in\mathbb{N}$, possède-t-elle une solution en nombres entiers ? Quelle est cette solution ?
+\end{exercise}
+
+
+\begin{exercise}
+    On s'intéresse aux mots de longueur $n$ sur l'alphabet $\{a,b,c,d\}$. Un mot $M$ de ce type sera dit $d-pair$ si la lettre $d$ apparaît un nombre pair de fois dans $M$. Voici trois exemples de mots $d-pairs$ de longueur quatre : $abca,bdad,dddd$. Combien y a-t-il de mot $d-pairs$ de longueur $n$ sur l'alphabet considéré ?\\ \textit{Suggestion}: D'abord, établir une relation de récurrence entre les nombres de mots $d-pairs$ de deux longueurs successives, $n$ et $n+1$. Ensuite, résoudre la récurrence obtenue.
+\end{exercise}
+
+
+\begin{exercise}
+    Démontrer par récurrence que pour tout entier $n\geq 1$, on a 
+    $$S_n = \ds\sum_{k=1}^{n}k^2=1^2+2^2+\cdots+n^2=\frac{n(n+1)(2n+1)}{6}$$
+\end{exercise}
+
+
+\section*{2. Méthode matricielle \& exponentiation rapide}
+
+\begin{exercise}
+On considère la suite
+\[
+v_{n+2}=2\,(v_{n+1}-v_n),\qquad v_0=1,\ v_1=2.
+\]
+
+\begin{enumerate}
+  \item Écrire une fonction \texttt{pow\_fast(a,n)} qui calcule $a^n$ en $O(\log n)$.
+  \item Écrire \texttt{mat\_pow\_fast(A,n)} qui calcule $A^n$ en $O(\log n)$ (avec $I_2$ comme neutre).
+  \item Poser $X_n=\begin{psmallmatrix}v_{n+1}\\ v_n\end{psmallmatrix}$ et
+  \[
+  M=\begin{pmatrix}2&-2\\[2pt]1&0\end{pmatrix}.
+  \]
+  Montrer que $X_{n+1}=MX_n$, donc $X_n=M^nX_0$ avec $X_0=\begin{psmallmatrix}2\\1\end{psmallmatrix}$, et en déduire
+  \[
+  v_n=\big(M^n\!\begin{psmallmatrix}2\\1\end{psmallmatrix}\big)_2.
+  \]
+  \item Coder \texttt{v\_of(n)} qui renvoie $v_n$ via \texttt{mat\_pow\_fast}. Tester $v_0,\dots,v_8$.
+  \item Calculer $v_{10^6}\bmod(10^9+7)$ et comparer le temps avec une méthode naïve (itération de la récurrence $n$ fois).
+\end{enumerate}
+\end{exercise}
