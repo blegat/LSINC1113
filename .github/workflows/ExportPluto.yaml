@@ -24,6 +24,12 @@ jobs:
             - name: Checkout this repository
               uses: actions/checkout@v4
 
+            - name: Compile exercises
+              uses: xu-cheng/latex-action@v4
+              with:
+                working_directory: Exercises/
+                root_file: main.tex
+
             - name: Compile exams
               uses: xu-cheng/latex-action@v4
               with:

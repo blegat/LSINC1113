@@ -11,6 +11,10 @@ The html versions accessible here are static, see [here](Lectures) for details o
 * Automatic Differentiation [html](Lectures/6_autodiff.html) [pdf](Lectures/6_autodiff.pdf)
 * Intégrale bivariée [html](Lectures/7_integral.html) [pdf](Lectures/7_integral.pdf)
 
+## Exercises
+
+* [PDF](Exercises/main.pdf)
+
 ## Past exams
 
 * [2025 January](Exams/2025_01/main.pdf)
