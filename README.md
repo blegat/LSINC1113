@@ -13,19 +13,19 @@ See the README in each subfolder for more details and troubleshooting:
 
 ## Schedule
 
-| Week  |   Monday   |   Lecture     |   Exercise    |  Project  |
-|-------|------------|---------------|---------------|-----------|
-| S1    | 15/09/2025 | Complexes     | Complexes     | 🚀 roots  |
-| S2    | 22/09/2025 | Récurrence    | Récurrence    | 🏁 roots  |
-| S3    | 29/09/2025 | Th. nombres   | Th. nombres   | 🚀 crypto |
-| S4    | 06/10/2025 | Crypto        | Th. nombres   |           |
-| S5    | 13/10/2025 | Graphes       | Spanning      |           |
-| S6    | 20/10/2025 | Graphes       | DAG           | 🏁 crypto |
-|       | 27/10/2025 | 🎃            |               |           |
-| S7    | 03/11/2025 |               | Shortest Path |           |
-| S8    | 10/11/2025 |               | Max-Flow      |           |
-| S9    | 17/11/2025 | Fourier       | Fourier       | 🚀 FFTB   |
-| S10   | 24/11/2025 | Fourier       | Fourier       |           |
-| S11   | 01/12/2025 | Gradient      | Gradient      |           |
-| S12   | 08/12/2025 | AutoDiff      | LabAutoDiff   |           |
-| S13   | 15/12/2025 | Intégrale     | Intégrale     | 🏁 FFTB   |
+| Week  |   Monday   |   Lecture          |   Exercise              |  Project  |
+|-------|------------|--------------------|-------------------------|-----------|
+| S1    | 15/09/2025 | Complexes          | Complexes               | 🚀 roots  |
+| S2    | 22/09/2025 | Th. Nombres        | Th. Nomb. (**Lecture**) | 🏁 roots  |
+| S3    | 29/09/2025 | Th. nombres        | Recurrence              |           |
+| S4    | 06/10/2025 | Crypto             | Th. nombres             |           |
+| S5    | 13/10/2025 | Graphes            | Th. nombres             | 🚀 crypto |
+| S6    | 20/10/2025 | Graphes            | Spanning                |           |
+|       | 27/10/2025 | 🎃                 |                         |           |
+| S7    | 03/11/2025 | DAG (**Exercise**) | Shortest Path           | 🏁 crypto |
+| S8    | 10/11/2025 |                    | Max-Flow                | 🚀 graph  |
+| S9    | 17/11/2025 | Graphes            |                         | 🏁 graph  |
+| S10   | 24/11/2025 | Fourier            | Fourier                 | 🚀 FFTB   |
+| S11   | 01/12/2025 | Fourier            | Fourier                 |           |
+| S12   | 08/12/2025 | Gradient           | Gradient                |           |
+| S13   | 15/12/2025 | Intégrale          | Intégrale               | 🏁 FFTB   |
