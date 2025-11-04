@@ -130,6 +130,5 @@ Séquence de traitement :
 ## Fichiers
 
 - `exercise.jl` : Code de l'exercice (sans solution)
-- `solution.jl` : Solution complète (pour les enseignants)
 - `main.jl` : Point d'entrée pour exécuter l'exercice
 - `README.md` : Ce fichier d'instructions
