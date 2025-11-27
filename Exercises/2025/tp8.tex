@@ -1,0 +1,259 @@
+\session{TP8 - Graphes (max-flow)}
+
+\subsection*{1. L’intuition} \\
+
+Imagine un \textbf{réseau de tuyaux} :
+\begin{itemize}
+    \item une \textbf{source} $S$ où le flux entre,
+    \item un \textbf{puits} $T$ où le flux sort,
+    \item des \textbf{arêtes orientées} (tuyaux) avec une \textbf{capacité} maximale (débit possible).
+\end{itemize}
+
+On veut savoir :  
+\[
+\text{\og Combien de liquide au maximum peut-on faire passer de $S$ à $T$ sans casser de tuyau ?\fg}
+\]
+C’est ça, le Max Flow. \\
+
+C’est exactement le \textbf{problème de flot maximum (Max Flow)}.  
+Le \textbf{flot} modélise :
+\begin{itemize}
+    \item de l’eau dans des tuyaux,
+    \item de la marchandise dans un réseau de routes,
+    \item des tâches qui passent d’une étape à l’autre,
+    \item des appariements (matching) entre deux ensembles.
+\end{itemize}
+
+\subsection*{2. Modèle et contraintes}
+
+On a un graphe orienté $G = (V,E)$, une source $S$, un puits $T$ et une capacité $c(u,v) \ge 0$ sur chaque arête $(u,v)$. \\
+
+Un \textbf{flot} $f(u,v)$ doit respecter deux règles :
+
+\begin{enumerate}
+    \item \textbf{Capacité} : on ne peut pas dépasser la capacité :
+    \[
+        0 \le f(u,v) \le c(u,v) \quad \text{pour toute arête } (u,v).
+    \]
+    \item \textbf{Conservation du flot} : pour tous les sommets sauf $S$ et $T$, ce qui \emph{rentre} doit \emph{sortir} :
+    \[
+        \sum_{u} f(u,v) = \sum_{w} f(v,w) \quad \text{pour tout } v \neq S,T.
+    \]
+\end{enumerate}
+
+La \textbf{valeur du flot} est la quantité qui sort de la source (ou qui arrive au puits) :
+\[
+    |f| = \sum_{v} f(S,v).
+\]
+
+Le problème Max Flow est :  
+\[
+\text{Trouver un flot de valeur maximale } |f| \text{ respectant ces contraintes.}
+\]
+
+\subsection*{3. Idée de l’algorithme (Ford–Fulkerson / Edmonds–Karp)}
+
+\textbf{Intuition :} on commence avec un flot nul, puis on \og pousse\fg{} du flux petit à petit dans le réseau, tant qu’on trouve encore un chemin avec de la place.
+
+\begin{enumerate}
+    \item Chercher un \textbf{chemin de $S$ à $T$} où il reste de la capacité disponible  
+          (on l’appelle \textbf{chemin augmentant}).
+    \item On envoie sur ce chemin la \textbf{quantité maximale possible} (le minimum des capacités restantes le long du chemin).
+    \item On \textbf{met à jour} le \textbf{graphe résiduel} :
+    \begin{itemize}
+        \item sur les arêtes utilisées, la capacité restante diminue,
+        \item on ajoute des arêtes \og en sens inverse\fg{} qui permettent éventuellement de \textbf{retirer du flot} si on change d’avis plus tard.
+    \end{itemize}
+    \item On recommence tant qu’il existe un chemin augmentant de $S$ à $T$.
+\end{enumerate}
+
+Quand il n’y a plus de chemin augmentant, le flot obtenu est \textbf{maximal}. \\
+
+\textbf{Graphe résiduel (idée simple)} : \\
+Pour chaque arête $(u,v)$ avec capacité $c(u,v)$ et flot $f(u,v)$ :
+\begin{itemize}
+    \item capacité résiduelle \textbf{forward} : $c(u,v) - f(u,v)$ (ce qu’on peut encore \textbf{ajouter}),
+    \item capacité résiduelle \textbf{backward} : $f(u,v)$ (ce qu’on peut \textbf{retirer} en rembobinant).
+\end{itemize}
+
+Le graphe résiduel te dit : \og à partir du flot actuel, où puis-je encore augmenter ou diminuer le flot ?\fg{}
+
+\subsection*{4. Lien fondamental : Max Flow = Min Cut}
+
+Une \textbf{coupe} $(S,T)$ est une façon de séparer les sommets en deux groupes :
+\begin{itemize}
+    \item un côté contenant $S$,
+    \item l’autre côté contenant $T$.
+\end{itemize}
+
+La \textbf{capacité de la coupe} est la somme des capacités des arêtes qui vont du côté de $S$ vers le côté de $T$. \\
+
+\textbf{Théorème Max Flow = Min Cut :}
+\begin{itemize}
+    \item la valeur du \textbf{flot maximal} de $S$ à $T$ est égale
+    \item à la \textbf{capacité minimale} d’une coupe séparant $S$ et $T$.
+\end{itemize}
+
+\textbf{Intuition :}
+\begin{itemize}
+    \item le Min Cut = le \textbf{goulot d’étranglement} du réseau,
+    \item le Max Flow = combien tu peux vraiment faire passer,
+    \item ces deux nombres coïncident.
+\end{itemize}
+
+\subsection*{5. Comment reconnaître un exercice de flot ?}
+
+Tu penses à un problème de Max Flow quand :
+\begin{itemize}
+    \item on veut \textbf{maximiser une quantité} qui \og circule\fg{} dans un réseau (eau, trafic, marchandises, tâches, appariements…),
+    \item il y a une \textbf{source} naturelle (départ) et un \textbf{puits} (arrivée),
+    \item chaque lien a une \textbf{capacité} (max par lien, ou max par personne / machine),
+    \item on ne veut pas \textbf{doubler} une ressource (un employé ne peut traiter qu’un scanner, etc.).
+\end{itemize}
+
+\textbf{Recette dans un exo :}
+\begin{enumerate}
+    \item Construire le graphe : choisir $S$, $T$, les sommets intermédiaires, les capacités.
+    \item Appliquer un algorithme de Max Flow (Ford–Fulkerson / Edmonds–Karp).
+    \item Lire la valeur du flot maximal, puis \textbf{traduire} dans le langage de l’énoncé.
+\end{enumerate}
+
+\subsection*{6. Exemple : scanners et employés}
+
+On veut utiliser un maximum de scanners en parallèle, en assignant chaque scanner à un seul employé, et chaque employé à un seul scanner compatible. \\
+
+Exemple :
+\begin{align*}
+    S_1[\text{Scanner 1}] &\rightarrow E_1[\text{Employé A}] \\
+    S_1 &\rightarrow E_2[\text{Employé B}] \\ 
+    S_2[\text{Scanner 2}] &\rightarrow E_1  \\
+    S_2 &\rightarrow E_2  \\
+    S_3[\text{Scanner 3}] &\rightarrow E_2  \\
+    S_4[\text{Scanner 4}] &\rightarrow E_2  \\
+    S_4 &\rightarrow E_4[\text{Employé D}]  \\
+    S_4 &\rightarrow E_5[\text{Employé E}]  \\
+    S_5[\text{Scanner 5}] &\rightarrow E_1  \\
+    S_5 &\rightarrow E_3[\text{Employé C}]  \\
+    S_5 &\rightarrow E_5 \\
+\end{align*}
+
+\textbf{Étape 1 : construire le graphe de flot}
+
+\begin{itemize}
+    \item Source $S$.
+    \item Un sommet pour chaque \textbf{scanner} $S_i$.
+    \item Un sommet pour chaque \textbf{employé} $E_j$.
+    \item Puits $T$.
+\end{itemize}
+
+Arêtes et capacités :
+\begin{itemize}
+    \item $S \rightarrow S_i$ de capacité $1$ \quad (chaque scanner au plus une fois),
+    \item $S_i \rightarrow E_j$ de capacité $1$ si l’employé $E_j$ sait utiliser le scanner $S_i$,
+    \item $E_j \rightarrow T$ de capacité $1$ \quad (un employé ne fait qu’un scan à la fois). \\
+\end{itemize}
+
+\textbf{Max Flow} = \textbf{nombre maximal de paires (scanner, employé)} utilisables en parallèle. \\
+
+Dans l’exemple donné, on arrive à un flot de valeur $4$ : on peut utiliser \textbf{4 scanners en même temps}, pas 5. \\
+
+\textbf{Pourquoi pas 5 ? Intuition par la coupe minimale :}
+
+Les scanners $S_1$, $S_2$, $S_3$ ne peuvent être utilisés que par $E_1$ ou $E_2$.  
+Or il n’y a que \textbf{2} employés $E_1$ et $E_2$ pour ces trois scanners.  
+Donc au plus \textbf{2} scanners parmi $\{S_1,S_2,S_3\}$ peuvent fonctionner en même temps.
+
+Même si $S_4$ et $S_5$ peuvent être affectés à d’autres employés ($E_3$, $E_4$, $E_5$), on obtient au total :
+\[
+2 \text{ (bloqués par } E_1,E_2) + 2 \text{ (autres)} = 4 \text{ scanners maximum.}
+\]
+
+On peut formaliser cela comme une \textbf{coupe} de capacité $4$ (par exemple en séparant $\{S, S_1, S_2, S_3, E_1, E_2\}$ du reste du graphe).  
+Par le théorème Max Flow = Min Cut, le flot maximum vaut donc aussi $4$. \\
+
+On recherche les sommets atteignables depuis la source dans le graphe résiduel. On démarre de S et on suit les arêtes résiduelles de capacité > 0. Dans notre cas, les arêtes S $\rightarrow$ $S_1$,$S_3$,$S_4$,$S_5$ sont saturées (flux=1) $\rightarrow$ forward residuel = 0 (donc non utilisables). L’arête S $\rightarrow$ $S_2$ n’est pas saturée (flux=0) $\rightarrow$ forward residuel = 1 $\rightarrow$ $S_2$ est atteignable depuis S. \\
+
+Ensuite, depuis $E_1$ on peut revenir (backward) vers $S_1$ (car $S_1$ $\rightarrow$ $E_1$ a flux 1), et depuis $E_2$ on peut revenir vers $S_3$ (car $S_3$ $\rightarrow$ $E_2$ a flux 1). En suivant toutes ces arêtes résiduelles on obtient l’ensemble atteignable : R = {S, $S_2$, $E_1$, $E_2$, $S_1$, $S_3$}.
+Les sommets non atteignables (complément) sont : {$S_4$, $S_5$, $E_3$, $E_4$, $E_5$, T}. \\
+
+La coupe est l’ensemble des arêtes orientées du côté atteignable vers le côté non-atteignable dans le graphe original. Ce sont :
+\begin{itemize}
+    \item S $\rightarrow$ $S_4$ (S atteignable, $S_4$ non-atteignable)
+    \item S $\rightarrow$ $S_5$ (S atteignable, $S_5$ non-atteignable)
+    \item $E_1$ $\rightarrow$ T ($E_1$ atteignable, T non-atteignable)
+    \item $E_2$ $\rightarrow$ T ($E_2$ atteignable, T non-atteignable) \\
+\end{itemize}
+
+Chaque arête a une capacité de 1, donc la capacité totale de cette coupe = 1+1+1+1 = 4. \\
+
+La coupe montre les scanners du côté source non utilisables ($S_4$,$S_5$) et les employés du côté puits non utilisés ($E_3$,$E_4$,$E_5$). Pour augmenter la capacité (faire passer la valeur du min-cut / max-flow à 5), il faut ajouter au moins une arête qui connecte un scanner du côté source (ici $S_4$ ou $S_5$) à un employé du côté puits ($E_3$, $E_4$ ou $E_5$) qui n’était pas capable de l’utiliser avant, c'est-à-dire former un employé à un scanner de façon à « traverser la coupe ». Concrètement, former par exemple $E_3$ à $S_4$ ou $E_5$ à $S_1$/$S_2$/$S_3$ selon la topologie — mais note le raisonnement : relier un nœud dans le côté S à un nœud dans le côté T supprime une arête de la coupe et peut augmenter le max flow. \\
+
+\textbf{À retenir :}
+\begin{itemize}
+    \item on transforme un problème d’affectation en \textbf{réseau de flot},
+    \item le \textbf{Max Flow} donne le nombre maximal de couples (scanner, employé),
+    \item la \textbf{Min Cut} montre où se trouve le \og goulot d’étranglement\fg{} du système.
+\end{itemize}
+
+
+
+
+
+
+% \textbf{Exemple 2 :} \\
+% \begin{align*}
+%     S_1[\text{Scanner 1}] &\rightarrow E_1[\text{Employé A}] \\
+%     S_1 &\rightarrow E_2[\text{Employé B}] \\ 
+%     S_2[\text{Scanner 2}] &\rightarrow E_1  \\
+%     S_2 &\rightarrow E_2  \\
+%     S_3[\text{Scanner 3}] &\rightarrow E_2  \\
+%     S_4[\text{Scanner 4}] &\rightarrow E_2  \\
+%     S_4 &\rightarrow E_4[\text{Employé D}]  \\
+%     S_4 &\rightarrow E_5[\text{Employé E}]  \\
+%     S_5[\text{Scanner 5}] &\rightarrow E_1  \\
+%     S_5 &\rightarrow E_3[\text{Employé C}]  \\
+%     S_5 &\rightarrow E_5 \\
+% \end{align*}
+
+% Regarde les scanners $S_1$, $S_2$, $S_3$ : chacun n’a que $E_1$ ou $E_2$ comme employés possibles. Or $E_1$ et $E_2$ sont seulement 2 employés. Donc au plus 2 des scanners {$S_1$,$S_2$,$S_3$} peuvent être utilisés simultanément. Même si $S_4$ et $S_5$ sont utilisables en plus, cela donne au plus 2 + 2 = 4 scanners utilisables en parallèle. Donc 4 c’est le flux optimal. \\
+
+% On transforme le problème en réseau de flot avec capacités 1 :
+% \begin{center}
+%     Source S $\rightarrow$ ($S_1$,$S_2$,$S_3$,$S_4$,$S_5$) $\rightarrow$ ($E_1$,$E_2$,$E_3$,$E_4$,$E_5$) $\rightarrow$ Puits T
+% \end{center}
+
+% Donc les arêtes $S$ $\rightarrow$ $S_i$ : capacité = 1 (chaque scanner une seule fois) ; les arêtes $S_i$ $\rightarrow$ $E_j$ : capacité = 1 ssi l’employé sait utiliser le scanner et les arêtes $E_j$ $\rightarrow$ $T$ : capacité = 1 (chaque employé peut faire au plus 1 scan). \\
+
+% Avec le flot donné ci-dessus, les arêtes $S \rightarrow S_i$ et $E_j \rightarrow T$ ont ces flux :
+% \begin{itemize}
+%     \item $S \rightarrow S_1$ = 1, $S \rightarrow S_3$ = 1, $S \rightarrow S_4$ = 1, $S \rightarrow S_5$ = 1, $S \rightarrow S_2$ = 0.
+%     \item $E_1 \rightarrow T$ = 1, $E_2 \rightarrow T$ = 1, $E_3 \rightarrow T$ = 1, $E_4 \rightarrow T = 1$, $E_5 \rightarrow T$ = 0. \\
+% \end{itemize}
+
+% Pour ensuite trouver la coupe (min-cut) : \\
+% Pour une arête u $\rightarrow$ v de capacité 1 et flux f :
+% \begin{itemize}
+%     \item Capacité résiduelle forward = 1 - f (si >0, on peut avancer u $\rightarrow$ v),
+%     \item Capacité résiduelle backward = f (si >0, on peut repousser du flux v $\rightarrow$ u). \\
+% \end{itemize}
+
+% On recherche les sommets atteignables depuis la source dans le graphe résiduel. On démarre de S et on suit les arêtes résiduelles de capacité > 0. Dans notre cas, les arêtes S $\rightarrow$ $S_1$,$S_3$,$S_4$,$S_5$ sont saturées (flux=1) $\rightarrow$ forward residuel = 0 (donc non utilisables). L’arête S $\rightarrow$ $S_2$ n’est pas saturée (flux=0) $\rightarrow$ forward residuel = 1 $\rightarrow$ $S_2$ est atteignable depuis S. \\
+
+% Depuis $S_2$, on peut aller vers $E_1$ et $E_2$ (les arêtes $S_2$ $\rightarrow$ $E_1$ et $S_2$ $\rightarrow$ $E_2$ sont non saturées). \\
+
+% Ensuite, depuis $E_1$ on peut revenir (backward) vers $S_1$ (car $S_1$ $\rightarrow$ $E_1$ a flux 1), et depuis $E_2$ on peut revenir vers $S_3$ (car $S_3$ $\rightarrow$ $E_2$ a flux 1). En suivant toutes ces arêtes résiduelles on obtient l’ensemble atteignable : R = {S, $S_2$, $E_1$, $E_2$, $S_1$, $S_3$}.
+% Les sommets non atteignables (complément) sont : {$S_4$, $S_5$, $E_3$, $E_4$, $E_5$, T}. \\
+
+% La coupe est l’ensemble des arêtes orientées du côté atteignable vers le côté non-atteignable dans le graphe original. Ce sont :
+% \begin{itemize}
+%     \item S $\rightarrow$ $S_4$ (S atteignable, $S_4$ non-atteignable)
+%     \item S $\rightarrow$ $S_5$ (S atteignable, $S_5$ non-atteignable)
+%     \item $E_1$ $\rightarrow$ T ($E_1$ atteignable, T non-atteignable)
+%     \item $E_2$ $\rightarrow$ T ($E_2$ atteignable, T non-atteignable) \\
+% \end{itemize}
+
+% Chaque arête a une capacité de 1, donc la capacité totale de cette coupe = 1+1+1+1 = 4.
+
+% Par le théorème Max-Flow = Min-Cut, comme le maximum de flot est 4, la coupe minimale a capacité 4 : c’est bien celle qu’on a trouvée. \\
+
+% La coupe montre les scanners du côté source non utilisables ($S_4$,$S_5$) et les employés du côté puits non utilisés ($E_3$,$E_4$,$E_5$). Pour augmenter la capacité (faire passer la valeur du min-cut / max-flow à 5), il faut ajouter au moins une arête qui connecte un scanner du côté source (ici $S_4$ ou $S_5$) à un employé du côté puits ($E_3$, $E_4$ ou $E_5$) qui n’était pas capable de l’utiliser avant, c'est-à-dire former un employé à un scanner de façon à « traverser la coupe ». Concrètement, former par exemple $E_3$ à $S_4$ ou $E_5$ à $S_1$/$S_2$/$S_3$ selon la topologie — mais note le raisonnement : relier un nœud dans le côté S à un nœud dans le côté T supprime une arête de la coupe et peut augmenter le max flow.
