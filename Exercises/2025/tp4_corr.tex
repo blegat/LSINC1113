@@ -1,0 +1,361 @@
+\session{Correction TP4 - Théorie des nombres}
+
+\section*{1. Inverses, unités et générateurs}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item $a = 11$ and $p = 47$, on cherche l'inverse de $11 \pmod{47}$. \\
+        1. Pour qu'il soit inversible, on doit vérifier que $11t \equiv 1 \pmod{47}$ autrement dit que Euclide étendu : $11 t + 47 k = 1$ \\
+        Pour ce faire on calcule le $pgcd{(a, p)} :$ \\
+        \(
+        \begin{aligned}
+            47 - 11 \cdot 4 &= 3 \\
+            11 - 3 \cdot 3 &= 2 \\
+            3 - 2 \cdot 1 &= 1 \\
+            2 - 1 \cdot 2 &= 0 \\
+        \end{aligned}
+        \)
+
+        11 est inversible modulo 47, le $pgcd$ vaut 1. \\
+
+        \(
+        \begin{aligned}
+            3 - 2 \cdot 1 = 1 \\
+            3 - (11 - 3 \cdot 3) \cdot 1 &= 1 \\
+            3 \cdot 4 - 11 \cdot 1 &= 1 \\
+            (47 - 11 \cdot 4) \cdot 4 - 11 \cdot 1 &= 1 \\
+            47 \cdot 4 - 11 \cdot 17 &= 1 \\
+        \end{aligned}
+        \)
+
+        On a $ t = -17$ qu'on transforme en $t = 30 \pmod{47}$. \\
+
+        2. Fermat. On va tirer parti de la décomposition binaire.\\
+        \(
+        \begin{aligned}
+            \text{Théorème : } 11^{47-2} \pmod{47} &= 11^{45} \pmod{47}\\
+            \text{On écrit sous forme binaire : } 45 = 32 + 8 + 4+ 1 &= 2^5 + 2^3 + 2^2 + 2^0 \\
+            11^{2} \equiv 121 &\equiv 27  \pmod{47} \\
+            11^{4} \equiv 27^{2} \equiv 729 &\equiv 24  \pmod{47} \\
+            11^{8} \equiv 24^{2} \equiv 576 &\equiv 12  \pmod{47} \\
+            11^{16} \equiv 12^{2} \equiv 144 &\equiv 3  \pmod{47} \\
+            11^{32} \equiv 3^{2} &\equiv 9  \pmod{47} \\
+        \end{aligned}
+        \)
+
+        \( 11^{45} = 11^{32} \cdot 11^{8} \cdot 11^{4} \cdot 11 = 9 \cdot 12 \cdot 24 \cdot 11 = 9504 = 30 \pmod{47} \)
+
+        \item $a = 345$ and $p = 587$, on cherche l'inverse de $345 \pmod{587}$. \\
+        1. Pour qu'il soit inversible, on doit vérifier que $345t \equiv 1 \pmod{587}$ autrement dit que Euclide étendu : $345 x + 587 k = 1$ \\
+
+        \(
+        \begin{aligned}
+            587 - 345 \cdot 1 &= 242 \\
+            345 - 242 \cdot 1 &= 103 \\
+            242 - 103 \cdot 2 &= 36 \\
+            103 - 36 \cdot 2 &= 31 \\
+            36 - 31 \cdot 1 &= 5 \\
+            31 - 5 \cdot 6 &= 1 \\
+            5 - 1 \cdot 5 &= 0 \\
+        \end{aligned}
+        \)
+
+        345 est inversible modulo 587, le $pgcd$ vaut 1. \\
+
+        \(
+        \begin{aligned}
+            31 - 5 \cdot 6 &= 1 \\
+            31 - (36 - 31) \cdot 6 = 1 &\rightarrow 31 \cdot 7 - 36 \cdot 6 = 1\\
+            (103 - 36 \cdot 2) \cdot 7 - 36 \cdot 6 = 1 &\rightarrow 103 \cdot 7 - 36 \cdot 20 = 1\\
+            103 \cdot 7 - (242 - 103 \cdot 2) \cdot 20 = 1 &\rightarrow 103 \cdot 47 - 242 \cdot 20 = 1 \\
+            (345 - 242) \cdot 47 - 242 \cdot 20 = 1 &\rightarrow 345 \cdot 47 - 242 \cdot 67 = 1 \\
+            345 \cdot 47 - (587 - 345) \cdot 67 = 1 &\rightarrow 345 \cdot 114 - 587 \cdot 67 = 1
+        \end{aligned}
+        \)
+
+        On a $ t = 114 \pmod{587}$. \\
+
+        2. Fermat \\
+        \(
+        \begin{aligned}
+            345^{587 -2 } \pmod{587} = 345^{585 } \pmod{587}\\
+            585 = 512 + 64 + 8 + 1 \\
+            345^{2} \equiv 119025 \equiv 451  \pmod{587} \\
+            345^{4} \equiv 451^{2} \equiv 299  \pmod{587} \\
+            345^{8} \equiv 299^{2} \equiv 177  \pmod{587} \\
+            345^{16} \equiv 177^{2} \equiv 218  \pmod{587} \\
+            345^{32} \equiv 218^{2} \equiv 564  \pmod{587} \\
+            345^{64} \equiv 564^{2} \equiv 529  \pmod{587} \\
+            345^{128} \equiv 529^{2} \equiv 429  \pmod{587} \\
+            345^{256} \equiv 429^{2} \equiv 310  \pmod{587} \\
+            345^{512} \equiv 310^{2} \equiv 419  \pmod{587} \\
+        \end{aligned}
+        \)
+
+        \( 345^{585} = 345^{512} \cdot 345^{64} \cdot 345^{8} \cdot 345 = 419 \cdot 529 \cdot 177 \cdot 345 = 114 \pmod{587} \)
+
+        \item $a = 78467$ et $p = 104801$ on cherche l'inverse de $78467 \pmod{104801}$. \\
+        1. Euclide étendu : On cherche à calculer $78467 x \equiv 1 \pmod{104801}$ ou encore $78467 \cdot x + 104801 \cdot y = 1$. On commence par s'assurer que le $pgcd=1$. \\
+        
+        \(
+        \begin{aligned}
+            104801 &= 1 \cdot 78467 + 26334 \\
+            78467 &= 2 \cdot 26334 + 25799 \\
+            26334 &= 1 \cdot 25799 + 535 \\
+            25799 &= 48 \cdot 535 + 119 \\
+            535 &= 4 \cdot 119 + 59 \\
+            119 &= 2 \cdot 59 + 1 \\
+            59 &= 1 \cdot 59 + 0 \\
+        \end{aligned}
+        \)
+
+        78467 est inversible modulo 104801. \\
+
+        \(
+        \begin{aligned}
+            1 &= 119 - 2 \cdot 59 \\
+            1 &= 119 - 2 \cdot (535 - 4 \cdot 119) \\
+            1 &= 9 \cdot 119 - 2 \cdot 535 \\
+            1 &= 9 \cdot (25799 − 48 \cdot 535) − 2 \cdot 535 \\
+            1 &=9 \cdot 25799 − 434 \cdot 535 \\
+            1 &=9 \cdot 25799−434 \cdot (26334−1 \cdot 25799) \\
+            1 &=443 \cdot 25799−434 \cdot 26334
+            1 &=443 \cdot (78467−2 \cdot 26334)−434 \cdot 26334
+            1 &=443 \cdot 78467−1320 \cdot 26334
+            1 &=443 \cdot 78467−1320 \cdot (104801−1 \cdot 78467)
+            1 &=(443+1320) \cdot 78467−1320 \cdot 104801
+            1 &=1763 \cdot 78467−1320 \cdot 104801
+        \end{aligned}
+        \)
+
+        On a $ x = 1763 \pmod{104801}$. \\
+
+        2. Fermat : \\ 
+        \(
+        \begin{aligned}
+            78467^{104801 - 2} \pmod{104801} = 78467^{104799} \pmod{104801}\\
+            104799 = 65536 + 32768 + 4096 + 2048 + 256 + 64 + 32 + 16 + 8 + 4 + 2 + 1 \\
+            104799 = 2^{16} + 2^{15} + 2^{12} + 2^{11} + 2^8 + 2^6 + 2^5 + 2^4 + 2^3 + 2^2 + 2^1 + 2^0 \\
+            78467^{2} \equiv 6157070089 \equiv 11339  \pmod{104801} \\
+            78467^{4} \equiv 11339^{2} \equiv 86895  \pmod{104801} \\
+            78467^{8} \equiv 86895^{2} \equiv 38577  \pmod{104801} \\
+            78467^{16} \equiv 38577^{2} \equiv 10729  \pmod{104801} \\
+            78467^{32} \equiv 10729^{2} \equiv 39943  \pmod{104801} \\
+            78467^{64} \equiv 39943^{2} \equiv 57626  \pmod{104801} \\
+            78467^{128} \equiv 57626^{2} \equiv 31390  \pmod{104801} \\
+            78467^{256} \equiv 31390^{2} \equiv 97899  \pmod{104801} \\
+            78467^{512} \equiv 97899^{2} \equiv 57950  \pmod{104801} \\
+            78467^{1024} \equiv 57950^{2} \equiv 64057  \pmod{104801} \\
+            78467^{2048} \equiv 64057^{2} \equiv 25696  \pmod{104801} \\
+            78467^{4096} \equiv 25696^{2} \equiv 38116  \pmod{104801} \\
+            78467^{8192} \equiv 38116^{2} \equiv 77994  \pmod{104801} \\
+            78467^{16384} \equiv 77994^{2} \equiv 99593  \pmod{104801} \\
+            78467^{32768} \equiv 99593^{2} \equiv  84606 \pmod{104801} \\ 
+            78467^{65536} \equiv 84606^{2} \equiv  57334 \pmod{104801} \\ 
+        \end{aligned}
+        \) \\ \\
+
+        $78467^{104799} = (78467^{65536})(78467^{32768})(78467^{4096})(78467^{2048})(78467^{256})(78467^{64})(78467^{16})(78467^8)(78467^4)(78467^2)(78467) \\
+        = 57334 \cdot 84606 \cdot 38116 \cdot 25696 \cdot 97899 \cdot 57626 \cdot 10729 \cdot 38577 \cdot 86895 \cdot 11339 \cdot 78467 (\pmod{104801})$
+        on fait comme précédemment et on tombe sur $ x = 1763 \pmod{104801}$. \\
+
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item \( m = 7 \rightarrow  \Z/7\Z = {1,2,3,4,5,6} \quad \Phi(7) = 6\)
+        \item \( m = 10 \rightarrow  \Z/10\Z = {1,3,7,9} \quad  \Phi(10) = 4\)
+        \item \( m = 13 \rightarrow  \Z/13\Z = {1,2,3,4,5,6,7,8,9,10,11,12}  \quad \Phi(13) = 12\)
+        \item \( m = 24 \rightarrow  \Z/24\Z = {1,5,7,11,13,17,19,23} \quad  \Phi(24) = 8\)
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ } \\
+    (a) 
+    \begin{enumerate}[label=(\roman*)]
+        \item $p = 7$ \\
+        Pour vérifier que 2 est une racine primitive modulo p, il faut vérifier que l'ordre de 2 modulo p est p-1. Cela revient à $2^{k} \equiv 1 \pmod{p} \text{ pour } k \text{ allant de 1 à } p - 1, k \neq 0$. 
+
+        \(
+            2^1 \equiv 2 \pmod{7} \\
+            2^2 \equiv 4 \pmod{7} \\
+            2^3 \equiv 8 \equiv 1 \pmod{7} \\
+        \)
+
+        2 n'est donc pas une racine primitive modulo 7.        
+
+        \item $p = 13$ 
+
+        \(
+            2^1 \equiv 2 \pmod{13} \\
+            2^2 \equiv 4 \pmod{13} \\
+            2^3 \equiv 8 \pmod{13} \\
+            2^4 \equiv 16 \equiv 3 \pmod{13} \\
+            2^5 \equiv 32 \equiv 6 \pmod{13} \\
+            2^6 \equiv 64 \equiv 12 \pmod{13} \\
+            2^7 \equiv 128 \equiv 11 \pmod{13} \\
+            2^8 \equiv 256 \equiv 9 \pmod{13} \\
+            2^9 \equiv 512 \equiv 5 \pmod{13} \\
+            2^{10} \equiv 1024 \equiv 10 \pmod{13} \\
+            2^{11} \equiv 2048 \equiv 7 \pmod{13} \\
+            2^{12} \equiv 4096 \equiv 1 \pmod{13} \\
+        \)
+
+        2 est une racine primitive modulo 13.
+
+        \item $p = 19$ 
+
+        \(
+            2^1 \equiv 2 \pmod{19} \\
+            2^2 \equiv 4 \pmod{19} \\
+            2^3 \equiv 8 \pmod{19} \\
+            2^4 \equiv 16 \pmod{19} \\
+            2^5 \equiv 32 \equiv 13 \pmod{19} \\
+            2^6 \equiv 64 \equiv 7 \pmod{19} \\
+            2^7 \equiv 128 \equiv 14 \pmod{19} \\
+            2^8 \equiv 256 \equiv 9 \pmod{19} \\
+            2^9 \equiv 512 \equiv 18 \pmod{19} \\
+            2^{10} \equiv 1024 \equiv 17 \pmod{19} \\
+            2^{11} \equiv 2048 \equiv 15 \pmod{19} \\
+            2^{12} \equiv 4096 \equiv 11 \pmod{19} \\
+            2^{13} \equiv 8192 \equiv 3 \pmod{19} \\
+            2^{14} \equiv 16384 \equiv 6 \pmod{19} \\
+            2^{15} \equiv 12 \pmod{19} \\
+            2^{16} \equiv 5 \pmod{19} \\
+            2^{17} \equiv 10 \pmod{19} \\
+            2^{18} \equiv 1 \pmod{19} \\
+        \)
+
+        2 est une racine primitive modulo 19.
+        
+        \item  $p = 23$
+
+        \(
+            2^1 \equiv 2 \pmod{23} \\
+            2^2 \equiv 4 \pmod{23} \\
+            2^3 \equiv 8 \pmod{23} \\
+            2^4 \equiv 16 \pmod{23} \\
+            2^5 \equiv 32 \equiv 9 \pmod{23} \\
+            2^6 \equiv 64 \equiv 18 \pmod{23} \\
+            2^7 \equiv 128 \equiv 13 \pmod{23} \\
+            2^8 \equiv 256 \equiv 3 \pmod{23} \\
+            2^9 \equiv 512 \equiv 6 \pmod{23} \\
+            2^{10} \equiv 1024 \equiv 12 \pmod{23} \\
+            2^{11} \equiv 2048 \equiv 1 \pmod{23} \\
+        \)
+        2 n'est pas une racine primitive modulo 23. \\
+    \end{enumerate}
+
+    (b)
+    \begin{enumerate}[label=(\roman*)]
+        \item $p = 5$ \\
+        \(
+            3^4 \equiv 1 \pmod{5} \\
+        \)
+        3 est une racine primitive modulo 5.
+
+        \item $p = 7$ \\
+        \(
+            3^6 \equiv 1 \pmod{7} \\
+        \)
+        3 est une racine primitive modulo 7.
+
+        \item $p = 11$ \\
+        \(
+            3^5 \equiv 1 \pmod{11} \\
+        \)
+        3 n'est une racine primitive modulo 11.
+
+        \item $p = 17$ \\
+        \(
+            3^{16} \equiv 1 \pmod{17} \\
+        \)
+        3 est une racine primitive modulo 17. \\
+    \end{enumerate}
+
+    (c)
+    \begin{enumerate}[label=(\roman*)]
+        \item $p = 23$ \\
+        \(
+            5^{22} \equiv 1 \pmod{23} \\
+        \)
+        5 est une racine primitive modulo 23.
+
+        \item $p = 29$ \\
+        \(
+            2^{28} \equiv 1 \pmod{29} \\
+        \)
+        2 est une racine primitive modulo 29.
+
+        \item $p = 41$ \\
+        \(
+            6^{16} \equiv 1 \pmod{41} \\
+        \)
+        6 n'est une racine primitive modulo 41.
+    
+        \item $p = 43$ \\
+        \(
+            3^{42} \equiv 1 \pmod{43} \\
+        \)
+        3 est une racine primitive modulo 43.
+    \end{enumerate}
+
+\end{solution}
+
+\begin{solution}
+    \text{  } \\
+    On rappelle le critère d'Euler : \\
+    Pour un nombre premier impair $p$, \\
+    \(
+        2^{(p-1)/2} \equiv 
+        \begin{cases}
+        1 \pmod{p}, & \text{si 2 est un \textbf{résidu quadratique} modulo p}, \\
+        -1 \equiv p-1 \pmod{p}, & \text{si 2 est un \textbf{résidu non quadratique} modulo p}.
+        \end{cases}
+    \) \\ \\
+    
+    \(
+    2^{(p-1)/2} \pmod{p} 3 \leq p \leq 20 \rightarrow p \in [3, 5, 7, 11, 13, 17, 19] 
+    \) 
+
+    \begin{itemize}
+        \item Si $p = 3, \quad 2^1 \equiv 2 \pmod{3} \equiv p-1$ donc 2 est un résultat non quadratique modulo 3.
+        \(
+        \text{On peut vérifier en testant si un carré donne 2 modulo 3:} \\
+        1^2 \equiv 1 \pmod{3} \\
+        2^2 \equiv 4 \equiv 1 \pmod{3}
+        \)
+
+        \item Si $p = 5, \quad 2^2 \equiv 4 \pmod{5} \rightarrow p-1$ donc 2 est un résultat non quadratique modulo 5.
+        \(
+        \text{On peut vérifier en testant si un carré donne 2 modulo 5:} \\
+        1^2 \equiv 1 \pmod{5} \\
+        2^2 \equiv 4 \pmod{5} \\
+        3^2 \equiv 9 \equiv 4 \pmod{5} \\
+        4^2 \equiv 16 \equiv 1 \pmod{5}
+        \)
+
+        \item Si $p = 7, \quad 2^3 \equiv 8 \equiv 1 \pmod{7} \rightarrow 1$ donc 2 est un résidu quadratique modulo 7.
+         \(
+        \text{On peut vérifier en testant si un carré donne 2 modulo 5:} \\
+        1^2 \equiv 1 \pmod{7} \\
+        2^2 \equiv 4 \pmod{7} \\
+        3^2 \equiv 9 \equiv 2 \pmod{7} \Rightarrow \text{TOP}
+        \)
+
+        \item Si $p = 11, \quad 2^5 \equiv 32 \equiv 10 \pmod{11} \rightarrow p-1$ donc 2 est un résultat non quadratique modulo 11.
+
+        \item Si $p = 13, \quad 2^6 \equiv 64 \equiv 12 \pmod{13} \rightarrow p-1$ donc 2 est un résultat non quadratique modulo 13.
+
+        \item Si $p = 17, \quad 2^8 \equiv 256 \equiv 1 \pmod{17} \rightarrow 1$ donc 2 est un résultat quadratique modulo 17.
+
+        \item Si $p = 19, \quad 2^9 \equiv 512 \equiv 18 \pmod{19} \rightarrow p-1$ donc 2 est un résultat non quadratique modulo 19.
+
+    \end{itemize}
+
+    $\rightarrow$ Si 2 est un résidu quadratique modulo p alors $2^{(p-1)/2} \equiv 1 \text{ sinon } \equiv p - 1$
+\end{solution}

@@ -1,7 +1,15 @@
 \session{TP3 - Théorie des nombres}
 
 \section*{Rappels Théoriques}
-\textbf{0. Le modulo} \\
+
+L’\textbf{arithmétique modulaire} est la manière de raisonner sur les entiers “à reste près”. On y utilise les notions de divisibilité, de reste et d’inverse modulaire. \\
+
+Ces outils sont fondamentaux pour construire des algorithmes efficaces en informatique et en cryptographie (par exemple pour le chiffrement ou les calculs rapides sur les ordinateurs). Autrement dit, on ne s’intéresse pas aux valeurs exactes, mais au reste obtenu après division. \\
+
+Par exemple :
+$17 \equiv 2 \pmod 5$ car $17 = 5 * 3 + 2 = 15 + 2$ et 15 est divisible par 5 donc on sait le “retirer” du calcul et il reste 2.
+
+\subsection*{0. Le modulo}
 Le modulo, c’est une façon de dire : “je ne m’intéresse qu’au reste de la division euclidienne.” \\
 
 Quand on écrit
@@ -10,9 +18,9 @@ a \equiv b \pmod{m}
 \]
 on lit : a et b laissent le même reste quand on les divise par m. On peut aussi dire m divise $(a-b)$. \\
 
-Exemple : Si m = 5. $7 \equiv 12 \equiv 17 \equiv 22 \pmod{5}$ car leur division par 5 donne le même reste, 2. \\
+Exemple : Si m = 5. $7 \equiv 12 \equiv 17 \equiv 22 \pmod{5}$ car leur division par 5 donne le même reste, 2.
 
-\textbf{1. Division Euclidienne} \\
+\subsection*{1. Division Euclidienne}
 Pour deux entiers \( a \) (dividende) et \( d \) (diviseur, \( d \neq 0 \)), 
 il existe des entiers \( q \) (quotient) et \( r \) (reste) tels que :
 \[
@@ -23,30 +31,25 @@ a = dq + r \quad \text{avec } 0 \le r < |d|.
     \item Le reste \( r \) est obtenu par \( r = a - dq \)
 \end{itemize}
 
-En notation modulaire $a \equiv r \pmod{d}$. \\
+En notation modulaire $a \equiv r \pmod{d}$.
 
-\textbf{2. Algorithme d'Euclide} \\
-Cet algorithme permet de calculer le \textit{plus grand commun diviseur} (\( \text{pgcd} \)) ou the \textit{greatest common divisor} (\( \text{gcd} \)) de deux nombres \( a \) et \( d \) (\( a > d > 0 \)). On applique la division euclidienne à répétition :
-\begin{enumerate}
-    \item Diviser \( a \) par \( d \), et noter le reste \( r \).
-    \item Remplacer \( a \) par \( d \), et \( d \) par \( r \).
-    \item Répéter jusqu'à ce que \( r = 0 \). 
-\end{enumerate}
-Le dernier reste non nul est le \( \text{pgcd}(a, d) \). \\
-
-Au lieu de tester tous les diviseurs possibles, on réduit le problème à des restes de plus en plus petits. Le pgcd est utile pour savoir si deux nombres sont premiers entre eux, ce qui conditionne la possibilité d’inverser un nombre modulo un autre. \\
-
-\textbf{3. Théorème de Bézout} \\
-Si \( \text{pgcd}(a, b) = c \), alors il existe des entiers \( x \) et \( y \) tels que :
+\subsection*{2. Théorème de Bézout}
+\textbf{Bézout} dit qu’on peut toujours écrire le PGCD (le plus grand commun diviseur) de deux nombres a et b sous la forme d'une combinaison linéaire :
 \[
 ax + by = \text{pgcd}(a,b).
 \]
+
+Cette relation est essentielle car elle relie arithmétique et algorithme : 
+\begin{itemize}
+    \item Elle montre que le PGCD n’est pas qu’un nombre, mais qu’il est “fabriqué” à partir de a et b.
+    \item Elle sert surtout à démontrer l’existence d’inverses modulaires lorsque le PGCD vaut 1 (condition à l'existence de l'inverse modulaire).
+\end{itemize}
+
+\newpage
 En notation modulaire,
 \[
-ax \equiv c \pmod{b} \quad \text{ et } \quad by \equiv c \pmod{a}
+ax \equiv \text{pgcd}(a,b) \pmod{b} \quad \text{ et } \quad by \equiv \text{pgcd}(a,b) \pmod{a}
 \]
-Si $\text{pgcd}(a,b)=1$, on peut trouver un inverse modulo alors il existe $x$ tel que $ax \equiv 1 \pmod{b}$. Si le \text{pgcd} ne vaut pas 1, certaines congruences n'ont pas de solution. 
-L’algorithme d’Euclide étendu permet de trouver ces coefficients \( x \) et \( y \). \\
 
 \textit{Lemme}:
 \[
@@ -69,21 +72,60 @@ a \equiv \alpha \pmod{n} \quad \text{et} \quad b \equiv \beta \pmod{n}
 \quad \Rightarrow \quad a b \equiv \alpha \beta \pmod{n}
 \]
 
-\textbf{4. Euclide étendu}\\
-L’algorithme d’Euclide étendu permet de trouver une combinaison linéaire :
-\[
-a \cdot x + m \cdot y = 1,
-\]
-En réduisant cette égalité modulo $m$, le terme $my$ disparaît (car divisible par $m$) :
-\[
-ax \equiv 1 \pmod{m}
-\]
-où \( x \) (réduit modulo \( m \)) est l’inverse modulaire \( a^{-1} \pmod m \). Cela signifie aussi quel x donne un reste 1 quand on multiplie par 3 et divise par 7. \\
+\subsection*{3. Algorithme d'Euclide}
+L'algorithme d'Euclide sert à trouver le PGCD entre deux nombres efficacement. On peut également le dire comme : quel est le plus grand nombre qui divise à la fois \( a \) et \( d \). \\
 
-C’est comme l’algorithme d’Euclide, mais on garde la trace des coefficients.
-Il te dit non seulement “le pgcd vaut 1”, mais aussi “comment le combiner pour obtenir 1”. \\
+On va appliquer la division euclidienne à répétition :
+\begin{enumerate}
+    \item Diviser \( a \) par \( d \), et noter le reste \( r \).
+    \item Remplacer \( a \) par \( d \), et \( d \) par \( r \).
+    \item Répéter jusqu'à ce que \( r = 0 \). 
+\end{enumerate}
+Le dernier reste non nul est le \( \text{pgcd}(a, d) \). \\
 
-\textbf{5. Congruences} \\
+Par exemple :
+\begin{align*}
+    &pgcd(252, 105) \quad ? \\
+    &252 = 2 * 105 + 42 \quad \text{(le reste)} \\
+    &pgcd(252,105) = pgcd(105,42) \\
+    &105 = 2 * 42 + 21 \quad \text{(le reste)} \\
+    &pgcd(252,105) = pgcd(105,42) = pgcd(42, 21) \\
+    &42 = 2 * 21 + 0 
+\end{align*}
+
+Le PGCD est le dernier reste non nul : ici 21. \\
+
+Au lieu de tester tous les diviseurs possibles, on réduit le problème à des restes de plus en plus petits. Le PGCD est utile pour savoir si deux nombres sont premiers entre eux, ce qui conditionne la possibilité d’inverser un nombre modulo un autre.
+
+\subsection*{4. Euclide étendu}
+L’algorithme d’Euclide étendu ne se contente pas de trouver le PGCD. Il permet aussi de trouver les coefficients de Bézout, c'est-à-dire les deux nombres $u$ et $v$ de l'équation de Bezout $au + bv = pgcd(a,b)$. \\
+
+Autrement dit, elle calcule explicitement $u$ et $v$ tels que : 
+\[
+au + bv = pgcd(a,b)
+\]
+
+Quand le PGCD vaut 1, on a :
+\[
+au + bv = 1
+\]
+Et si on regarde cette équation modulo b, le terme en $bv$ s’annule (car divisible par $b$), donc :
+\[
+au \equiv 1(mod b)
+\]
+
+Cela signifie que \textbf{$u$ est l’inverse de $a$ modulo $b$} et c'est grâce à cette propriété qu’on peut calculer les inverses nécessaires dans de nombreux algorithmes cryptographiques.
+
+\subsection*{5. Inverses Modulo}
+L’inverse modulo \( a \) par rapport à \( m \) (\( a^{-1} \)) est un entier \( x \) tel que :
+\[
+a \cdot x \equiv 1 \pmod{m}.
+\]
+Il existe si et seulement si \( \text{pgcd}(a, m) = 1 \), et peut être trouvé avec l'algorithme d'Euclide étendu. \\
+
+Si $\text{pgcd}(a,b)=1$, on peut trouver un inverse modulo alors il existe $x$ tel que $ax \equiv 1 \pmod{b}$.
+
+\subsection*{6. Congruences}
 Une congruence est une relation de la forme :
 \[
 ax \equiv b \pmod{m},
@@ -94,22 +136,21 @@ ax - b = km \quad \Rightarrow \quad ax + m(-k) = b
 \]
 En utilisant l’algorithme d’Euclide étendu, tu peux déterminer si elle a une solution (si $\text{pgcd}(a,m)$ divise $b$) et la trouver explicitement.\\
 
-\textbf{5. Théorème des Restes Chinois} \\
-Pour résoudre un système de congruences, tu utilises le théorème des restes chinois. Pour appliquer le théorème des restes chinois (TRC), tu as besoin d’inverses modulaires entre les différents modules. Ces inverses se trouvent grâce à l'algorithme d'Euclide étendu.
+\subsection*{7. Théorème des Restes Chinois}
+Il permet de résoudre des systèmes de congruences simultanées, c’est-à-dire plusieurs équations modulaires à la fois. Il s’applique lorsque les moduli sont premiers entre eux (c’est-à-dire que leur PGCD vaut 1 deux à deux). \\
+
+Autrement dit, on cherche un nombre x qui satisfait plusieurs conditions du type :
 \[
 x \equiv a_1 \pmod{m_1} \quad \text{et} \quad x \equiv a_2 \pmod{m_2},
 \]
-si \( m_1 \) et \( m_2 \) sont premiers entre eux (\( \text{pgcd}(m_1, m_2) = 1 \)), il existe une solution unique modulo \( m_1 \cdot m_2 \). \\
+Le théorème des restes Chinois garantit alors (si les moduli sont premiers entre eux) qu’il existe une solution unique modulo \( m_1 \cdot m_2 \). \\
 
-\textbf{6. Inverses Modulo} \\
-L’inverse modulo \( a \) par rapport à \( m \) (\( a^{-1} \)) est un entier \( x \) tel que :
-\[
-a \cdot x \equiv 1 \pmod{m}.
-\]
-Il existe si et seulement si \( \text{pgcd}(a, m) = 1 \), et peut être trouvé avec l'algorithme d'Euclide étendu. \\
+Ces outils sont la base de nombreux algorithmes modernes (RSA, Diffie-Hellman, calculs cryptographiques). Ils permettent de manipuler efficacement des entiers très grands, tout en gardant des opérations rapides et sûres.
 
-\textbf{7. La crypto} \\
+\subsection*{8. La crypto}
 L'algorithme RSA à clé publique repose entièrement sur de l'arithmétique modulaire et donc sur les théorèmes / algorithmes cités ci-dessus. 
+
+\newpage
 
 \section*{1. Divisions et congruences}
 \begin{exercise} % BL : juste 1
