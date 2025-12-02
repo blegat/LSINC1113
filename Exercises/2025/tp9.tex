@@ -1,0 +1,280 @@
+\session{TP9 - La transformée de Fourier}
+
+\section*{Rappels théoriques}
+
+Un signal $x(t)$ peut se voir de deux manières complémentaires :
+\begin{itemize}
+    \item \textbf{Domaine temporel} : on regarde comment $x(t)$ évolue au cours du temps (forme de la courbe, impulsions, décroissance, etc.).
+    \item \textbf{Domaine fréquentiel} : on regarde de quelles \textbf{fréquences} il est composé (quelles sinusoïdes, avec quelle amplitude, etc.). \\
+\end{itemize}
+
+Exemples :
+\begin{itemize}
+    \item En audio, $x(t)$ est le son dans le temps, et $X(\omega)$ montre les graves / médiums / aigus (comme un égaliseur).
+    \item En traitement d’images, la Transformée de Fourier (TF) permet de voir quelles “textures” (fréquences spatiales) sont présentes. \\
+\end{itemize}
+
+La transformée de Fourier sert à \textbf{passer du temps à la fréquence}, et la transformée inverse permet de \textbf{reconstruire le signal temporel à partir du spectre de fréquences}.
+
+
+\subsection*{1. Signaux Périodiques}
+
+Un signal $x(t)$ est \textbf{périodique} si :
+\[
+x(t+T) = x(t)
+\]
+pour une période $T>0$.  
+On définit :
+\[
+f = \frac{1}{T} \quad \text{et} \quad \omega = 2\pi f = \frac{2\pi}{T}.
+\] \\
+
+Exemples :
+\[
+\cos(\omega t) \text{ et } \sin(\omega t)
+\]
+sont périodiques avec $T = \frac{2\pi}{\omega}$.
+
+
+\subsection*{2. Transformée de Fourier (TF) et TF inverse}
+
+La transformée de Fourier d’un signal $x(t)$ est :
+\[
+X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-i\omega t} \, dt
+\]
+\begin{itemize}
+    \item $x(t)$ : signal dans le temps,
+    \item $X(\omega)$ : même information vue dans le domaine fréquentiel. \\
+\end{itemize}
+
+On peut revenir dans le temps grâce à la transformée inverse :
+\[
+x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) e^{i\omega t} \, d\omega.
+\]
+
+Intuition :
+\begin{itemize}
+    \item $X(\omega)$ dit “combien de fréquence $\omega$ il y a dans le signal”.
+    \item La TF inverse “remixe” toutes ces sinusoïdes pour reconstruire $x(t)$.
+\end{itemize}
+
+\subsection*{3. Signaux de base : $u(t)$, Dirac, sinc}
+
+\textbf{Fonction échelon $u(t)$ (Heaviside)}  
+\[
+u(t) =
+\begin{cases}
+0 & t < 0,\\
+1 & t \ge 0.
+\end{cases}
+\]
+C’est un “interrupteur” qui allume le signal à partir de $t=0$.  
+Par exemple $e^{-at}u(t)$ est une exponentielle décroissante \textbf{causale} (qui commence à $t=0$).
+
+\medskip
+
+\textbf{Dirac $\delta(t)$ (impulsion)}  
+
+La fonction $\delta(t)$ est nulle partout sauf en $t=0$, où elle est “infiniment piquée”, avec :
+\[
+\int_{-\infty}^{\infty} \delta(t)\,dt = 1.
+\]
+
+Elle sert à modéliser une impulsion idéale (un “coup” instantané).  
+Propriété clé :
+\[
+f(t)\,\delta(t-a) = f(a)\,\delta(t-a).
+\]
+
+\medskip
+
+\textbf{Fonction sinc}  
+
+En traitement du signal, on utilise souvent :
+\[
+\mathrm{sinc}(x) = \frac{\sin x}{x}, \quad \mathrm{sinc}(0)=1
+\]
+(par continuité). \\
+
+Elle vaut 1 au centre, oscille et décroît pour $|x|$ grand, avec des zéros en $x = \pm \pi, \pm 2\pi, \dots$ \\
+
+Elle apparaît tout le temps en Fourier :
+\begin{itemize}
+    \item une \textbf{porte en temps} (signal non nul sur un intervalle fini) a une TF en forme de sinc,
+    \item une \textbf{sinc en temps} donne une TF en forme de \textbf{porte} (signal bande limitée). \\
+\end{itemize}
+
+Idée importante : couper un signal dans le temps (limiter sa durée) permet de tout faire rentrer,
+mais cela “étale” son spectre en fréquence avec des oscillations (sinc).
+
+\newpage
+\subsection*{4. Transformées de Fourier usuelles}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{c|c}
+        \toprule
+         Domaine temporel & Domaine fréquentiel \\
+         \midrule
+         $x(t) = u(t)$ & $X(\omega) = \displaystyle\frac{1}{i\omega}+\pi\delta(\omega)$\\
+
+         $x(t) =\delta(t)$ & $X(\omega) = 1$\\
+
+         $x(t) = 1$&$X(\omega) = 2\pi\delta(\omega)$\\
+
+         $x(t) = \displaystyle\frac{1}{\pi t}\sin(Wt)$ & $X(\omega) = \left\{
+         \begin{array}{ll}
+             1 &  \text{si }|\omega| \leq W \\
+             0 &  \text{sinon.}
+         \end{array}
+         \right.$\\
+
+         $x(t) = e^{-at}u(t), a>0$ & $X(\omega)=\displaystyle\frac{1}{a + i\omega}$\\
+	    \bottomrule
+    \end{tabular}
+    \label{tab:my_label}
+\end{table}
+
+
+\subsection*{5. Propriétés de la Transformée de Fourier}
+
+\textbf{Linéarité}
+\[
+\mathcal{F}\{a x_1(t) + b x_2(t)\} = a X_1(\omega) + b X_2(\omega).
+\]
+ \\
+\textbf{Modulation (translation en fréquence)}  \\
+Si on multiplie le signal par une exponentielle :
+\[
+\mathcal{F}\{x(t) e^{i \omega_0 t}\} = X(\omega - \omega_0),
+\]
+on \textbf{décale le spectre} autour de $\omega_0$.  
+C’est le principe de la \textbf{modulation} (radio, transmission, etc.). \\
+
+\textbf{Convolution}  
+\[
+\mathcal{F}\{x_1 * x_2\} = X_1(\omega) X_2(\omega).
+\]
+Convolution dans le temps $\Rightarrow$ produit en fréquence (filtrage). \\
+
+\textbf{Dualité}  
+\[
+\mathcal{F}\{x(t)\} = X(\omega) \implies \mathcal{F}\{X(t)\} = 2\pi x(-\omega).
+\]
+
+\subsection*{6. Formules d'Euler}
+
+Les formules d’Euler relient les fonctions trigonométriques aux exponentielles complexes :
+\[
+\cos(\omega t) = \frac{1}{2}(e^{i\omega t}+e^{-i\omega t}), \qquad
+\sin(\omega t) = \frac{1}{2i}(e^{i\omega t}-e^{-i\omega t}).
+\]
+Elles permettent de réécrire les cos/sin en exponentielles, ce qui simplifie énormément les calculs de TF.
+
+\newpage
+
+\section*{1. Périodicité}
+
+\begin{exercise}
+    Déterminer si les signaux suivants sont périodiques et donner, le cas échéant, la période $T$, la fréquence $f$, ainsi que la vitesse angulaire $\omega$: 
+        \begin{enumerate}[label=(\alph*)]
+            \item $x(t) = \cos(2t) + \sin(3t)$
+            \item $x(t) = \cos(t)u(t)$
+            \item $x(t) = v(t) + v(-t)$ avec $v(t) = \sin(t)u(t)$
+        \end{enumerate}
+\end{exercise}
+
+\section*{2. Transformée de Fourier}
+
+\begin{exercise}
+    Calculer la transformée de Fourier des signaux suivants:
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = e^{-at}u(t)$, \ $a>0$
+        \item $x(t) = e^{-t}\cos(2\pi t)u(t)$
+        \item $x(t) = 
+            \begin{cases}
+            1 & |t| < T_1 \\
+            0 & \text{sinon}
+            \end{cases}
+        $
+        \item $x(t) = \frac{1}{\pi t}\sin(Wt)$ 
+        
+        \item (*) $x(t) = e^{-t+2}u(t-2)$
+        \item (*) $x(t) = e^{-a|t|}$
+        
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Calculer les signaux qui ont comme transformée de Fourier les fonctions suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $X(i\omega) = e^{-2\omega}u(\omega)$
+        \item $X(i\omega) = 
+            \begin{cases}
+                \cos(2\omega) & \text{si } |\omega| < \pi/4 \\
+                0 & \text{sinon}.
+            \end{cases}$
+	\item $X(i\omega) = 
+	    \begin{cases}
+            1 & \text{pour } |\omega| < W \\
+            0 & \text{pour } |\omega| > W
+        \end{cases}$
+    \end{enumerate}
+\end{exercise}
+
+\section*{3. Lecture et tracé de spectres}
+\begin{exercise}
+    Tracer à la main (amplitude uniquement) l’allure de $|X(\omega)|$ pour les signaux suivants.
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = \mathbf{1}_{|t|<T_0}$
+        \item $x(t) = \dfrac{1}{\pi t}\sin(Wt)$
+        \item $x(t) = \delta(t)$
+        \item $x(t) = 1$
+    \end{enumerate}
+\end{exercise}
+
+\section*{4. Exercices supplémentaires}
+\begin{exercise}
+    Déterminer si les signaux suivants sont périodiques et donner, le cas échéant, la période fondamentale, la fréquence, ainsi que la vitesse angulaire: 
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = \sum_{k=-\infty}^{\infty}(-1)^k\delta(t-2k)$
+        \item $x(t) = v(t) + v(-t)$ avec $v(t) = \cos(t)u(t)$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Calculer la transformée de Fourier des signaux suivants :
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = e^{-2t} \sin(3\pi t) u(t)$
+        \item $x(t) = e^{3t} \cos(5\pi t) u(-t)$
+        \item $x(t) = e^{-t^2}$
+        \item $x(t) = t e^{-t} u(t)$
+        \item $x(t) = \delta(t - 3)$
+        \item $x(t) = \frac{1}{t^2 + 1}$
+        \item $x(t) = e^{-bt} u(t), \, b > 0$
+        \item $x(t) = \sin(\pi t) u(t)$
+        \item $x(t) = e^{-t} \cos(2\pi t) u(t - 1)$
+        \item $x(t) = \delta'(t)$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Calculer les signaux qui ont comme transformée de Fourier les fonctions suivantes :
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $X(i\omega) = \frac{1}{\omega^2 + 9}$
+        \item $X(i\omega) = e^{-\omega^2}$
+        \item $X(i\omega) = \frac{1}{i\omega + 1}$
+        \item $X(i\omega) = \sin(2\omega) u(\omega)$
+        \item $X(i\omega) = \delta(\omega - 5)$
+        \item $X(i\omega) = \frac{1}{\omega^2 + a^2}, \, a > 0$
+        \item $X(i\omega) = e^{-\omega} u(\omega)$
+        \item $X(i\omega) = \frac{1}{1 + \omega^2}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+
+
