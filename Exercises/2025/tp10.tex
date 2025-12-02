@@ -1,3 +1,249 @@
+% \session{TP10 - La transformée de Fourier}
+
+% \section*{Rappels théoriques}
+
+% \subsection*{1. Ce que veut dire « échantillonner » un signal}
+
+% On part d’un signal analogique $x(t)$ (continu dans le temps).
+
+% On le mesure toutes les $T_e$ secondes : on obtient un signal discret, une suite de valeurs $x[k] = x(kT_e)$. \\
+
+% Mathématiquement, on peut écrire le signal échantillonné comme :
+% \[
+% x_e(t) = \sum_{k=-\infty}^{\infty} x(kT_e)\,\delta(t-kT_e),
+% \]
+% où 
+% \[
+% T_e = \text{période d’échantillonnage}, \qquad
+% f_e = \frac{1}{T_e} = \text{fréquence d’échantillonnage (en Hz)}.
+% \]
+
+% \textbf{À retenir :} \\
+% Echantillonner $=$ ne garder que des valeurs ponctuelles du signal, à intervalles réguliers $T_e$. 
+
+% \subsection*{2. Ce qui se passe dans le domaine fréquentiel}
+
+% Soit $X(f)$ le spectre (Transformée de Fourier) du signal continu $x(t)$. \\
+
+% L’échantillonnage à la fréquence $f_e$ a deux effets importants dans le domaine fréquentiel (de façon schématique) :
+% \begin{itemize}
+%     \item le spectre $X(f)$ est \textbf{recopié} périodiquement autour de toutes les fréquences $k f_e$ ($k \in \mathbb{Z}$) ;
+%     \item si ces copies se chevauchent, on ne peut plus les distinguer : c’est le \textbf{repliement spectral} (aliasing). \\
+% \end{itemize}
+
+% \textbf{Cela signifie :} \\
+% Tant que le spectre original est petit (par ex. limité à $[-1,1]$ kHz) et que $f_e$ est grand (8 kHz), ces copies :
+% \begin{itemize}
+%     \item ne se chevauchent pas ;
+%     \item on voit clairement quelle partie est “l’original” (autour de 0) ;
+%     \item et on peut “filtrer” pour récupérer le bon spectre. \\
+% \end{itemize}
+
+% Mais si le spectre original est plus large, par exemple jusqu’à 5 kHz, et qu'on l'échantillonnes à 8 kHz : la copie centrée en 0 va de -5 à +5 kHz, alors que la copie centrée en 8 kHz va de 3 à 13 kHz. Entre 3 et 5 kHz, les deux se chevauchent. On parle d'aliasing : des morceaux de la copie se replient dans la bande utile. \\
+
+% \textbf{A retenir :} \\
+% Quand on échantillonne, on ne garde pas qu’un seul spectre : on crée une infinité de copies du spectre continu, décalées de $\pm f_e, \pm 2 f_e$. Si la fréquence d’échantillonnage est assez grande (Shannon respecté), ces copies ne se touchent pas. Si elle est trop petite, elles se chevauchent. Les hautes fréquences se "replient" et on ne peut plus distinguer ce qui vient d’où : c’est le repliement spectral. \\
+
+% \textbf{Théorème de Shannon–Nyquist} \\
+% Si un signal ne contient pas de fréquences au-dessus de $f_{\max}$, alors il suffit de l’échantillonner à une fréquence :
+% \[
+% f_e \ge 2 f_{\max}
+% \]
+% pour pouvoir le reconstruire parfaitement à partir de ses échantillons. Et garantir donc qu'il n'y a \textbf{pas d’aliasing}. \\
+
+% Si au contraire $f_e < 2 f_{\max}$, certaines composantes fréquentielles se replient et apparaissent à de \emph{fausses} fréquences après échantillonnage, c'est de l'aliasing.
+
+% \subsection*{3. Fréquence réduite et aliasing}
+
+% Lorsqu’on échantillonne un signal à la fréquence $f_e$, on passe d’un signal continu $x(t)$ à une suite discrète $x[k] = x(kT_e)$, avec $T_e = 1/f_e$. \\
+
+% En temps discret, ce qui compte n’est plus la fréquence « réelle » $f$ (en Hz), mais sa position par rapport à la fréquence d’échantillonnage. \\
+
+% \textbf{Fréquence réduite (ou normalisée)}
+
+% On définit la fréquence réduite :
+% \[
+% \tilde f = \frac{f}{f_e}.
+% \]
+% C’est une fréquence \emph{sans unité}, qui indique « combien de fois par période d’échantillonnage » le signal oscille. \\
+
+% Dans beaucoup de formules en temps discret, la fréquence n’apparaît plus comme $f$, mais comme ce rapport $f/f_e$. \\
+
+% \textbf{Périodicité en fréquence et aliasing}
+
+% Après échantillonnage, le spectre discret est \textbf{périodique} en fréquence avec une période $f_e$ :
+% \[
+% \text{Les fréquences } f,\ f \pm f_e,\ f \pm 2f_e,\dots \text{ deviennent indistinguables.}
+% \]
+% Autrement dit, toutes les fréquences de la forme
+% \[
+% f' = f + n f_e,\qquad n\in\mathbb{Z},
+% \]
+% sont des \textbf{alias} les unes des autres : elles donnent le même comportement du signal après échantillonnage. \\
+
+% \textbf{Fréquence alias observée}
+
+% En pratique, on ne peut observer (sans ambiguïté) que les fréquences dans la \textbf{bande de Nyquist}
+% \[
+% [0, f_e/2].
+% \]
+% Toute fréquence réelle $f$ (même très grande) se « replie » dans cette bande. On appelle
+% \emph{fréquence aliasée} (ou \emph{fréquence observée}) une version repliée de $f$ dans $[0, f_e/2]$. \\
+
+% On peut l’obtenir en retranchant ou ajoutant des multiples de $f_e$ :
+% \[
+% f_{\text{alias}} = |\, f - m f_e \,| \quad \text{pour un certain entier $m$ choisi de sorte que } f_{\text{alias}} \in [0, f_e/2].
+% \]
+
+% \textbf{À retenir :}
+% \begin{itemize}
+%     \item Après échantillonnage, les fréquences sont vues modulo $f_e$ (d’où la fréquence réduite $\tilde f = f/f_e$).
+%     \item Les fréquences qui diffèrent d’un multiple de $f_e$ sont des \emph{alias} : le système discret ne peut pas les distinguer.
+%     \item On ne voit effectivement que les fréquences dans $[0,f_e/2]$ ; les autres se replient dans cette bande sous forme de $f_{\text{alias}}$.
+%     \item Échantillonner trop lentement ($f_e$ trop petit) fait se replier les composantes de haute fréquence dans la bande $[0, f_e/2]$.
+%     \item Plusieurs fréquences analogiques différentes peuvent donner le \emph{même signal échantillonné} : on ne sait plus retrouver l’original — c’est l’aliasing.
+% \end{itemize}
+
+% \subsection*{4. Harmoniques et fondamentale}
+
+% En traitement du son, on parle souvent de \textbf{fréquence fondamentale} et d'\textbf{harmoniques}.
+
+% \begin{itemize}
+%     \item La \textbf{fréquence fondamentale} $f_0$ est la fréquence de base d’un son périodique (sa hauteur principale, par ex. 440 Hz pour le ``La'').
+%     \item Les \textbf{harmoniques} sont les fréquences multiples de la fondamentale :
+%     \[
+%       f_n = n f_0, \quad n = 2,3,4,\dots
+%     \]
+%     Par exemple, si $f_0 = 440$ Hz :
+%     \[
+%       2f_0 = 880~\text{Hz},\quad 3f_0 = 1320~\text{Hz},\quad 4f_0 = 1760~\text{Hz}, \dots
+%     \]
+% \end{itemize}
+
+% Un son peut donc être vu comme la somme :
+% \[
+% x(t) = A_1 \cos(2\pi f_0 t) + A_2 \cos(2\pi 2f_0 t) + A_3 \cos(2\pi 3f_0 t) + \dots
+% \]
+
+% \begin{itemize}
+%     \item La fondamentale $f_0$ donne la \textbf{hauteur perçue} (la note).
+%     \item Les harmoniques (2$f_0$, 3$f_0$, ...) donnent le \textbf{timbre} (son ``rond'', ``métallique'', etc.). \\
+% \end{itemize}
+
+% Dans le spectre $|X(f)|$ :
+% \begin{itemize}
+%     \item On voit un pic à $f_0$ (fondamentale),
+%     \item D’autres pics à $2f_0, 3f_0, \dots$ (harmoniques),
+%     \item Leurs amplitudes relatives ($A_1, A_2, A_3, \dots$) déterminent la couleur du son. \\
+% \end{itemize}
+
+% \textbf{Remarque :} dans certains cas, la fondamentale peut être absente du spectre (par ex. seulement 880 Hz et 1320 Hz présents), mais le cerveau peut tout de même percevoir la hauteur $f_0 = 440$ Hz : on parle de \emph{fondamentale manquante}.
+
+% % \subsection*{3. Exemple}
+
+% % On part d'un signal très simple :
+% % \[
+% % x(t) = \cos(2\pi f_0 t).
+% % \]
+
+% % \subsubsection*{Étape 1 : Spectre du cosinus en continu}
+
+% % Un cosinus pur ne contient qu'une seule fréquence $f_0$.
+
+% % Dans le domaine fréquentiel (continu), cela se traduit par deux impulsions de Dirac :
+% % \[
+% % X(f) = \frac{1}{2}\big[\delta(f - f_0) + \delta(f + f_0)\big].
+% % \]
+
+% % \subsubsection*{Étape 2 : Échantillonnage dans le temps}
+
+% % On échantillonne le signal à une fréquence $f_e$ (période $T_e = 1/f_e$). Dans le domaine fréquentiel, le spectre est recopié périodiquement autour des multiples de $f_e$.
+
+% % Concrètement, on ne regarde plus $x(t)$ pour tout $t$, mais seulement aux instants
+% % \[
+% % t = kT_e, \quad k \in \mathbb{Z}.
+% % \]
+
+% % On obtient une suite de valeurs :
+% % \[
+% % x[k] = x(kT_e) = \cos(2\pi f_0\, kT_e).
+% % \]
+
+% % On remplace $T_e = 1/f_e$ :
+% % \[
+% % x[k] = \cos\Big(2\pi f_0\, k \frac{1}{f_e}\Big)
+% %      = \cos\Big(2\pi \frac{f_0}{f_e} k\Big).
+% % \]
+
+% % \subsubsection*{Étape 3 : Fréquence réduite (normalisée)}
+
+% % On introduit la \textbf{fréquence réduite} (ou normalisée) :
+% % \[
+% % \tilde f = \frac{f_0}{f_e}.
+% % \]
+
+% % Alors la suite s’écrit très simplement :
+% % \[
+% % x[k] = \cos(2\pi \tilde f\, k).
+% % \]
+
+% % \textbf{Idée :} en discret, ce qui compte, ce n’est plus $f_0$ en Hz, mais le rapport $f_0/f_e$ (où se situe $f_0$ par rapport à la fréquence d’échantillonnage).
+
+
+% % \subsubsection*{Étape 4 : Pourquoi plusieurs fréquences se confondent (aliasing)}
+
+% % En temps discret, les fréquences qui diffèrent d’un entier donnent la même suite, car :
+% % \[
+% % \cos\big(2\pi (\tilde f + n)\,k\big)
+% % = \cos\big(2\pi \tilde f\,k + 2\pi n k\big)
+% % = \cos(2\pi \tilde f\,k), \quad \forall n\in\mathbb{Z},
+% % \]
+% % puisque $\cos(\theta + 2\pi m) = \cos(\theta)$ pour tout $m\in\mathbb{Z}$. \\
+
+% % Donc on ne fait pas la différence entre :
+% % \[
+% % \tilde f,\quad \tilde f+1,\quad \tilde f+2,\quad \dots
+% % \]
+% % Elles donnent \textbf{exactement la même suite} $x[k]$. \\
+
+% % En fréquence réelle (en Hz), cela signifie que toutes les fréquences $f_0$ et $f_0'$ telles que
+% % \[
+% % f_0' = \pm f_0 + n f_e,\quad n\in\mathbb{Z},
+% % \]
+% % sont \textbf{indiscernables} après échantillonnage : c'est de l'aliasing. \\
+
+% % Exemple numérique : \\
+% % Soit $f_e = 8$ kHz.
+% % \begin{itemize}
+% %     \item $f_0 = 1$ kHz $\Rightarrow \tilde f = 1/8$.
+% %     \item $f_0' = 9$ kHz $= 1$ kHz $+ 1\cdot 8$ kHz $\Rightarrow \tilde f' = 9/8 = 1 + 1/8$.
+% % \end{itemize}
+% % Or $\tilde f' = \tilde f + 1$, donc $f_0$ et $f_0'$ donnent exactement la même suite échantillonnée. Un cosinus à 9 kHz échantillonné à 8 kHz \textbf{sera vu comme} un cosinus à 1 kHz.
+
+% % \subsubsection*{Étape 5 : Bande de Nyquist et repliement spectral}
+
+% % En pratique, en temps discret, on ne distingue que les fréquences dans la bande :
+% % \[
+% % [0, f_e/2] \quad \text{(bande de Nyquist).}
+% % \]
+
+% % Les composantes de fréquence au-dessus de $f_e/2$ se \textbf{replient} dans cette bande :
+% % elles apparaissent comme des fréquences plus basses (alias). \\
+
+% % On peut voir la fréquence observée comme un « pliage » autour des multiples de $f_e$.  
+% % Pour un cosinus de fréquence $f_0$, on peut écrire de manière schématique :
+% % \[
+% % f_{\text{alias}} = \big| f_0 - m f_e \big| \quad \text{(pour un certain $m\in\mathbb{Z}$ choisi de sorte que $f_{\text{alias}} \in [0, f_e/2]$)}.
+% % \]
+
+% % \textbf{Lien avec Shannon--Nyquist.}  
+% % Le critère
+% % \[
+% % f_e \ge 2 f_{\max}
+% % \]
+% % assure que toutes les fréquences du signal (jusqu'à $f_{\max}$) sont dans la bande $[0, f_e/2]$ \textbf{sans repliement}. On peut alors reconstruire le signal sans ambiguïté, car chaque fréquence du signal d’origine correspond à une unique fréquence après échantillonnage. \\
+
+
 \session{TP10 - La transformée de Fourier}
 
 \section*{Rappels théoriques}
@@ -19,7 +265,7 @@ f_e = \frac{1}{T_e} = \text{fréquence d’échantillonnage (en Hz)}.
 \]
 
 \textbf{À retenir :} \\
-Echantillonner $=$ ne garder que des valeurs ponctuelles du signal, à intervalles réguliers $T_e$. 
+Échantillonner $=$ ne garder que des valeurs ponctuelles du signal, à intervalles réguliers $T_e$. 
 
 \subsection*{2. Ce qui se passe dans le domaine fréquentiel}
 
@@ -27,7 +273,7 @@ Soit $X(f)$ le spectre (Transformée de Fourier) du signal continu $x(t)$. \\
 
 L’échantillonnage à la fréquence $f_e$ a deux effets importants dans le domaine fréquentiel (de façon schématique) :
 \begin{itemize}
-    \item le spectre $X(f)$ est \textbf{recopié} périodiquement autour de toutes les fréquences $k f_e$ ($k \in \mathbb{Z}$) ;
+    \item le spectre $X(f)$ est \textbf{recopié périodiquement} autour de toutes les fréquences $k f_e$ ($k \in \mathbb{Z}$) ;
     \item si ces copies se chevauchent, on ne peut plus les distinguer : c’est le \textbf{repliement spectral} (aliasing). \\
 \end{itemize}
 
@@ -39,19 +285,35 @@ Tant que le spectre original est petit (par ex. limité à $[-1,1]$ kHz) et que 
     \item et on peut “filtrer” pour récupérer le bon spectre. \\
 \end{itemize}
 
-Mais si le spectre original est plus large, par exemple jusqu’à 5 kHz, et qu'on l'échantillonnes à 8 kHz : la copie centrée en 0 va de $-5$ à +5 kHz, alors que la copie centrée en 8 kHz va de 3 à 13 kHz. Entre 3 et 5 kHz, les deux se chevauchent. On parle d'aliasing : des morceaux de la copie se replient dans la bande utile. \\
+Mais si le spectre original est plus large, par exemple jusqu’à 5 kHz, et qu'on l'échantillonne à 8 kHz : la copie centrée en 0 va de -5 à +5 kHz, alors que la copie centrée en 8 kHz va de 3 à 13 kHz. Entre 3 et 5 kHz, les deux se chevauchent. On parle d'aliasing : des morceaux de la copie se replient dans la bande utile. \\
 
 \textbf{A retenir :} \\
-Quand on échantillonne, on ne garde pas qu’un seul spectre : on crée une infinité de copies du spectre continu, décalées de $\pm f_e, \pm 2 f_e$. Si la fréquence d’échantillonnage est assez grande (Shannon respecté), ces copies ne se touchent pas. Si elle est trop petite, elles se chevauchent. Les hautes fréquences se ``replient'' et on ne peut plus distinguer ce qui vient d’où : c’est le repliement spectral. \\
+Quand on échantillonne, on ne garde pas qu’un seul spectre : on crée une infinité de copies du spectre continu, décalées de $\pm f_e, \pm 2 f_e$. Si la fréquence d’échantillonnage est assez grande (Shannon respecté), ces copies ne se touchent pas. Si elle est trop petite, elles se chevauchent. Les hautes fréquences se "replient" et on ne peut plus distinguer ce qui vient d’où : c’est le repliement spectral. \\
 
-\textbf{Théorème de Shannon–Nyquist} \\
-Si un signal ne contient pas de fréquences au-dessus de $f_{\max}$, alors il suffit de l’échantillonner à une fréquence :
+\textbf{Théorème de Shannon–Nyquist (version complète)} \\[0.5em]
+Si un signal \textbf{ne contient pas de fréquences au-dessus de $f_{\max}$ en valeur absolue}, c’est-à-dire que son spectre est nul en dehors de :
+\[
+X(f) = 0 \quad \text{pour } |f| > f_{\max} \quad \text{(autrement dit } f \in [-f_{\max}, f_{\max}] \text{)},
+\]
+alors il suffit de l’échantillonner à une fréquence :
 \[
 f_e \ge 2 f_{\max}
 \]
 pour pouvoir le reconstruire parfaitement à partir de ses échantillons. Et garantir donc qu'il n'y a \textbf{pas d’aliasing}. \\
 
-Si au contraire $f_e < 2 f_{\max}$, certaines composantes fréquentielles se replient et apparaissent à de \emph{fausses} fréquences après échantillonnage, c'est de l'aliasing.
+\textbf{Remarque importante :} \\
+Le facteur 2 vient du fait que le spectre d’un signal réel est \textbf{symétrique} : il contient à la fois $+f$ et $-f$.  
+Par exemple, un simple cosinus
+\[
+x(t) = \cos(2\pi f_0 t)
+\]
+possède deux pics dans son spectre :
+\[
+X(f) = \tfrac{1}{2}\delta(f - f_0) + \tfrac{1}{2}\delta(f + f_0),
+\]
+c’est-à-dire un à $+f_0$ et un à $-f_0$.  
+Ainsi, même si on parle souvent uniquement de la fréquence positive $f_0$, il faut se rappeler que le spectre réel occupe en réalité toute la bande $[-f_{\max}, +f_{\max}]$.  
+C’est précisément pour cela que la condition de Shannon fait intervenir $2 f_{\max}$ : il faut éviter que les copies du spectre (autour de $+f_e$ et $-f_e$) se chevauchent. \\
 
 \subsection*{3. Fréquence réduite et aliasing}
 
@@ -101,7 +363,7 @@ f_{\text{alias}} = |\, f - m f_e \,| \quad \text{pour un certain entier $m$ choi
     \item Les fréquences qui diffèrent d’un multiple de $f_e$ sont des \emph{alias} : le système discret ne peut pas les distinguer.
     \item On ne voit effectivement que les fréquences dans $[0,f_e/2]$ ; les autres se replient dans cette bande sous forme de $f_{\text{alias}}$.
     \item Échantillonner trop lentement ($f_e$ trop petit) fait se replier les composantes de haute fréquence dans la bande $[0, f_e/2]$.
-    \item Plusieurs fréquences analogiques différentes peuvent donner le \emph{même signal échantillonné} : on ne sait plus retrouver l’original — c’est l’aliasing.
+    \item Plusieurs fréquences analogiques différentes peuvent donner le \emph{même signal échantillonné} : on ne sait plus retrouver l’original — c’est l'aliasing.
 \end{itemize}
 
 \subsection*{4. Harmoniques et fondamentale}
@@ -138,111 +400,6 @@ Dans le spectre $|X(f)|$ :
 \end{itemize}
 
 \textbf{Remarque :} dans certains cas, la fondamentale peut être absente du spectre (par ex. seulement 880 Hz et 1320 Hz présents), mais le cerveau peut tout de même percevoir la hauteur $f_0 = 440$ Hz : on parle de \emph{fondamentale manquante}.
-
-% \subsection*{3. Exemple}
-
-% On part d'un signal très simple :
-% \[
-% x(t) = \cos(2\pi f_0 t).
-% \]
-
-% \subsubsection*{Étape 1 : Spectre du cosinus en continu}
-
-% Un cosinus pur ne contient qu'une seule fréquence $f_0$.
-
-% Dans le domaine fréquentiel (continu), cela se traduit par deux impulsions de Dirac :
-% \[
-% X(f) = \frac{1}{2}\big[\delta(f - f_0) + \delta(f + f_0)\big].
-% \]
-
-% \subsubsection*{Étape 2 : Échantillonnage dans le temps}
-
-% On échantillonne le signal à une fréquence $f_e$ (période $T_e = 1/f_e$). Dans le domaine fréquentiel, le spectre est recopié périodiquement autour des multiples de $f_e$.
-
-% Concrètement, on ne regarde plus $x(t)$ pour tout $t$, mais seulement aux instants
-% \[
-% t = kT_e, \quad k \in \mathbb{Z}.
-% \]
-
-% On obtient une suite de valeurs :
-% \[
-% x[k] = x(kT_e) = \cos(2\pi f_0\, kT_e).
-% \]
-
-% On remplace $T_e = 1/f_e$ :
-% \[
-% x[k] = \cos\Big(2\pi f_0\, k \frac{1}{f_e}\Big)
-%      = \cos\Big(2\pi \frac{f_0}{f_e} k\Big).
-% \]
-
-% \subsubsection*{Étape 3 : Fréquence réduite (normalisée)}
-
-% On introduit la \textbf{fréquence réduite} (ou normalisée) :
-% \[
-% \tilde f = \frac{f_0}{f_e}.
-% \]
-
-% Alors la suite s’écrit très simplement :
-% \[
-% x[k] = \cos(2\pi \tilde f\, k).
-% \]
-
-% \textbf{Idée :} en discret, ce qui compte, ce n’est plus $f_0$ en Hz, mais le rapport $f_0/f_e$ (où se situe $f_0$ par rapport à la fréquence d’échantillonnage).
-
-
-% \subsubsection*{Étape 4 : Pourquoi plusieurs fréquences se confondent (aliasing)}
-
-% En temps discret, les fréquences qui diffèrent d’un entier donnent la même suite, car :
-% \[
-% \cos\big(2\pi (\tilde f + n)\,k\big)
-% = \cos\big(2\pi \tilde f\,k + 2\pi n k\big)
-% = \cos(2\pi \tilde f\,k), \quad \forall n\in\mathbb{Z},
-% \]
-% puisque $\cos(\theta + 2\pi m) = \cos(\theta)$ pour tout $m\in\mathbb{Z}$. \\
-
-% Donc on ne fait pas la différence entre :
-% \[
-% \tilde f,\quad \tilde f+1,\quad \tilde f+2,\quad \dots
-% \]
-% Elles donnent \textbf{exactement la même suite} $x[k]$. \\
-
-% En fréquence réelle (en Hz), cela signifie que toutes les fréquences $f_0$ et $f_0'$ telles que
-% \[
-% f_0' = \pm f_0 + n f_e,\quad n\in\mathbb{Z},
-% \]
-% sont \textbf{indiscernables} après échantillonnage : c'est de l'aliasing. \\
-
-% Exemple numérique : \\
-% Soit $f_e = 8$ kHz.
-% \begin{itemize}
-%     \item $f_0 = 1$ kHz $\Rightarrow \tilde f = 1/8$.
-%     \item $f_0' = 9$ kHz $= 1$ kHz $+ 1\cdot 8$ kHz $\Rightarrow \tilde f' = 9/8 = 1 + 1/8$.
-% \end{itemize}
-% Or $\tilde f' = \tilde f + 1$, donc $f_0$ et $f_0'$ donnent exactement la même suite échantillonnée. Un cosinus à 9 kHz échantillonné à 8 kHz \textbf{sera vu comme} un cosinus à 1 kHz.
-
-% \subsubsection*{Étape 5 : Bande de Nyquist et repliement spectral}
-
-% En pratique, en temps discret, on ne distingue que les fréquences dans la bande :
-% \[
-% [0, f_e/2] \quad \text{(bande de Nyquist).}
-% \]
-
-% Les composantes de fréquence au-dessus de $f_e/2$ se \textbf{replient} dans cette bande :
-% elles apparaissent comme des fréquences plus basses (alias). \\
-
-% On peut voir la fréquence observée comme un « pliage » autour des multiples de $f_e$.  
-% Pour un cosinus de fréquence $f_0$, on peut écrire de manière schématique :
-% \[
-% f_{\text{alias}} = \big| f_0 - m f_e \big| \quad \text{(pour un certain $m\in\mathbb{Z}$ choisi de sorte que $f_{\text{alias}} \in [0, f_e/2]$)}.
-% \]
-
-% \textbf{Lien avec Shannon--Nyquist.}  
-% Le critère
-% \[
-% f_e \ge 2 f_{\max}
-% \]
-% assure que toutes les fréquences du signal (jusqu'à $f_{\max}$) sont dans la bande $[0, f_e/2]$ \textbf{sans repliement}. On peut alors reconstruire le signal sans ambiguïté, car chaque fréquence du signal d’origine correspond à une unique fréquence après échantillonnage. \\
-
 
 
 
