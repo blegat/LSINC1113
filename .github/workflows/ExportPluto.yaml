@@ -30,10 +30,16 @@ jobs:
                 working_directory: Exercises/
                 root_file: main.tex
 
-            - name: Compile exams
+            - name: Compile exam 2025_01
               uses: xu-cheng/latex-action@v4
               with:
                 working_directory: Exams/2025_01/
+                root_file: main.tex
+
+            - name: Compile exam 2025_08
+              uses: xu-cheng/latex-action@v4
+              with:
+                working_directory: Exams/2025_08/
                 root_file: main.tex
 
             - name: Install Julia
