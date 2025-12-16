@@ -1,0 +1,392 @@
+\session{TP4 - Fonctions à deux variables}
+
+\begin{solution}
+    On pose que $u = x^3$:
+    $f(u,y) = \frac{u y}{u^2 + y^2}$ \\
+    Si x tend vers zéro, u tend (encore plus vite) vers zéro. \\
+    On peut passer en coordonnées polaires. Ici, les coordonnées du plan sont  (u,y), donc :
+    \begin{itemize}
+        \item la distance à l’origine : $r = \sqrt{u^2 + y^2}$
+        \item $\theta$ l'angle par rapport à l’axe horizontal donc $u=r \cos \theta$, $y=r \sin \theta$
+    \end{itemize}
+    \[
+    f(r, \theta) = \frac{r \cos(\theta) r \sin(\theta)}{(r \cos(\theta))^2 + (r \sin(\theta))^2} = \frac{\cos(\theta)\sin(\theta)}{1} = \frac{1}{2} \sin(2\theta)
+    \]
+    
+    On a donc la limite $\displaystyle\lim (\frac{1}{2} \sin(2\theta))$ : quelque soit r, la limite dépend de $\theta$ et peut prendre plusieurs valeurs, on a donc pas de valeur unique pour la limite, elle n'existe pas.
+\end{solution}
+
+\begin{solution}
+    On peut passer en polaires : $x = r \cos(\theta)$ et $y = r \sin(\theta)$ \\
+    \begin{equation}
+        f(r, \theta) = \frac{(r \cos(\theta))^2 (r \sin(\theta))^2}{(r \cos(\theta))^2 + (r \sin(\theta))^2} = \frac{r^4 \cos(\theta)^2\sin(\theta)^2}{(r \cos(\theta))^2 + (r \sin(\theta))^2} \leq r^2 
+    \end{equation}
+
+    \begin{equation}
+        r^2 \cos(\theta)^2 \sin(\theta)^2 \leq r^2
+    \end{equation}
+    \begin{equation}
+        \cos(\theta)^2 \sin(\theta)^2 \leq 1
+    \end{equation}
+    
+    $\cos(\theta)^2 \sin(\theta)^2$ atteint son maximum en $\frac{\pi}{4} + 2k\pi$ et $\frac{3\pi}{4} + 2k\pi$ ce qui donne $\frac{1}{4}$ qui est bien plus petit que 1. 
+\end{solution}
+
+\begin{solution}
+    Calculer les dérivées partielles de fonctions ci-dessous aux différents points de leur domaine naturel :
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        \[
+        \begin{aligned}
+            \frac{\partial f}{\partial x} &= 3y \cos(3xy) + (-4xy) \exp(-2x^2y) + 6x^2, \\
+            \frac{\partial f}{\partial y} &= 3x \cos(3xy) + (-2x^2) \exp(-2x^2y)
+        \end{aligned}
+        \]
+    
+        \item 
+        \[
+        \begin{aligned}
+            \frac{\partial f}{\partial x} &= -\frac{1}{2} (x+y)^{-\frac{3}{2}}, \\
+            \frac{\partial f}{\partial y} &= -\frac{1}{2} (x+y)^{-\frac{3}{2}}
+        \end{aligned}
+        \]
+    
+        \item 
+        \[
+        \begin{aligned}
+            \frac{\partial f}{\partial x} &= \frac{2x}{x^2 + y^2}, \\
+            \frac{\partial f}{\partial y} &= \frac{2y}{x^2 + y^2}
+        \end{aligned}
+        \]
+    
+        \item 
+        \[
+        \begin{aligned}
+            \frac{\partial f}{\partial x} &= \cos(y), \\
+            \frac{\partial f}{\partial y} &= -x \sin(y) + 1
+        \end{aligned}
+        \]
+    
+        \item 
+        \[
+        \begin{aligned}
+            \frac{\partial f}{\partial x} &= -15 \cos^2(5x - y^3) \sin(5x - y^3) + \frac{1}{x \ln(xy)}, \\
+            \frac{\partial f}{\partial y} &= 9y^2 \cos^2(5x - y^3) \sin(5x - y^3) + \frac{1}{y \ln(xy)}
+        \end{aligned}
+        \]
+    
+        \item 
+        \[
+        \begin{aligned}
+            \frac{\partial f}{\partial x} &= \frac{y x^{-\frac{1}{2}}}{2 + 2(y \sqrt{x})^2} + 2 \cos(3x^2 + xy - 5y^3)(6x + y), \\
+            \frac{\partial f}{\partial y} &= \frac{\sqrt{x}}{1 + (y \sqrt{x})^2} + 2 \cos(3x^2 + xy - 5y^3)(x - 15y^2)
+        \end{aligned}
+        \]
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+Soient $g(x,y) = f(x,y)$,
+\begin{enumerate}
+    \item Continuité de \( f \) à l'origine : 
+    Pour montrer que \( f \) est continue à l'origine, nous devons vérifier que : 
+    \[
+    \lim_{(x, y) \to (0, 0)} f(x, y) = f(0, 0) = 0 \quad \text{comme dit dans l'énoncé}.
+    \]
+    En utilisant les coordonnées polaires, nous avons \( x = r \cos \theta \) et \( y = r \sin \theta \), où \( r = \sqrt{x^2 + y^2} \) est la distance à l'origine. En remplaçant dans \( f(x, y) \), on obtient :
+    \[
+    f(x, y) = f(r \cos \theta, r \sin \theta) = \frac{(r \cos \theta)(r \sin \theta)^2}{(r \cos \theta)^4 + (r \sin \theta)^2}.
+    \]
+    
+    Le numérateur devient :
+    \[
+    (r \cos \theta)(r \sin \theta)^2 = r^3 \cos \theta \sin^2 \theta,
+    \]
+    et le dénominateur devient :
+    \[
+    (r \cos \theta)^4 + (r \sin \theta)^2 = r^4 \cos^4 \theta + r^2 \sin^2 \theta.
+    \]
+    Ainsi, on peut simplifier l'expression de \( f \) comme suit :
+    \[
+    f(x, y) = \frac{r^3 \cos \theta \sin^2 \theta}{r^2 (r^2 \cos^4 \theta + \sin^2 \theta)} = \frac{r \cos \theta \sin^2 \theta}{ (r^2 \cos^4 \theta + \sin^2 \theta)}.
+    \]
+    
+    Pour montrer que \( f \) est continue à l'origine, calculons la limite de \( f(x, y) \) lorsque \( (x, y) \to (0, 0) \), ce qui revient à faire tendre \( r \) vers 0 en coordonnées polaires :
+    \[
+    \lim_{r \to 0} f(r \cos \theta, r \sin \theta) = \lim_{r \to 0} \frac{r \cos \theta \sin^2 \theta}{ (r^2 \cos^4 \theta + \sin^2 \theta)} = \lim_{r \to 0} \frac{0}{ (0 + \sin^2 \theta)}.
+    \]
+    
+    Comme \( \cos \theta \) et \( \sin^2 \theta \) sont bornés (ils ne dépendent pas de \( r \)), on obtient :
+    \[
+    \lim_{r \to 0} r \cos \theta \sin^2 \theta = 0.
+    \]
+    
+    Donc :
+    \[
+    \lim_{(x, y) \to (0, 0)} f(x, y) = 0 = f(0, 0),
+    \]
+    ce qui montre que \( f \) est continue à l'origine.
+
+    \item Calcul des dérivées partielles de \( f \) à l'origine :
+
+    Pour calculer les dérivées partielles de \( f \) en \( (0, 0) \), nous utilisons la définition des dérivées partielles en coordonnées cartésiennes.
+
+    La dérivée partielle de \( f \) par rapport à \( x \) en \( (0, 0) \) est donnée par :
+    \[
+    f_x(0, 0) = \lim_{h \to 0} \frac{f(h, 0) - f(0, 0)}{h}.
+    \]
+    En prenant \( y = 0 \), on a \( f(h, 0) = 0 \), donc :
+    \[
+    f_x(0, 0) = \lim_{h \to 0} \frac{0 - 0}{h} = 0.
+    \]
+
+    La dérivée partielle de \( f \) par rapport à \( y \) en \( (0, 0) \) est donnée par :
+    \[
+    f_y(0, 0) = \lim_{k \to 0} \frac{f(0, k) - f(0, 0)}{k}.
+    \]
+    
+    En prenant \( x = 0 \), on a également \( f(0, k) = 0 \), donc :
+    \[
+    f_y(0, 0) = \lim_{k \to 0} \frac{0 - 0}{k} = 0.
+    \]
+
+    En utilisant les coordonnées polaires, nous obtenons que la fonction \( f \) est continue à l'origine, et que les dérivées partielles de \( f \) à l'origine sont toutes deux nulles :
+    \[
+    f_x(0, 0) = 0 \quad \text{et} \quad f_y(0, 0) = 0.
+    \]
+
+\end{enumerate}
+\end{solution}
+
+\begin{solution}
+Les Hessiennes, 
+    \begin{enumerate}
+        \item $f(x,y) = 3x^2y+4x^3y^4-7x^9y^4$
+        \[
+        \frac{\partial f}{\partial x} = 2x + 4y \quad \quad \quad
+        \frac{\partial f}{\partial y} = 10y + 4x - 2
+        \]
+        
+        \[
+        \frac{\partial^2 f}{\partial x^2} = 2
+        \quad \quad \quad
+        \frac{\partial^2 f}{\partial y^2} = 10
+        \]
+        
+        \[
+        \frac{\partial^2 f}{\partial xy} = \frac{\partial^2 f}{\partial yx} = 4
+        \]
+        
+        \[ H(f) = \begin{pmatrix}
+        2 & 4 \\
+        4 & 10
+        \end{pmatrix}
+        \]
+    
+        \item $f(x,y)=x^2+5y^2+4xy-2y$
+        \[
+        \frac{\partial f}{\partial x} = 6xy +12 x^2 y^4 - 63 x^8 y^4 \quad \quad \quad
+        \frac{\partial f}{\partial y} = 3x^2 + 16 x^3 y^3 - 28 x^9 y^3
+        \]
+        
+        \[
+        \frac{\partial^2 f}{\partial x^2} = 6y +24x y^4 - 504 x^7 y^4 \quad \quad \quad
+        \frac{\partial^2 f}{\partial y^2} = 48 x^3 y^2 - 84x^9 y^2
+        \]
+        
+        \[
+        \frac{\partial^2 f}{\partial xy} = \frac{\partial^2 f}{\partial yx} = 6x + 48 x^2 y^3 - 252 x^8 y^3
+        \]
+
+        \[
+        H(f) = \begin{pmatrix}
+        6y + 24x y^4 - 504 x^7 y^4 & 6x + 48 x^2 y^3 - 252 x^8 y^3 \\
+        6x + 48 x^2 y^3 - 252 x^8 y^3 & 48 x^3 y^2 - 84x^9 y^2
+        \end{pmatrix}
+        \]
+
+        \item $f(x,y) =e^x\sin(y)$
+        \[
+        \frac{\partial f}{\partial x} = \exp(x) \sin(y) \quad \quad \quad
+        \frac{\partial f}{\partial y} = \exp(x) \cos(y)
+        \]
+        
+        \[\frac{\partial^2 f}{\partial x^2} = \exp(x) \sin(y) \quad \quad \quad
+        \frac{\partial^2 f}{\partial y^2} = - \exp(x) \sin(y)
+        \]
+        
+        \[
+        \frac{\partial^2 f}{\partial xy} = \frac{\partial^2 f}{\partial yx} = exp(x) \cos(y)
+        \]
+
+        \[ H(f) = \begin{pmatrix}
+        2 & 4 \\
+        4 & 10
+        \end{pmatrix}
+        \]
+        
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    Le gradient,
+    \begin{enumerate}
+        \item $f(x,y) = x + 3y^2$
+        \[
+        \frac{\partial f}{\partial x} = 3y^2 \quad \quad \quad
+        \frac{\partial f}{\partial y} = 6y
+        \]
+
+        \item $f(x,y) = \sqrt{x^2 + y^2}$
+        \[
+        \frac{\partial f}{\partial x} = \frac{x}{\sqrt{x^2 + y^2}} \quad \quad \quad
+        \frac{\partial f}{\partial y} = \frac{y}{\sqrt{x^2 + y^2}}
+        \]
+
+        \item $f(x,y) = \frac{4y}{(x^2 + 1)}$
+        \[
+        \frac{\partial f}{\partial x} = \frac{-8xy}{(x^2 + 1)^2} \quad \quad \quad
+        \frac{\partial f}{\partial y} = \frac{4}{(x^2 + 1)}
+        \]
+
+        \item $f(x,y) = 3x^2 \sqrt{y}$
+         \[
+        \frac{\partial f}{\partial x} = 6x \sqrt{y} \quad \quad \quad
+        \frac{\partial f}{\partial y} = \frac{3x^2}{2 \sqrt{y}}
+        \]
+        
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    Les points critiques,
+    \begin{enumerate}
+        \item $f(x,y) = 4xy - 2x^2 - y^4$
+        \[
+        \nabla f = \begin{pmatrix}
+        4y - 4x \\
+        4x - 4y^3
+        \end{pmatrix}
+        \]
+        \[
+        \nabla f = 0 : 4y - 4x = 0 \text{ and } 4x - 4y^3 = 0
+        \]
+        En résolvant, on a donc : 
+        \[
+        y = x \\
+        x = 0, 1, -1
+        \]
+        Les points critiques sont donc : $(0,0), (1,1), (-1,-1)$
+
+        Pour connaître leur nature, on calcule la matrice Hessienne :
+
+        \[ H(f) = \begin{pmatrix}
+        -4 & 4 \\
+        4 & -12 y^2
+        \end{pmatrix}
+        \]
+
+        Pour le point $(0,0)$, $\det H = -16$. Le point est donc un point selle. \\
+        Pour le point $(1,1)$, $\det H = 48 - 16 = 32$. Le point est donc un maximum local. \\
+        Pour le point $(-1,-1)$, $\det H = 48 - 16 = 32$. Le point est donc un maximum local.
+        
+        \item $f(x,y) = 3xy - x^2 - y^2$
+        \[
+        \nabla f = \begin{pmatrix}
+        3y - 2x \\
+        3x - 2y
+        \end{pmatrix}
+        \]
+        \[
+        \nabla f = 0 : 3y - 2x = 0 \text{ and } 3x - 2y = 0
+        \]
+        En résolvant, on a donc : 
+        \[
+        y = \frac{2x}{3} \\
+        x = 0
+        \]
+        Les points critiques sont donc : $(0,0)$
+
+        Pour connaître leur nature, on calcule la matrice Hessienne :
+
+        \[ H(f) = \begin{pmatrix}
+        -2 & 3 \\
+        3 & -2
+        \end{pmatrix}
+        \]
+
+        Pour le point $(0,0)$, $\det H = 4 - 9 = -5$. Le point est donc un point selle. 
+        
+        \item $f(x,y) = 2x^4 + y^4 - x^2 - 2y^2$
+        \[
+        \nabla f = \begin{pmatrix}
+        8x^3 - 2x \\
+        4y^3 - 4y
+        \end{pmatrix}
+        \]
+        \[
+        \nabla f = 0 : 8x^3 - 2x = 0 \text{ and } 4y^3 - 4y = 0
+        \]
+        En résolvant, on a donc : 
+        \[
+        2x = 0 \rightarrow x = 0 
+        \]
+        \[ 
+        4x^2 - 1 = 0 \rightarrow x = \pm \frac{1}{2}
+        \]
+        \[
+        4y = 0 \rightarrow y = 0
+        \]
+        \[
+        y^2 - 1 = 0 \rightarrow y = \pm 1
+        \]
+
+        Les points critiques sont donc : $(0,0), (0,1), (0,-1),(1/2,0), (-1/2, 0), (1/2,1), \\ (-1/2, 1), (1/2,-1), (-1/2, -1)$
+
+        Pour connaître leur nature, on calcule la matrice Hessienne :
+
+        \[ H(f) = \begin{pmatrix}
+        24x^2 - 2 & 0 \\
+        0 & 12y^2 - 4
+        \end{pmatrix}
+        \]
+
+        Pour le point $(0,0)$, $\det H = 8$. Le point est donc un maximum local. \\
+        Pour le point $(0,1)$, $\det H = -16$. Le point est donc un point selle. \\
+        Pour le point $(0,-1)$, $\det H = -16$. Le point est donc un point selle. \\
+        Pour le point $(-1/2, 0)$, $\det H = -16$. Le point est donc un point selle. \\
+        Pour le point $(1/2,0)$, $\det H = -16$. Le point est donc un point selle. \\
+        Pour le point $(1/2,1)$, $\det H = 32$. Le point est donc un minimum local. \\
+        Pour le point $(-1/2,1)$, $\det H = 32$. Le point est donc un minimum local. \\
+        Pour le point $(1/2,-1)$, $\det H = 32$. Le point est donc un minimum local. \\
+        Pour le point $(-1/2,-1)$, $\det H = 32$. Le point est donc un minimum local. \\
+        
+        \item $f(x,y) = 4x^2 - 12xy + 9y^2$
+        \[
+        \nabla f = \begin{pmatrix}
+        8x - 12y \\
+        -12x + 18y
+        \end{pmatrix}
+        \]
+        \[
+        \nabla f = 0 : 8x - 12y = 0 \text{ and } -12x + 18y = 0
+        \]
+        En résolvant, on a donc : 
+        \[
+        y = \frac{2x}{3} \\
+        x = 0
+        \]
+        Les points critiques sont donc : $(0,0)$
+
+        Pour connaître leur nature, on calcule la matrice Hessienne :
+
+        \[ H(f) = \begin{pmatrix}
+        8 & -12 \\
+        -12 & 18
+        \end{pmatrix}
+        \]
+
+        Pour le point $(0,0)$, $\det H = 0$. Le point est donc indéterminé. 
+        
+    \end{enumerate}
+\end{solution}
