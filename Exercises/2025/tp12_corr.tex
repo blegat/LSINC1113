@@ -95,19 +95,32 @@
             \int_0^2 (ye^{xy}) \, dy &= \left[ y \frac{1}{x} e^{xy} \right]_0^2 - \int_0^2 (\frac{1}{x} e^{xy}) \, dy\\
             &= (\frac{2e^{2x}}{x} - 0) - \left[ \frac{e^{xy}}{x^2}\right]_0^2 \\
             &= \frac{2e^{2x}}{x} - (\frac{e^{2x}}{x^2} - \frac{1}{x^2}) \\
-            &= \frac{2e^{2x}}{x} - \frac{e^{2x}}{x^2} + \frac{1}{x^2}
+            &= \frac{2e^{2x}}{x} - \frac{e^{2x}}{x^2} + \frac{1}{x^2} \\
+            &=\frac{(2x -1) e^{2x} + 1}{x^2}
         \end{aligned}
         \]
 
         Il nous reste maintenant à intégrer \( \frac{2}{xe^{2x}} - \frac{e^{2x}}{x^2} + \frac{1}{x^2} \) par rapport à \( x \) de 1 à 2 :
         \[
         \begin{aligned}
-            I = \int_1^2 (\frac{2e^{2x}}{x} - \frac{e^{2x}}{x^2} + \frac{1}{x^2}) \, dx &= \int_1^2 \frac{2e^{2x}}{x} \, dx - \int_1^2 \frac{e^{2x}}{x^2} \, dx + \int_1^2 \frac{1}{x^2} \, dx \\
+            I = \int_1^2 (\frac{(2x -1) e^{2x} + 1}{x^2}) \, dx 
         \end{aligned}
         \]
 
-        On voit que la résolution de ces intégrales est analytiquement compliquée. On va donc procéder à un changement d'ordre dans les intégrales pour se simplifier la vie. On retombe donc sur l'équation du a.
-        
+        Or on peut y trouver une fonction et sa dérivée: 
+        \[
+        \begin{aligned}
+            (\frac{e^{2x}}{x})^{'} = \frac{2 e^{2x} x - e^{2x}}{x^2}= \frac{(2x -1) e^{2x}}{x^2}
+        \end{aligned}
+        \]
+        On a donc deux intégrale simple à calculer : 
+
+        \[
+        \begin{aligned}
+           &\int_1^2 (\frac{2e^{2x}}{x} - \frac{e^{2x}}{x^2}) dx = \left[ \frac{e^{2x}}{x}\right]_1^2 = \frac{e^4}{2} - e^2 \\
+           &\int_1^2 \frac{1}{x^2} dx = \left[ -\frac{1}{x}\right]_1^2 = \frac{1}{2} \\
+           &I = \frac{1}{2}e^4 - e^2 + \frac{1}{2}        \end{aligned}
+        \]
     \end{enumerate}
 \end{solution}
 
