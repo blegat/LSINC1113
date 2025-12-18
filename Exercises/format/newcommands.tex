@@ -1,0 +1,95 @@
+% ==  Title  ===================================================
+\newcommand{\maintitle}[1]{\textbf{#1}}
+\titleformat{\section}
+{\normalfont\sf\Large\bfseries}{\thesection}{1.2em}{}
+\titleformat{\subsection}
+{\normalfont\sf\large\bfseries}{\thesubection}{1.1em}{}
+
+% Lengths
+\setlength\parindent{0pt}
+\def\arraystretch{1.2}
+
+% ==  Maths  ===================================================
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+% \newcommand{\cjs}[1]{\mathrm{cjs}\left(#1\right)}
+\newcommand{\ddx}{\ds \frac{\mathrm{d}}{\mathrm{d}x}}
+\newcommand{\dx}{\ds \mathrm{d}x}
+\newcommand{\dy}{\ds \mathrm{d}y}
+\renewcommand{\d}{\ds \mathrm{d}}
+
+% Shortcut
+\newcommand{\ds}{\displaystyle}
+% Already defined
+%\newcommand{\cis}[1]{\mathrm{cis}\!\left(#1\right)}
+
+
+% ==  French  ==================================================
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\etal}{\emph{et al.}}
+\renewcommand{\labelitemi}{$\bullet$}
+
+% ==  Inner commands  ==========================================
+% ==  For exercices, solutions, titles of the sessions... ======
+
+% Fomatting titles for sessions associated with a counter
+\newcounter{session}
+\newcommand{\session}[1]{{
+    \newpage
+    \begin{center}
+        \sf \Large \centering
+        \maintitle{LSINC1113 - Compléments de mathématiques}\\[.8em]
+        {\LARGE \textbf{#1}}\\
+        \hrulefill
+    \end{center}
+    \vspace*{0.5cm}
+}}
+
+% Formatting equations
+\counterwithin*{equation}{session}
+\counterwithin*{figure}{session}
+\counterwithin*{footnote}{session}
+
+% Formatting exercices/solutions according to the counter session
+\theoremstyle{plain}
+    \newtheorem{theorem}{Théorème}
+    \counterwithin*{theorem}{session} 
+\theoremstyle{definition}
+    \newtheorem{exercise}{Exercice}
+    \counterwithin*{exercise}{session} 
+\newenvironment{note}{
+    \small {\it Note.} \hskip1ex
+    }
+    {}
+
+% Displaying solutions if "solutions" is true
+% Displaying short solutions otherwise
+\ifsolutions
+  \newtheorem{solution}{Solution}
+  \counterwithin*{solution}{session} 
+\else
+  \excludecomment{solution}
+\fi
+
+% ======================================================
+% Tikz commands
+\pgfplotsset{
+    complexSoluces/.style={
+        xmin = -2,xmax = 4,
+        ymin = -2,ymax = 4,
+        axis equal,
+        axis lines = center,
+        grid = major,
+        xlabel = $\Re$,
+        ylabel = $\Im$,
+        xtick={-5,-4,-3,-2,-1,0,1,2,3,4,5},
+        ytick={-5,-4,-3,-2,-1,0,1,2,3,4,5},
+        xticklabels={},
+        extra x ticks={1},
+        yticklabels={},
+        extra y ticks={1},
+        width = \textwidth
+    }
+}

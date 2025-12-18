@@ -1,0 +1,423 @@
+\session{Correction TP9 - Transformée de Fourier}
+
+\section*{1. Périodicité}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = \cos(2t)+\sin(3t)$ \\
+
+        $\cos(2t)$ a pour période $T_1 = \pi$ (car $2(t+T_1) = 2t + 2\pi$).  \\
+        $\sin(3t)$ a pour période $T_2 = \dfrac{2\pi}{3}$. \\ 
+    
+        La somme est périodique si les deux périodes ont un PPCM :
+        \[
+          \text{PPCM}\Big(\pi, \frac{2\pi}{3}\Big) = 2\pi.
+        \]
+        Donc $x(t)$ est \textbf{périodique} de période fondamentale $T = 2\pi$.  
+        \[
+          f = \frac{1}{T} = \frac{1}{2\pi}, \qquad
+          \omega = 2\pi f = 1.
+        \]
+        
+        \item $x(t) = \cos(t)u(t)$ \\
+
+        $\cos(t)$ seul a une période $2\pi$, mais $u(t)$ vaut 0 pour $t<0$ et 1 pour $t\ge 0$. \\
+        Le produit tronque la sinusoïde pour $t<0$, donc la forme globale n’est pas répétée périodiquement :
+        \[
+          x(t+T) \neq x(t) \quad \text{pour tout } T>0.
+        \]
+        $x(t)$ \textbf{n’est pas périodique}.
+        
+        \item $x(t) = v(t)+v(-t)$ avec $v(t) = \sin(t)u(t)$ \\
+
+        On a
+        \[
+          v(t) = \sin(t)u(t), \quad v(-t) = \sin(-t)u(-t) = -\sin(t)u(-t).
+        \]
+        Donc
+        \[
+          x(t) = \sin(t)u(t) - \sin(t)u(-t).
+        \]
+        Pour $t>0$, $u(t)=1$ et $u(-t)=0$, donc $x(t) = \sin(t)$.  \\
+        Pour $t<0$, $u(t)=0$ et $u(-t)=1$, donc $x(t) = -\sin(t)$. \\
+    
+        On obtient un signal \textbf{impair} :
+        \[
+          x(t) =
+          \begin{cases}
+            -\sin(t) & t<0, \\
+            0        & t=0, \\
+            \sin(t)  & t>0.
+          \end{cases}
+        \]
+        Ce n’est pas une sinusoïde complète répétée : la définition change autour de $0$.  \\
+    
+        En particulier, 
+        \[
+           x(-\tfrac{\pi}{2}) = -\sin(-\tfrac{\pi}{2}) = 1, 
+           \quad x(-\tfrac{\pi}{2} + 2\pi) = x(\tfrac{3\pi}{2}) = \sin(\tfrac{3\pi}{2}) = -1.
+        \]
+        Donc $x(t+2\pi) \neq x(t)$ pour tout $t$, le signal \textbf{n’est pas périodique}.
+    \end{enumerate}
+\end{solution}
+
+\section*{2. Transformée de Fourier}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = e^{-at}u(t)$, \ $a>0$ 
+        
+        \[
+        \begin{aligned}
+          X(\omega) 
+            &= \int_{-\infty}^{\infty} e^{-at}u(t)e^{-i\omega t}\,dt \\
+            &= \int_0^{\infty} e^{-(a + i\omega)t}\,dt \\
+            &= \bigg[ \frac{-1}{a+i\omega} e^{-(a+i\omega)t} \bigg]_0^{\infty} \\
+            &= \frac{1}{a + i\omega}.
+        \end{aligned}
+        \]
+
+        \item $x(t) = e^{-t}\cos(2\pi t)u(t)$
+
+        On utilise les exponentielles complexes :
+        \[
+          \cos(2\pi t) = \frac{1}{2}\left(e^{i2\pi t} + e^{-i2\pi t}\right),
+        \]
+        donc
+        \[
+          x(t) = \frac{1}{2}e^{-t}e^{i2\pi t}u(t) + \frac{1}{2}e^{-t}e^{-i2\pi t}u(t).
+        \]
+    
+        La TF de $e^{-t}u(t)$ est $\dfrac{1}{1+i\omega}$ (cas $a=1$).  \\
+        La multiplication par $e^{\pm i2\pi t}$ décale le spectre :
+        \[
+          \mathcal{F}\{x(t)e^{i\omega_0 t}\} = X(\omega - \omega_0).
+        \]
+    
+        On obtient :
+        \[
+          X(\omega) = \frac{1}{2}\left[\frac{1}{1 + i(\omega - 2\pi)} + \frac{1}{1 + i(\omega + 2\pi)}\right].
+        \]
+
+        On peut également le calculer comme suit :
+        \[
+        \begin{aligned}
+          X(\omega) 
+            &= \int_{-\infty}^{\infty} (\frac{1}{2}e^{-t}e^{i2\pi t}u(t) + \frac{1}{2}e^{-t}e^{-i2\pi t}u(t)) e^{-i\omega t} \,dt \\
+            &= \int_{-\infty}^{\infty} \frac{1}{2}e^{-t}e^{i2\pi t}u(t) e^{-i\omega t}  \,dt + \int_{-\infty}^{\infty} \frac{1}{2}e^{-t}e^{-i2\pi t}u(t) e^{-i\omega t} \,dt \\
+            &= \int_{-\infty}^{\infty} \frac{1}{2}e^{-t + i2\pi t - i\omega t}u(t)  \,dt + \int_{-\infty}^{\infty} \frac{1}{2}e^{-t -i2\pi t - i\omega t}u(t) \,dt \\
+            &= \int_{0}^{\infty} \frac{1}{2}e^{-t + i2\pi t - i\omega t}  \,dt + \int_{0}^{\infty} \frac{1}{2}e^{-t -i2\pi t - i\omega t} \,dt \\
+            &= \frac{1}{2} \left[ \frac{e^{-t(1-i2\pi + i \omega)}}{1-i2\pi + i \omega} \right]_{0}^{\infty} + \frac{1}{2} \left[ \frac{e^{-t(1+i2\pi + i \omega)}}{1+i2\pi + i \omega} \right]_{0}^{\infty} \\
+            &= \frac{1}{2} \left[ \frac{1}{1 + i(\omega -2\pi)} + \frac{1}{1 + i(\omega + 2\pi)} \right]
+        \end{aligned}
+        \]
+
+        \item $x(t) = 
+          \begin{cases}
+            1 & |t|<T_1\\
+            0 & \text{sinon}
+          \end{cases}$
+    
+        \[
+        \begin{aligned}
+          X(\omega) &= \int_{-T_1}^{T_1} e^{-i\omega t}\,dt 
+          = \left[ \frac{e^{-i\omega t}}{-i\omega}\right]_{-T_1}^{T_1} \\
+          &= \frac{e^{-i\omega T_1} - e^{i\omega T_1}}{-i\omega}
+          = \frac{-2i\sin(\omega T_1)}{-i\omega} \\
+          &= 2T_1 \,\frac{\sin(\omega T_1)}{\omega T_1}
+          = 2T_1\,\mathrm{sinc}(\omega T_1).
+        \end{aligned}
+        \]
+
+        \item $x(t) = \dfrac{1}{\pi t}\sin(Wt)$ \\
+
+        C’est exactement le cas dual de (c). On admet (ou on retrouve par intégrale) que :
+        \[
+          X(\omega) =
+          \begin{cases}
+            1 & |\omega| < W, \\
+            0 & \text{sinon}.
+          \end{cases}
+        \]
+
+        On va donc en fait résoudre cette intégrale : 
+        \[
+        \begin{aligned}
+          X(\omega) &= \int_{-\infty}^{\infty} \dfrac{1}{\pi t}\sin(Wt) e^{-i\omega t}\,dt
+        \end{aligned}
+        \]
+         
+        \item[\textbf{(*)}] $x(t) = e^{-t+2}u(t-2)$ \\
+
+        On reconnaît une version \textbf{décalée} de $e^{-t}u(t)$ :
+        \[
+          x(t) = e^{2} \, e^{-t}u(t-2).
+        \]
+        On peut écrire $x(t) = e^{2} y(t-2)$ avec $y(t)=e^{-t}u(t)$.  
+        La translation dans le temps donne :
+        \[
+          \mathcal{F}\{y(t-t_0)\} = e^{-i\omega t_0}Y(\omega).
+        \]
+        Donc, avec $Y(\omega) = \dfrac{1}{1+i\omega}$,
+        \[
+          X(\omega) = e^{2} e^{-i\omega 2} \frac{1}{1 + i\omega}.
+        \]
+        
+        \item[\textbf{(*)}] $x(t) = e^{-a|t|}$ \\
+
+        On sépare $t>0$ et $t<0$ :
+        \[
+          e^{-a|t|} =
+          \begin{cases}
+            e^{-at} & t>0,\\
+            e^{at}  & t<0.
+          \end{cases}
+        \]
+        On a un signal \textbf{pair}.  
+        En posant l’intégrale et en l’évaluant (ou en utilisant une table), on obtient :
+        \[
+          X(\omega) = \int_{-\infty}^{\infty} e^{-a|t|}e^{-i\omega t}dt
+          = \frac{2a}{a^2 + \omega^2}.
+        \]
+        
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+        
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        $
+        X(\omega) = e^{-2\omega}u(\omega)
+        $
+        \[
+        \begin{aligned}
+            x(t) &= \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-2\omega} u(\omega) e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{2\pi} \int_{0}^{\infty} e^{\omega (-2 + it)} \, \mathrm{d}\omega \\
+                 &= \frac{1}{2\pi} \cdot \frac{-1}{-2 + it} \\
+                 &= \frac{1}{2\pi} \cdot \frac{-1}{-2 + it} \cdot \frac{-2 - it}{-2 - it} \\
+                 &= \frac{1}{2\pi} \cdot \frac{2 + it}{4 + t^2}
+        \end{aligned}
+        \]
+    
+        \item 
+        $
+        X(\omega) = 
+        \begin{cases}
+            \cos(2\omega) & \text{si } |\omega| < \pi/4 \\
+            0 & \text{sinon}.
+        \end{cases}
+        $
+        \[
+        \begin{aligned}
+            x(t) &= \frac{1}{2\pi} \int_{-\pi/4}^{\pi/4} \cos(2\omega) e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{4\pi} \int_{-\pi/4}^{\pi/4} (e^{2i\omega} + e^{-2i\omega}) e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{4\pi} \int_{-\pi/4}^{\pi/4} \left( e^{(2i + it)\omega} + e^{(-2i + it)\omega} \right) \, \mathrm{d}\omega \\
+                 &= \frac{1}{4\pi} \left[ \frac{1}{(2 + t)i} \left( e^{i(2 + t)\frac{\pi}{4}} - e^{-i(2 + t)\frac{\pi}{4}} \right) + \frac{1}{(-2 + t)i} \left( e^{i(-2 + t)\frac{\pi}{4}} - e^{-i(-2 + t)\frac{\pi}{4}} \right) \right] \\
+                 &= \frac{1}{2\pi} \left( \frac{1}{2 + t} \sin\left((2 + t)\frac{\pi}{4}\right) + \frac{1}{-2 + t} \sin\left((-2 + t)\frac{\pi}{4}\right) \right)
+        \end{aligned}
+        \]
+    
+        \item 
+        $
+        X(\omega) = 
+        \begin{cases}
+            1 & \text{pour } |\omega| < W \\
+            0 & \text{pour } |\omega| > W
+        \end{cases}
+        $
+        \[
+        \begin{aligned}
+            x(t) &= \frac{1}{2\pi} \int_{-W}^{W} e^{i\omega t} \, \mathrm{d}\omega \\
+                 &= \frac{1}{2it\pi} \left( e^{it W} - e^{-it W} \right) \\
+                 &= \frac{1}{t\pi} \sin(t W)
+        \end{aligned}
+        \]
+    
+    \end{enumerate}
+\end{solution}
+
+\subsection*{3. Lecture et tracé de spectres}
+
+\begin{solution}
+Tracer l’allure de $|X(\omega)|$.
+
+\begin{enumerate}[label=(\alph*)]
+    \item $x(t) = \mathbf{1}_{|t|<T_0}$ \\
+
+    On a vu que :
+    \[
+      X(\omega) = 2T_0\,\mathrm{sinc}(\omega T_0).
+    \]
+    Allure : lobe principal centré en 0, décroissant, avec des zéros à $\omega = \pm k\frac{\pi}{T_0}$.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\linewidth]{2025/2025_pic/tp1_ex3_a.png}
+        \label{fig:placeholder}
+    \end{figure}
+
+    \item $x(t) = \frac{1}{\pi t}\sin(Wt)$ \\
+
+    TF rectangulaire :
+    \[
+      X(\omega) = 1 \text{ pour } |\omega|<W, \quad 0 \text{ sinon.}
+    \]
+    Allure : un rectangle de hauteur 1 entre $-W$ et $+W$.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\linewidth]{2025/2025_pic/tp1_ex3_b.png}
+        \label{fig:placeholder}
+    \end{figure}
+
+    \item $x(t) = \delta(t)$ \\
+
+    TF constante :
+    \[
+      X(\omega) = 1.
+    \]
+    Allure : ligne horizontale constante (spectre “plat”).
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\linewidth]{2025/2025_pic/tp1_ex3_c.png}
+        \label{fig:placeholder}
+    \end{figure}
+
+    \item $x(t) = 1$ \\
+
+    TF :
+    \[
+      X(\omega) = 2\pi \delta(\omega).
+    \]
+    Allure : pic de Dirac au niveau $\omega=0$ (toute l’énergie concentrée en fréquence 0).
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\linewidth]{2025/2025_pic/tp1_ex3_d.png}
+        \label{fig:placeholder}
+    \end{figure}
+    
+\end{enumerate}
+\end{solution}
+    
+\section*{4. Exercices Supplémentaires}
+
+\begin{solution}
+    \text{ }
+    \begin{enumerate}[label=(\alph*)]
+        \item Chaque impulsion est un Dirac situé en ( t = 2k ), donc les impulsions sont espacées régulièrement de 2. \\
+        De plus, le facteur \( (-1)^k \) fait simplement \textbf{alterner le signe} : une impulsion positive, puis une négative, etc.
+
+        \[
+        x(t) = \delta(t) - \delta(t-2) + \delta(t-4) - \delta(t-6) + \dots
+        \]
+        
+        Le motif ((+,-)) se répète identiquement tous les (2) secondes :
+        \[
+        x(t + 2) = (-1)^{k+1}\delta(t + 2 - 2(k+1)) = (-1)^k \delta(t - 2k) = x(t)
+        \]
+        
+        \textbf{Le signal est donc périodique} avec :
+        \[
+        T = 2, \quad f = \frac{1}{2}\ \text{Hz}, \quad \omega = 2\pi f = \pi\ \text{rad/s}.
+        \]
+        
+        \textit{Intuition : c’est un “peigne de Dirac” (train d’impulsions) alterné en signe, répété toutes les 2 unités de temps.}
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\linewidth]{2025/2025_pic/tp1_sup_exo_dirac_train.png}
+            \label{fig:placeholder}
+        \end{figure}
+
+        \item On a :
+        \[
+        v(t) = \cos(t)u(t) =
+        \begin{cases}
+        \cos(t) & t > 0,\\
+        0 & t < 0.
+        \end{cases}
+        \]
+        
+        Et :
+        \[
+        v(-t) = \cos(-t)u(-t) = \cos(t)u(-t) =
+        \begin{cases}
+        0 & t > 0,\\
+        \cos(t) & t < 0.
+        \end{cases}
+        \]
+        
+        En les additionnant :
+        \[
+        x(t) = v(t) + v(-t) =
+        \begin{cases}
+        \cos(t) & t > 0,\\
+        \cos(t) & t < 0,\\
+        \cos(0)=1 & t=0.
+        \end{cases}
+        \]
+        
+        Autrement dit :
+        \[
+        x(t) = \cos(t)\ \text{pour tout } t.
+        \]
+        
+        La fonction obtenue est bien continue et périodique, de période \( T = 2\pi \).
+        Mais attention : cela n’est vrai que parce que les morceaux se complètent parfaitement. \\
+        
+        Si on gardait les échelons déphasés (par ex. (u(t)) et (u(-t)) sans symétrie exacte), le signal aurait une discontinuité et ne serait pas périodique.
+        
+        \[
+        T = 2\pi, \quad f = \frac{1}{2\pi}, \quad \omega = 1.
+        \]
+        
+        \textit{Intuition :} la combinaison $v(t)+v(-t)$ “recolle” les deux moitiés du cosinus, donc on récupère le signal cosinus complet et périodique.
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\linewidth]{2025/2025_pic/tp1_sup_exo_v_plus_vminus.png}
+            \label{fig:placeholder}
+        \end{figure}
+
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $X(\omega) = \frac{1}{2i} \left( \frac{1}{2 - i(3\pi - \omega)} - \frac{1}{2 - i(3\pi + \omega)} \right)$
+        \item $X(\omega) = \frac{1}{2} \left( \frac{1}{i\omega - (3 + i5\pi)} + \frac{1}{i\omega - (3 - i5\pi)} \right)$
+        \item $X(\omega) = \sqrt{\pi} e^{-\omega^2 / 4}$
+        \item $X(\omega) = \frac{1}{(1 + i\omega)^2}$
+        \item $X(\omega) = e^{-i 3\omega}$
+        \item $X(\omega) = \pi e^{-|\omega|}$
+        \item $X(\omega) = \frac{1}{b + i\omega}$
+        \item $X(\omega) = \frac{\pi}{\pi^2 + \omega^2}$
+        \item $X(\omega) = \frac{e^{-i\omega}}{2} \left( \frac{1}{1 + i(\omega - 2\pi)} + \frac{1}{1 + i(\omega + 2\pi)} \right)$
+        \item $X(\omega) = i\omega$
+    \end{enumerate}
+    \end{multicols}
+\end{solution}
+
+\begin{solution}
+    \text{ }
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $x(t) = \frac{1}{6} e^{-3|t|}$
+        \item $x(t) = \sqrt{\pi} e^{-t^2 / 4}$
+        \item $x(t) = e^{-t} u(t)$
+        \item $x(t) = \frac{-1}{\pi (t^2 - 4)}$
+        \item $x(t) = \frac{1}{2\pi} e^{i5t}$
+        \item $x(t) = \frac{1}{2a} e^{-a|t|}$
+        \item $x(t) = \frac{1}{2\pi} \cdot \frac{1 + it}{1 + t^2}$
+        \item $x(t) = \frac{1}{2} \cdot e^{-|t|}$
+    \end{enumerate}
+    \end{multicols}
+\end{solution}

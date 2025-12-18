@@ -1,0 +1,402 @@
+\session{Correction TP12 - Intégrales multiples}
+
+\section*{1. Intégration de fonctions à plusieurs variables}
+
+\begin{solution}
+    Intégrer la fonction $f(x,y)=3x^2-y$ sur la région rectangulaire $R=[0,2]\times[0,2]$
+    
+    \[
+    \begin{aligned}
+    I &= \iint_R f(x, y) \, dx \, dy = \int_0^2 \int_0^2 (3x^2 - y) \, dx \, dy \\
+    &= \int_0^2 \left( \int_0^2 (3x^2 - y) \, dx \right) dy
+    \end{aligned}
+    \]
+
+    La parenthèse : 
+
+    \[
+    \begin{aligned}
+        \int_0^2 (3x^2 - y) \, dx &= \int_0^2 3x^2 \, dx - \int_0^2 y \, dx \\
+        &= 3 \int_0^2 x^2 \, dx - y \int_0^2 1 \, dx \\
+        &= 3 \left[ \frac{x^3}{3} \right]_0^2 - y \cdot \left[ x \right]_0^2 \\
+        &= 3 \cdot \frac{8}{3} - y \cdot 2 \\
+        &= 8 - 2y
+    \end{aligned}
+    \]
+
+    Il nous reste maintenant à intégrer \( 8 - 2y \) par rapport à \( y \) de 0 à 2 :
+    \[
+    \begin{aligned}
+        I = \int_0^2 (8 - 2y) \, dy &= \int_0^2 8 \, dy - \int_0^2 2y \, dy \\
+        &= 8 \cdot \left[ y \right]_0^2 - 2 \cdot \left[ \frac{y^2}{2} \right]_0^2 \\
+        &= 8 \cdot 2 - 2 \cdot 2 \\
+        &= 16 - 4 = 12
+    \end{aligned}
+    \]
+
+    L'intégrale de \( f(x, y) = 3x^2 - y \) sur la région \( R = [0, 2] \times [0, 2] \) est donc :
+    \[
+    \iint_R f(x, y) \, dx \, dy = 12.
+    \]
+
+\end{solution}
+
+\begin{solution}
+    Soit $D=[1,2]\times [0,2]\subset \mathbb{R}^2$ et $f(x,y) = ye^{xy}$
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+
+        \[
+        \begin{aligned}
+        I &= \iint_D f(x, y) \, dx \, dy = \int_0^2 \int_1^2 (ye^{xy}) \, dx \, dy \\
+        &= \int_0^2 \left( \int_1^2 (ye^{xy}) \, dx \right) dy
+        \end{aligned}
+        \]
+
+        La parenthèse : 
+
+        \[
+        \begin{aligned}
+            y \int_1^2 (e^{xy}) \, dx &= y \left[ \frac{1}{y} e^{xy} \right]_1^2 \\
+            &= e^{2y} - e^{y} \\
+        \end{aligned}
+        \]
+
+        Il nous reste maintenant à intégrer \( e^{2y} - e^{y} \) par rapport à \( y \) de 0 à 2 :
+        \[
+        \begin{aligned}
+            I = \int_0^2 (e^{2y} - e^{y}) \, dy &= \int_0^2 e^{2y} \, dy - \int_0^2 e^{y} \, dy \\
+            &= \frac{1}{2} \cdot \left[ e^{2y} \right]_0^2 - \left[ e^{y} \right]_0^2 \\
+            &= \frac{1}{2} \cdot (e^{4} - e^{0}) - (e^{2} - e^{0}) \\
+            &= \frac{1}{2} \cdot (e^{4} - e^{0} - 2e^{2} + 2e^{0}) \\
+            &= \frac{1}{2} \cdot (e^{4} - 2e^{2} + 1)
+        \end{aligned}
+        \]
+
+        \item
+        \[
+        \begin{aligned}
+        I &= \iint_D f(x, y) \, dy \, dx = \int_1^2 \int_0^2 (ye^{xy}) \, dy \, dx \\
+        &= \int_1^2 \left( \int_0^2 (ye^{xy}) \, dy \right) dx
+        \end{aligned}
+        \]
+
+        La parenthèse : \\
+        On résout par partie,
+        \[
+        \begin{aligned}
+            u   &= y          & \quad v' &= e^{xy} \\
+            u'  &= 1          & \quad v  &= \frac{1}{x} e^{xy}
+        \end{aligned}
+        \]
+
+        \[
+        \begin{aligned}
+            \int_0^2 (ye^{xy}) \, dy &= \left[ y \frac{1}{x} e^{xy} \right]_0^2 - \int_0^2 (\frac{1}{x} e^{xy}) \, dy\\
+            &= (\frac{2e^{2x}}{x} - 0) - \left[ \frac{e^{xy}}{x^2}\right]_0^2 \\
+            &= \frac{2e^{2x}}{x} - (\frac{e^{2x}}{x^2} - \frac{1}{x^2}) \\
+            &= \frac{2e^{2x}}{x} - \frac{e^{2x}}{x^2} + \frac{1}{x^2} \\
+            &=\frac{(2x -1) e^{2x} + 1}{x^2}
+        \end{aligned}
+        \]
+
+        Il nous reste maintenant à intégrer \( \frac{2}{xe^{2x}} - \frac{e^{2x}}{x^2} + \frac{1}{x^2} \) par rapport à \( x \) de 1 à 2 :
+        \[
+        \begin{aligned}
+            I = \int_1^2 (\frac{(2x -1) e^{2x} + 1}{x^2}) \, dx 
+        \end{aligned}
+        \]
+
+        Or on peut y trouver une fonction et sa dérivée: 
+        \[
+        \begin{aligned}
+            (\frac{e^{2x}}{x})^{'} = \frac{2 e^{2x} x - e^{2x}}{x^2}= \frac{(2x -1) e^{2x}}{x^2}
+        \end{aligned}
+        \]
+        On a donc deux intégrale simple à calculer : 
+
+        \[
+        \begin{aligned}
+           &\int_1^2 (\frac{2e^{2x}}{x} - \frac{e^{2x}}{x^2}) dx = \left[ \frac{e^{2x}}{x}\right]_1^2 = \frac{e^4}{2} - e^2 \\
+           &\int_1^2 \frac{1}{x^2} dx = \left[ -\frac{1}{x}\right]_1^2 = \frac{1}{2} \\
+           &I = \frac{1}{2}e^4 - e^2 + \frac{1}{2}        \end{aligned}
+        \]
+    \end{enumerate}
+\end{solution}
+
+\newpage
+
+\begin{solution}
+    Soit $D$ le domaine : $D = \{(x,y)\in\mathbb{R}^2;x\geq0,y\geq0,x+y\leq1\}$. 
+    Le domaine d'intégration est : 
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width=0.4\linewidth]{2025/2025_pic/exo3.png}
+    \end{figure}
+
+    Maintenant, on intègre :
+
+    \begin{enumerate}[label=(\alph*)]
+        \item $f(x,y) = x^2+y^2$
+        \[
+        \begin{aligned}
+        I &= \iint_D f(x, y) \, dy \, dx = \int_0^1 \int_0^{1-x} (x^2+y^2) \, dy \, dx \\
+        &= \int_0^1 \left( \int_0^{1-x} (x^2+y^2) \, dy \right) dx
+        \end{aligned}
+        \]
+
+        La parenthèse :
+        \[
+        \begin{aligned}
+            \int_0^{1-x} (x^2+y^2) \, dy &= \int_0^{1-x} x^2 \, dy + \int_0^{1-x} y^2 \, dy \\
+            &= \left[ x^2 y \right]_0^{1-x} + \left[ \frac{y^3}{3} \right]_0^{1-x} \\
+            &= x^2 (1-x) - 0 + \frac{(1-x)^3}{3} - 0
+        \end{aligned}
+        \]
+
+        Il nous reste maintenant à intégrer \( x^2 (1-x) + \frac{(1-x)^3}{3} \) par rapport à \( x \) de 0 à 1 :
+
+        \[
+        \begin{aligned}
+            \int_0^{1} (x^2 (1-x) + \frac{(1-x)^3}{3}) \, dx &= \int_0^{1} x^2 (1-x) \, dx + \int_0^{1} \frac{(1-x)^3}{3} \, dx \\
+            &= \frac{1}{3} \int_0^{1} (-4 x^3 + 6 x^2 - 3x + 1) \, dx \\
+            &= \frac{1}{3} \left[ - \frac{4 x^4}{4} + \frac{6 x^3}{3} - \frac{3x^2}{2} + x \right]_0^{1} \\
+            &= \frac{1}{3} \left( - \frac{4}{4} + \frac{6}{3} - \frac{3}{2} + 1 \right) \\
+            &= \frac{1}{3} \left( \frac{6}{3} - \frac{3}{2} \right) \\
+            &= \left( \frac{2}{3} - \frac{1}{2} \right) = \frac{1}{6} \\
+        \end{aligned}
+        \]
+
+        \newpage
+        
+        \item $g(x,y) = xy(x+y)$
+
+        \[
+        \begin{aligned}
+        I &= \iint_D g(x, y) \, dy \, dx = \int_0^1 \int_0^{1-x} (xy(x+y)) \, dy \, dx \\
+        &= \int_0^1 \left( \int_0^{1-x} (x^2 y + x y^2) \, dy \right) dx
+        \end{aligned}
+        \]
+
+        La parenthèse :
+        \[
+        \begin{aligned}
+            \int_0^{1-x} (x^2 y + x y^2) \, dy &= \int_0^{1-x} x^2 y \, dy + \int_0^{1-x} x y^2 \, dy \\
+            &= \left[ x^2 \frac{y^2}{2} \right]_0^{1-x} + \left[ \frac{x y^3}{3} \right]_0^{1-x} \\
+            &= \frac{x^2 (1-x)^2}{2} - 0 + \frac{x (1-x)^3}{3} - 0
+        \end{aligned}
+        \]
+
+        Il nous reste maintenant à intégrer \( \frac{x^2 (1-x)^2}{2} + \frac{x (1-x)^3}{3} \) par rapport à \( x \) de 0 à 1 :
+
+        \[
+        \begin{aligned}
+            \int_0^{1} (\frac{x^2 (1-x)^2}{2} + \frac{x (1-x)^3}{3}) \, dx &= \int_0^{1} \frac{x^2 (1-x)^2}{2} \, dx + \int_0^{1} \frac{x (1-x)^3}{3} \, dx \\
+            &= \frac{1}{6} \int_0^{1} 3x^2 (1-x)^2 + 2x (1-x)^3 \, dx \\
+            &= \frac{1}{6} \int_0^{1} x^4 - 3x^2 + 2x \, dx \\
+            &= \frac{1}{6} \left[ \frac{x^5}{5} - \frac{3x^3}{3} + \frac{2x^2}{2} \right]_0^{1} \\
+            &= \frac{1}{6} \left( \frac{1}{5} - 1 + 1\right) \\
+            &= \frac{1}{30}
+        \end{aligned}
+        \]
+    \end{enumerate}
+\end{solution}
+
+\begin{solution}
+    Calculer l'aire du domaine $D = \{(x,y)\in\mathbb{R}^2;-1\leq x\leq 1,x^2\leq y\leq4-x^3\}$,
+
+    Tout d'abord, voici le domaine : \\
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{2025/2025_pic/exo4.png}
+    \end{minipage}%
+    \begin{minipage}{0.5\textwidth}
+        \[
+        \begin{aligned}
+            Aire &= \int_{-1}^{1} \int_{x^2}^{4-x^3} \, dy \, dx \\
+            &= \int_{-1}^{1} \left[ y \right]_{x^2}^{4-x^3} \, dx \\
+            &= \int_{-1}^{1} 4 - x^3 - x^2 \, dx \\
+            &= \left[ 4x - \frac{x^4}{4} - \frac{x^3}{3}\right]_{-1}^{1} \\
+            &= 4 - \frac{1}{4} - \frac{1}{3} - 4 \cdot (-1) + \frac{(-1)}{4} + \frac{(-1)}{3} \\
+            &= \frac{96}{12} - \frac{8}{12} \\
+            &= \frac{22}{3}
+        \end{aligned}
+        \]
+    \end{minipage}
+\end{solution}
+
+\newpage
+
+\begin{solution}
+    Dessiner le domaine d'intégration et calculer l'intégrale
+    \begin{enumerate}[label=(\alph*)]
+        \item $f(x,y) = x$ \\
+        \begin{minipage}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{2025/2025_pic/exo5.png}
+        \end{minipage}%
+        \begin{minipage}{0.5\textwidth}
+            \[
+            \begin{aligned}
+               I &= \int_{-1}^{\frac{2}{3}} \int_0^{x+1} x \, dy \, dx \\
+                 &= \int_{-1}^{\frac{2}{3}} \left[ xy \right]_0^{x+1} \, dx \\
+                 &= \int_{-1}^{\frac{2}{3}} x (x+1) \, dx \\
+                 &= \left[ \frac{x^3}{3} + \frac{x^2}{2} \right]_{-1}^{\frac{2}{3}} \\
+                 &= \frac{8}{81} + \frac{1}{3} + \frac{2}{9} - \frac{1}{2} \\
+                 &= \frac{25}{162} \\
+            \end{aligned}
+            \]
+        \end{minipage}
+
+        \item $g(x,y) = x+y$ \\
+        \begin{minipage}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{2025/2025_pic/exo52.png}
+        \end{minipage}%
+        \begin{minipage}{0.5\textwidth}
+            \[
+            \begin{aligned}
+               I &= \int_{0}^{1} \int_{x^2}^{x} x+y \, dy \, dx \\
+               &= \int_{0}^{1} \left[ xy+ \frac{y^2}{2} \right]_{x^2}^{x} \, dx \\
+               &= \int_{0}^{1} \left( x \cdot x + \frac{x^2}{2} - x \cdot x^2 - \frac{x^4}{2} \right) \, dx \\
+               &= \int_{0}^{1} \frac{3x^2}{2} - x^3 - \frac{x^4}{2} \, dx \\
+               &= \left[ \frac{3x^3}{6} - \frac{x^4}{4} - \frac{x^5}{10} \right]_{0}^{1} \\
+               &= \frac{3}{6} - \frac{1}{4} - \frac{1}{10} \\
+               &= \frac{3}{20} \\
+            \end{aligned}
+            \]
+        \end{minipage}
+
+        \item $h(x,y)=\cos(xy)$ \\
+        \begin{minipage}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{2025/2025_pic/exo53.png}
+        \end{minipage}
+        \begin{minipage}{0.5\textwidth}
+            \[
+            \begin{aligned}
+               I &= \int_{1}^{2} \int_{0}^{\frac{\pi}{2x}} \cos (xy) \, dy \, dx \\
+              &= \int_{1}^{2} \left[ \frac{\sin (xy)}{x} \right]_{0}^{\frac{\pi}{2x}} \, dx \\
+              &= \int_{1}^{2} \frac{1}{x} ( \sin (\frac{\pi}{2}) - 0) \, dx \\
+              &= \int_{1}^{2} \frac{1}{x} \, dx \\
+              &= \left[ \log (x) \right]_{1}^{2} \\
+              &= \log(2) - \log(1) \approx 0.6931 \\
+            \end{aligned}
+            \]
+        \end{minipage}
+
+        \newpage
+        
+        \item $i(x,y) =\displaystyle\frac{1}{(x+y)^3}$ \\
+        \begin{minipage}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{2025/2025_pic/exo54.png}
+        \end{minipage}
+        \begin{minipage}{0.5\textwidth}
+            \[
+            \begin{aligned}
+               I &= \int_{1}^{3} \int_{2}^{5-x} \frac{1}{(x+y)^3} \, dy \, dx \\
+               &= \int_{1}^{3} \left[ \frac{-1}{2(x+y)^2} \right]_{2}^{5-x} \, dx \\
+               &= \int_{1}^{3} \frac{-1}{2(x+5-x)^2} -\frac{-1}{2(x+2)^2} \, dx \\
+               &= \int_{1}^{3} \frac{-1}{2(5)^2} -\frac{-1}{2(x+2)^2} \, dx \\
+               &= \left[ \frac{-x}{50} + \frac{-1}{2(x+2)} \right]_{1}^{3} \\
+               &= \frac{-3}{50} - \frac{-1}{50} + \frac{-1}{2(3+2)} - \frac{-1}{2(1+2)} \\
+               &= \frac{2}{75} \\
+            \end{aligned}
+            \]
+        \end{minipage}
+    
+    \end{enumerate}    
+\end{solution}
+
+\begin{solution}
+    Pour ces intégrales, nous allons utiliser les coordonnées polaires, où \( x = r \cos \theta \) et \( y = r \sin \theta \), avec \( dx \, dy = r \, dr \, d\theta \).
+    \begin{enumerate}[label=(\alph*)]
+        \item Le domaine \( \Delta \) est défini par :
+        \[
+        0 \leq x \leq 1, \quad 0 \leq y \leq 1, \quad 0 < x^2 + y^2 \leq 1
+        \]
+        Cela devient en coordonnées polaires : \\
+        \( 0 \leq r \leq 1 \), \\
+        \( 0 \leq \theta \leq \frac{\pi}{2} \) (car \( x \geq 0 \) et \( y \geq 0 \))
+
+        L'intégrale devient alors :
+        \[
+        \begin{aligned}
+            I &= \int_0^{\frac{\pi}{2}} \int_0^1 \frac{1}{1 + r^2} \, r \, dr \, d\theta \\
+        \end{aligned}
+        \]
+
+        En utilisant la substitution \( u = 1 + r^2 \Rightarrow du = 2r \, dr \). Les bornes sont aussi modifiées, u varie de 1 à 2 et on obtient :
+        \[
+        \int_0^1 \frac{1}{1 + r^2} \, r \, dr = \int_1^2 \frac{1}{2u} \, du = \frac{1}{2} \ln(u) \Big|_1^2 = \frac{1}{2} \ln(2)
+        \]
+
+        L'intégrale devient :
+        \[
+        I = \int_0^{\frac{\pi}{2}} \frac{\ln(2)}{2} \, d\theta = \frac{\ln(2)}{2} \cdot \frac{\pi}{2} = \frac{\pi \ln(2)}{4}
+        \]
+
+        \item Le domaine \( \Delta \) est défini par :
+        \[
+        x \geq 0, \quad y \geq 0, \quad 1 \leq x^2 + y^2 \leq 4
+        \]
+
+        Cela devient en coordonnées polaires : \\
+        \( 1 \leq r \leq 2 \), \\
+        \( 0 \leq \theta \leq \frac{\pi}{2} \) (car \( x \geq 0 \) et \( y \geq 0 \)) \\
+
+        En coordonnées polaires, \( x = r \cos \theta \) et \( y = r \sin \theta \), donc :
+        \[
+        f(x,y) = \frac{xy}{x^2 + y^2} \Rightarrow f(r,\theta) = \frac{r \cos \theta \cdot r \sin \theta}{r^2} = \cos \theta \sin \theta = \frac{1}{2} \sin(2\theta)
+        \]
+
+        L'intégrale devient :
+        \[
+        I = \int_0^{\frac{\pi}{2}} \int_1^2 \frac{1}{2} \sin(2\theta) \, r \, dr \, d\theta.
+        \]
+        
+        En intégrant par rapport à \( r \) :
+        \[
+        \int_1^2 \frac{1}{2} \sin(2\theta) \, r \, dr = \frac{1}{2} \sin(2\theta) \cdot \frac{r^2}{2} \Big|_1^2 = \frac{1}{2} \sin(2\theta) \cdot \frac{4 - 1}{2} = \frac{3}{4} \sin(2\theta)
+        \]
+
+        puis par rapport à \( \theta \) :
+        \[
+        I = \int_0^{\frac{\pi}{2}} \frac{3}{4} \sin(2\theta) \, d\theta = \frac{3}{4} \cdot \left[ -\frac{\cos(2\theta)}{2} \right]_0^{\frac{\pi}{2}} = \frac{3}{4} \cdot 1 = \frac{3}{4}
+        \]
+
+        \item Le domaine \( \Delta \) est défini par :
+        \[
+        x \geq 0, \quad 1 \leq x^2 + y^2 \leq 2y.
+        \]
+    
+        En coordonnées polaires, \( x^2 + y^2 = r^2 \) et \( y = r \sin \theta \), donc \( r^2 \leq 2r \sin \theta \) ou \( r \leq 2 \sin \theta \) pour \( \sin \theta \neq 0 \). \\
+    
+        Ainsi, les bornes deviennent : \\
+        \( 1 \leq r \leq 2 \sin \theta \) \\
+        \( 0 \leq \theta \leq \frac{\pi}{2} \) \\
+
+        L'intégrale est :
+        \[
+        I = \int_0^{\frac{\pi}{2}} \int_1^{2 \sin \theta} r \cdot r \, dr \, d\theta = \int_0^{\frac{\pi}{2}} \int_1^{2 \sin \theta} r^2 \, dr \, d\theta
+        \]
+
+        En intégrant par rapport à \( r \):
+        \[
+        \int_1^{2 \sin \theta} r^2 \, dr = \left[ \frac{r^3}{3} \right]_1^{2 \sin \theta} = \frac{(2 \sin \theta)^3}{3} - \frac{1}{3} = \frac{8 \sin^3 \theta - 1}{3}
+        \]
+        
+        L'intégrale devient alors :
+        \[
+        \begin{aligned}
+            I = \int_0^{\frac{\pi}{2}} \frac{8 \sin^3 \theta - 1}{3} \, d\theta &= \frac{1}{3} \int_0^{\frac{\pi}{2}} (8 \sin^3 \theta - 1) \, d\theta \\
+            &= \frac{1}{3} ( \int_0^{\frac{\pi}{2}} (8 \sin^3 \theta) \, d\theta - \int_0^{\frac{\pi}{2}} 1 \, d\theta) \\
+            &= \frac{1}{3} ( \frac{16}{3} - \frac{\pi}{2}) \\
+            &\approx 1.2541
+        \end{aligned}
+        \]
+        
+
+    \end{enumerate}
+\end{solution}

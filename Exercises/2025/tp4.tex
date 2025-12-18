@@ -1,0 +1,200 @@
+\session{TP4 - Théorie des nombres}
+
+\section*{Rappels Théoriques}
+
+On note
+\[
+a \equiv b \pmod{n}
+\]
+pour dire que $a$ et $b$ laissent le \textbf{même reste} quand on les divise par $n$.
+
+Exemples :
+\[
+17 \equiv 2 \pmod{5} \quad\text{car } 17 = 3\cdot 5 + 2,
+\]
+\[
+-3 \equiv 4 \pmod{7} \quad\text{car } -3 = -1\cdot 7 + 4.
+\]
+
+En arithmétique modulaire (et en informatique en général), on calcule souvent des puissances très grandes du type : an (mod m) \\
+
+Par exemple : $7^{560} \pmod {561} $
+Cependant, si on essaye de calculer $7^{560}$ directement, c’est impossible à la main (et même pour un ordinateur, c’est beaucoup trop grand). Donc, on a besoin d’une méthode efficace pour calculer ce résultat sans exploser les nombres. C’est exactement ce que fait le fast powering (ou exponentiation rapide). \\
+
+
+\subsection*{1. Exponentiation rapide (Fast Power)}
+On veut souvent calculer des choses du type
+\[
+a^n \pmod{m}
+\]
+avec $n$ très grand. Calculer $a^n$ “normalement” est impossible à la main (et très lourd pour un ordi). \\
+
+\textbf{Idée clé} : au lieu de multiplier $a$ par lui-même $n$ fois, on utilise le fait que
+\[
+a^8 = (a^4)^2 = ((a^2)^2)^2,
+\]
+donc on peut atteindre de grands exposants en \textbf{faisant surtout des carrés}. C’est ce qui rend possible les calculs cryptographiques comme RSA, où les exposants ont parfois des centaines de chiffres ! \\
+
+
+\textbf{Principe de l’algorithme (intuition) :}
+\begin{itemize}
+    \item On écrit l’exposant $n$ en \textbf{binaire} (somme de puissances de 2).
+    \item On parcourt les bits de $n$ et on :
+        \begin{itemize}
+            \item \textbf{carré} le résultat à chaque étape (on double l’exposant),
+            \item \textbf{multiplie par $a$} seulement quand le bit courant vaut 1.
+        \end{itemize}
+        \item À chaque multiplication, on \textbf{réduit modulo $m$} pour que les nombres restent petits. \\
+\end{itemize}
+
+\textbf{Exemple : } calculer $3^{13} \mod 7$
+\begin{itemize}
+    \item $13$ en binaire : $13 = 8 + 4 + 1 = 1101_2$.
+    \item On construit le résultat pas à pas (en réduisant mod 7 à chaque fois) :
+    \begin{itemize}
+        \item $3^1 \equiv 3 \pmod{7}$
+        \item $3^2 \equiv 3^2 = 9 \equiv 2 \pmod{7}$
+        \item $3^4 \equiv 2^2 = 4 \pmod{7}$
+        \item $3^8 \equiv 4^2 = 16 \equiv 2 \pmod{7}$
+    \end{itemize}
+    \item Puis $3^{13} = 3^{8+4+1} = 3^8 \cdot 3^4 \cdot 3^1$ :
+\end{itemize}
+\[
+3^{13} \equiv 2 \cdot 4 \cdot 3 = 24 \equiv 3 \pmod{7}.
+\]
+
+
+\subsection*{2. Petit théorème de Fermat et inverse modulaire}
+
+Si $p$ est un nombre premier et $a$ n’est pas multiple de $p$, alors :
+\[
+a^{p-1} \equiv 1 \pmod{p}.
+\]
+
+On peut réécrire
+\[
+a^{p-1} = a^{p-2} \cdot a \equiv 1 \pmod{p}.
+\]
+
+Donc $a^{p-2}$ joue le rôle de \textbf{l’inverse de $a$ modulo $p$} :
+\[
+a^{-1} \equiv a^{p-2} \pmod{p}.
+\]
+
+\textbf{Intuition} : multiplier par $a^{p-2}$ “annule” $a$ modulo $p$. \\
+
+\textbf{Pour les exos :} pour trouver l’inverse de $a$ modulo $p$ (avec $p$ premier) :
+\[
+a^{-1} \equiv a^{p-2} \pmod{p}
+\]
+en utilisant l’\textbf{exponentiation rapide}. \\
+
+
+\subsection*{3. Déterminer \( (\mathbb{Z}/m\mathbb{Z})^* \)}
+
+On note
+\[
+(\mathbb{Z}/m\mathbb{Z})^* = \{ a \in \{1, \dots, m-1\} \mid \operatorname{pgcd}(a,m)=1 \}.
+\]
+
+\textbf{Intuition} : ce sont tous les nombres entre $1$ et $m-1$ qui n’ont \textbf{aucun facteur commun} avec $m$ (à part 1). Ce sont exactement ceux pour lesquels un \textbf{inverse mod $m$} existe. \\
+
+Exemple : $m = 10$.
+\[
+(\mathbb{Z}/10\mathbb{Z})^* = \{1,3,7,9\}
+\]
+car $\operatorname{pgcd}(1,10)=\operatorname{pgcd}(3,10)=\operatorname{pgcd}(7,10)=\operatorname{pgcd}(9,10)=1$. \\
+
+La taille de cet ensemble est la \textbf{fonction d’Euler} $\phi(m)$. \\
+
+
+\subsection*{4. Racines primitives modulo \( p \)}
+
+On travaille ici modulo un \textbf{nombre premier} $p$. \\
+
+L’ensemble $(\mathbb{Z}/p\mathbb{Z})^*$ contient $p-1$ éléments.  
+Un entier $g$ est une \textbf{racine primitive modulo $p$} si ses puissances :
+\[
+g^1, g^2, \dots, g^{p-1} \pmod{p}
+\]
+donnent \textbf{tous les éléments} de $(\mathbb{Z}/p\mathbb{Z})^*$ (chacun apparaît une fois). \\
+
+\textbf{Intuition} : $g$ est comme un “générateur” : en multipliant toujours par $g$, on fait le tour de tous les nombres inversibles mod $p$. \\
+
+Exemple : modulo $7$, on vérifie que $3$ est racine primitive :
+\[
+3^1 = 3,\quad 3^2 = 9 \equiv 2,\quad 3^3 \equiv 6,\quad 3^4 \equiv 4,\quad 3^5 \equiv 5,\quad 3^6 \equiv 1 \pmod{7}.
+\]
+On a bien obtenu $1,2,3,4,5,6$ avant d'avoir $\equiv 1$. \\
+
+
+\subsection*{5. Valeur de \( 2^{(p-1)/2} \mod p \)}
+
+Un entier $a$ est un \textbf{résidu quadratique modulo $p$} (avec $p$ premier) s’il existe un $x \in \{1,\dots,p-1\}$ tel que
+\[
+x^2 \equiv a \pmod{p}.
+\]
+Sinon, on dit que $a$ est un \textbf{non-résidu quadratique}. \\
+
+\textbf{Critère d’Euler :} pour un entier $a$ et un nombre premier $p$ avec $\operatorname{pgcd}(a,p)=1$ :
+\[
+a^{(p-1)/2} \equiv
+\begin{cases}
+1 \pmod{p}, & \text{si $a$ est un résidu quadratique modulo $p$}, \\
+-1 \equiv p-1 \pmod{p}, & \text{si $a$ est un non-résidu quadratique}.
+\end{cases}
+\]
+
+\textbf{Intuition} : la puissance $(p-1)/2$ “teste” si $a$ est un carré modulo $p$ :
+\begin{itemize}
+    \item Si le résultat est $1$ : “oui, $a$ est un carré mod $p$” ;
+    \item Si le résultat est $-1$ : “non, ce n’est pas un carré”. \\
+\end{itemize}
+
+\textbf{Exemple : } modulo 7, avec $a=2$ \\
+
+On calcule les carrés modulo 7 :
+\[
+1^2 = 1,\; 2^2 = 4,\; 3^2 = 9 \equiv 2,\; 4^2 = 16 \equiv 2,\; 5^2 = 25 \equiv 4,\; 6^2 = 36 \equiv 1.
+\]
+On obtient les valeurs possibles : $1,2,4$. Donc $2$ \textbf{est} un résidu quadratique modulo 7. \\
+
+On vérifie le critère d’Euler :
+\[
+2^{(7-1)/2} = 2^3 = 8 \equiv 1 \pmod{7} \quad \Rightarrow \quad 2 \text{ est bien un résidu quadratique.}
+\]
+
+\newpage
+
+\section*{1. Inverses, unités et générateurs}
+
+\begin{exercise}
+    Pour chacun des nombres premiers $p$ et nombre $a$, calculer $a^{-1}$ mod $p$ en utilisant (i) l'algorithme d'Euclide étendu et (ii) le fast power algorithm et le petit théorème de Fermat.
+    \begin{enumerate}[label=(\alph*)]
+        \item $p=47$ et $a=11$.
+        \item $p=587$ et $a=345$.
+        \item $p=104801$ et $a=78467$.
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Déterminer l'espace $(\Z/m\Z)^*$ pour $m = \{ 7, 10, 13, 24 \}$.
+\end{exercise}
+
+\begin{exercise}
+    Rappelons que $g$ est appelé une racine primitive module $p$, si la puissance de $g$ donne tous éléments non-nuls de $\mathbb{F}_p \coloneqq (\Z/p\Z)^*$ :
+    \begin{enumerate}[label=(\alph*)]
+        \item Pour lequel des nombres premiers suivants $2$ est-il une racine primitive modulo $p$ ?\\
+        (i)\quad$p = 7$ \qquad (ii)\quad$p=13$ \qquad (iii)\quad$p=19$ \qquad (iv) $p=23$
+        \item Pour lequel des nombres premiers suivants $3$ est-il une racine primitive modulo $p$ ?\\
+        (i)\quad$p = 5$ \qquad (ii)\quad$p=7$ \qquad (iii)\quad$p=11$ \qquad (iv) $p=17$
+        \item Trouvez une racine primitive pour chacun des nombres premiers suivants.\\
+        (i)\quad$p = 23$ \qquad (ii)\quad$p=29$ \qquad (iii)\quad$p=41$ \qquad (iv) $p=43$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Déterminer la valeur de 
+    $$2^{(p-1)/2}\quad(\text{mod } p)$$
+    pour tous les nombres premiers $3 \leq p < 20$. Faites une conjecture sur les valeurs possibles de $2^{(p-1)/2} (\text{mod } p)$ lorsque $p$ est premier et prouvez que votre conjecture est correcte.
+\end{exercise}

@@ -1,0 +1,126 @@
+\session{TP11 - Fonctions à deux variables}
+
+\section*{Rappels théoriques}
+
+\textbf{Limites de Fonctions de Deux Variables}
+
+Pour une fonction \( f(x, y) \) de deux variables, la limite en un point \((a, b)\) est définie comme suit :
+\[
+\lim_{(x, y) \to (a, b)} f(x, y) = L
+\]
+si, pour toute suite de points \((x, y)\) s'approchant de \((a, b)\), les valeurs de \( f(x, y) \) tendent vers \( L \). Il est important de vérifier la limite selon différents chemins pour prouver son existence. \\
+
+\textbf{Dérivées Partielles}
+
+La dérivée partielle d'une fonction \( f(x, y) \) par rapport à \( x \) au point \((a, b)\) mesure le taux de variation de \( f \) dans la direction \( x \), en gardant \( y \) constant. Elle est définie par :
+\[
+f_x(a, b) = \lim_{h \to 0} \frac{f(a + h, b) - f(a, b)}{h}.
+\]
+De même, la dérivée partielle par rapport à \( y \) est donnée par :
+\[
+f_y(a, b) = \lim_{k \to 0} \frac{f(a, b + k) - f(a, b)}{k}.
+\]
+
+Les dérivées partielles permettent de déterminer les taux de changement de la fonction dans chaque direction indépendante. \\
+
+\textbf{Le Gradient d'une Fonction}
+
+Le gradient d'une fonction \( f(x, y) \), noté \( \nabla f \), est un vecteur qui regroupe les dérivées partielles de \( f \) par rapport à \( x \) et \( y \) :
+\[
+\nabla f(x, y) = \begin{pmatrix} f_x(x, y) \\ f_y(x, y) \end{pmatrix}.
+\]
+Le gradient indique la direction de la variation maximale de \( f \) et sa norme donne l'intensité de cette variation. \\
+
+\textbf{La Matrice Hessienne}
+
+La matrice Hessienne d'une fonction \( f(x, y) \), notée \( H(f) \), est la matrice des dérivées secondes de \( f \) par rapport à \( x \) et \( y \). Elle est définie comme suit :
+\[
+H(f) = \begin{pmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy} \end{pmatrix},
+\]
+où : \( f_{xx} = \frac{\partial^2 f}{\partial x^2} \) est la dérivée seconde de \( f \) par rapport à \( x \), \( f_{yy} = \frac{\partial^2 f}{\partial y^2} \) est la dérivée seconde de \( f \) par rapport à \( y \) et \( f_{xy} = f_{yx} = \frac{\partial^2 f}{\partial x \partial y} \) est la dérivée croisée.
+
+La Hessienne est utile pour étudier la courbure de \( f \) et pour déterminer la nature des points critiques. \\
+
+\textbf{Points Critiques et Nature des Extrémums}
+
+Un point critique de \( f(x, y) \) est un point où les dérivées partielles de \( f \) sont toutes nulles : \( f_x = 0 \) et \( f_y = 0 \). Pour déterminer la nature du point critique, on utilise la matrice Hessienne \( H(f) \) au point critique \((a, b)\) :
+\begin{itemize}
+    \item Si \( \det(H(f)(a, b)) > 0 \) et \( f_{xx}(a, b) > 0 \), alors \((a, b)\) est un minimum local.
+    \item Si \( \det(H(f)(a, b)) > 0 \) et \( f_{xx}(a, b) < 0 \), alors \((a, b)\) est un maximum local.
+    \item Si \( \det(H(f)(a, b)) < 0 \), alors \((a, b)\) est un point-selle.
+    \item Si \( \det(H(f)(a, b)) = 0 \), le test est indéterminé. 
+\end{itemize}
+
+
+\section*{1. Limites}
+
+\begin{exercise}
+    Calculer la limite suivante : 
+    \begin{enumerate}[label=(\alph*)]
+        \item $\displaystyle\lim_{(x,y)\to(0,0)}\frac{x^3y}{x^6+y^2}$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+   Soit $f(x,y)=\frac{x^2y^2}{x^2+y^2}$
+    \begin{enumerate}[label=(\alph*)]
+        \item Montrer que $f(x,y)\leq x^2+y^2$ autour de $(0,0)$
+    \end{enumerate}
+\end{exercise}
+
+\section*{2. Dérivation de fonctions à deux variables}
+
+\begin{exercise}
+    Calculer les dérivées partielles de fonctions ci-dessous aux différents points de leur domaine naturel : 
+    \begin{enumerate}[label=(\alph*)]
+        \item $f(x,y) = \sin(3xy)+e^{-2x^2y}+2x^3$
+        \item $f(x,y) = (x+y)^{-\frac{1}{2}}$
+        \item $f(x,y) = \ln(x^2+y^2)$
+        \item $g(x,y) = x\cos(y)+y$
+        \item $g(x,y) = \cos^3(5x-y^3)+\ln(3\ln(xy))$
+        \item $h(x,y) = \arctan(y\sqrt{x})+sin^2(3x^2+xy-5y^3)$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Soient $g(x,y) = f(x,y)$ et
+    $$f(x,y) = \begin{cases}
+        \displaystyle\frac{xy^2}{x^4+y^2} & \text{si }(x,y)\neq(0,0) \\
+        0 & \text{si }(x,y)=(0,0) 
+    \end{cases}$$
+    \begin{enumerate}[label=(\alph*)]
+        \item Monter que $f$ est continue à l'origine.
+        \item Calculer les dérivées partielles de $f$ à l'origine.
+    \end{enumerate}
+\end{exercise}
+
+
+\begin{exercise}
+    Calculer la hessienne des fonctions suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $f(x,y)=x^2+5y^2+4xy-2y$
+        \item $f(x,y) = 3x^2y+4x^3y^4-7x^9y^4$
+        \item $f(x,y) =e^x\sin(y)$
+    \end{enumerate}
+\end{exercise}
+
+
+\begin{exercise}
+    Calculer le gradient des fonctions suivantes :
+    \begin{enumerate}[label=(\alph*)]
+        \item $f(x,y)  = x+3y^2$
+        \item $f(x,y) = \sqrt{x^2+y^2 }$
+        \item $f(x,y) = \displaystyle\frac{4y}{(x^2+1)}$
+        \item $f(x,y) = 3x^2\sqrt{y}$
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    Etudier les points critiques :
+    \begin{enumerate}[label=(\alph*)]
+        \item $f(x,y) = 4xy-2x^2-y^4$
+        \item $f(x,y) = 3xy - x^2 - y^2$
+        \item $f(x,y) = 2x^4 + y^4 - x^2-2y^2$
+        \item $f(x,y) = 4x^2-12xy+9y^2$
+    \end{enumerate}
+\end{exercise}
