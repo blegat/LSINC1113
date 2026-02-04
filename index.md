@@ -19,3 +19,4 @@ The html versions accessible here are static, see [here](Lectures) for details o
 
 * [2025 January](Exams/2025_01/main.pdf)
 * [2025 August](Exams/2025_08/main.pdf)
+* [2026 January](Exams/2026_01/main.pdf)
