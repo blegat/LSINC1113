@@ -1,0 +1,72 @@
+\titledquestion{Suites récurrentes}
+
+Considérez un microbe qui  crée 2 nouveaux microbes le premier jour,
+1 le deuxième jour et meurt le 3ième jour.
+\begin{enumerate}
+  \item Le premier jour, il y a un seul microbe.
+  \item Le deuxième, il y a 1 microbe d'un jour et 2 nouveaux microbes de 0 jour.
+  \item Le troisième jour, il y a 1 microbe de 2 jours, 2 microbes d'un jour, 5 microbes de 0 jour.
+  \item Le quatrième jour, il y a 2 microbes de 2 jours, 5 microbes d'un jour, 12 microbes de 0 jour.
+\end{enumerate}
+
+\begin{parts}
+    \part Si vous commencez avec un seul microbe le jour 1, combien y aura-t-il de microbes le 6ème jour ?
+    \begin{solutionbox}{15.5cm}
+        Notons $u_n$ le nombre de nouveaux microbes au jour $n$.
+        
+        Analysons la dynamique :
+        \begin{itemize}
+            \item Chaque microbe créé au jour $n-1$ survit et produit 2 nouveaux microbes
+            \item Chaque microbe créé jour $n-2$ produit encore 1 nouveau microbe
+        \end{itemize}
+        
+        Donc la relation de récurrence est :
+        $$u_n = 2u_{n-1} + u_{n-2}$$
+        
+        Conditions initiales : $u_1 = 1$, $u_2 = 2$
+        
+        Calculons successivement :
+        \begin{align*}
+            u_3 &= 2u_2 + u_1 = 2(2) + 1 = 5\\
+            u_4 &= 2u_3 + u_2 = 2(5) + 2 = 12\\
+            u_5 &= 2u_4 + u_3 = 2(12) + 5 = 29\\
+            u_6 &= 2u_5 + u_4 = 2(29) + 12 = 70
+        \end{align*}
+        
+        Le 6ème jour : $\boxed{70}$ microbes au total.
+    \end{solutionbox}
+
+    \part Plus généralement, combien y aura-t-il de microbes après $n$ jours ?
+\begin{solutionbox}{20cm}
+    Notons $u_n$ le nombre de microbes après $n$ jours.
+    
+    Conditions initiales : $u_1 = 1$ (un microbe au départ)
+    
+    Pour trouver une formule générale, nous devons résoudre l'équation de récurrence :
+    $$u_n = 2u_{n-1} + u_{n-2}$$
+    
+    L'équation caractéristique est :
+    $$r^2 = 2r + 1$$
+    $$r^2 - 2r - 1 = 0$$
+    
+    En utilisant la formule quadratique :
+    $$r = \frac{2 \pm \sqrt{4 + 4}}{2} = \frac{2 \pm 2\sqrt{2}}{2} = 1 \pm \sqrt{2}$$
+    
+    Donc $r_1 = 1 + \sqrt{2}$ et $r_2 = 1 - \sqrt{2}$.
+    
+    La solution générale est :
+    $$u_n = A(1 + \sqrt{2})^n + B(1 - \sqrt{2})^n$$
+    
+    En utilisant les conditions initiales $u_1 = 1$ et $u_2 = 2$ :
+    \begin{align*}
+        u_1 &= A(1 + \sqrt{2}) + B(1 - \sqrt{2}) = 1\\
+        u_2 &= A(1 + \sqrt{2})^2 + B(1 - \sqrt{2})^2 = 2
+    \end{align*}
+    
+    Résolvant ce système, nous obtenons :
+    $$A = \frac{1 + \sqrt{2}}{2\sqrt{2}}, \quad B = \frac{\sqrt{2} - 1}{2\sqrt{2}}$$
+    
+    Donc la formule générale est :
+    $$u_n = \frac{1 + \sqrt{2}}{2\sqrt{2}}(1 + \sqrt{2})^n + \frac{\sqrt{2} - 1}{2\sqrt{2}}(1 - \sqrt{2})^n$$
+\end{solutionbox}
+\end{parts}

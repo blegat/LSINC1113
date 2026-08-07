@@ -1,0 +1,18 @@
+\titledquestion{Analyse multivariée}
+Considérons les fonctions
+\begin{align*}
+    f: & \R^2 \to \R\\
+    g: & \R \to \R: (x_1, x_2) \mapsto \sin(f(1 - x, x - 1)).
+\end{align*}
+Vous aimeriez calculer la dérivée de $g$ en $x = 0$ mais vous n'avez pas accès à $f$.
+Toutefois, vous avez accès à la valeur et au gradient de $f$ en $(1, -1)$: c'est $f(-1, 1) = \pi/4$ et $\nabla f(-1, 1) = (2, 3)$.
+
+Calculez la dérivée de $g$ en $0$ à l'aide de forward différentiation.
+\begin{solutionbox}{14cm}
+    \begin{align*}
+        g'(0) & = \cos(f(-1, 1)) \cdot \nabla f(-1, 1) \begin{bmatrix}-1\\1\end{bmatrix}\\
+        & = \cos(\pi/4) \cdot \begin{bmatrix}2&3\end{bmatrix} \begin{bmatrix}-1\\1\end{bmatrix}\\
+        & = \frac{\sqrt{2}}{2} \cdot \begin{bmatrix}2&3\end{bmatrix} \begin{bmatrix}-1\\1\end{bmatrix}\\
+        & = \frac{\sqrt{2}}{2} \cdot (-2 + 3) = \frac{\sqrt{2}}{2}.
+    \end{align*}
+\end{solutionbox}

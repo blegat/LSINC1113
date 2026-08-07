@@ -1,0 +1,190 @@
+\session{TP6 - Graphes (DAG)}
+
+\section*{Rappels Théoriques}
+
+\subsection*{1. Définitions}
+
+Un \textbf{graphe orienté acyclique} (Directed Acyclic Graph, ou \textbf{DAG}) est un graphe $G = (V,E)$ :
+\begin{itemize}
+    \item dont les arêtes $(u,v) \in E$ sont \textbf{orientées} (elles vont de $u$ vers $v$),
+    \item et qui ne contient \textbf{aucun cycle}, c'est-à-dire qu'il n'existe aucune suite de sommets $v_1,v_2,\dots,v_k$ telle que :
+    \[
+        (v_i, v_{i+1}) \in E \quad \text{pour tout $i$ et } v_k = v_1.
+    \]
+\end{itemize}
+
+\textbf{Intuition :} 
+
+Un DAG, c'est un graphe où l'on peut \textbf{avancer} en suivant les flèches, mais \textbf{jamais revenir au point de départ}.  
+Il y a donc une idée de \emph{temps} ou de \emph{priorité} : 
+on ne peut jamais faire un tour complet et revenir à une tâche déjà vue. \\
+
+Exemples typiques :
+\begin{itemize}
+    \item tâches avec des dépendances (on doit faire A avant B, B avant C, etc.) ;
+    \item étapes de calcul (on a besoin du résultat précédent pour calculer le suivant).
+\end{itemize}
+
+\subsection*{2. Représentation mathématique}
+
+Un DAG est souvent représenté par sa \textbf{matrice d'adjacence} $A$, où :
+\[
+A_{ij} = 
+\begin{cases}
+    1 & \text{si une arête va de $i$ vers $j$}, \\
+    0 & \text{sinon.}
+\end{cases}
+\]
+
+\textbf{Intuition :} la ligne $i$ indique \og vers qui part $i$\fg{}, et la colonne $j$ indique \og qui vient vers $j$\fg{}. \\
+
+L'absence de cycle implique qu'il existe un \textbf{ordre topologique} des sommets :  
+un ordre $v_1, v_2, \dots, v_n$ tel que :
+\[
+(u,v) \in E \;\Rightarrow\; \text{indice}(u) < \text{indice}(v).
+\]
+
+Autrement dit, chaque arête va d'un sommet \textbf{plus tôt} vers un sommet \textbf{plus tard} dans cet ordre. On peut aligner les sommets sur une ligne (du plus \og ancien\fg{} au plus \og récent\fg{}), et \emph{toutes} les flèches vont de la gauche vers la droite.
+
+\subsection*{3. Programmation dynamique et graphes}
+
+Beaucoup de problèmes combinatoires peuvent être vus comme un \textbf{parcours dans un DAG implicite} (c'est-à-dire que le graphe existe conceptuellement, même si on ne le dessine pas explicitement). 
+
+\begin{itemize}
+    \item Chaque \textbf{nœud} représente un \textbf{état} du système (par exemple : quels patients sont déjà affectés, quelle place il reste dans le sac à dos, etc.).
+    \item Chaque \textbf{arête} représente une \textbf{décision} ou une \textbf{transition} (par exemple : ajouter un objet, affecter un patient à un infirmier, ouvrir un nouveau sac).
+    \item Comme on avance étape par étape, sans revenir en arrière sur les décisions, le graphe n’a \textbf{pas de cycle} $\Rightarrow$ c’est un \textbf{DAG}. \\
+\end{itemize}
+
+\textbf{Programmation dynamique (PD) :} \\
+La PD revient à \textbf{explorer ce DAG intelligemment} :
+\begin{itemize}
+    \item on résout d'abord les \textbf{petits sous-problèmes} (les nœuds \og proches du début\fg{}),
+    \item puis on réutilise ces résultats pour les états plus complexes,
+    \item et on \textbf{mémorise} ce qu’on a déjà calculé pour ne pas le refaire. \\
+\end{itemize}
+
+\textbf{Intuition :} chaque état dépend seulement de quelques états précédents : on peut donc remplir un \textbf{tableau de DP} en suivant un \textbf{ordre topologique} sur les états.
+
+\subsection*{4. Opérations fondamentales}
+
+Le \textbf{tri topologique} produit un ordre linéaire des sommets qui respecte les dépendances :
+si $(u,v) \in E$, alors $u$ apparaît avant $v$ dans cet ordre.
+
+Deux façons classiques de le calculer :
+\begin{itemize}
+    \item \textbf{Par DFS (parcours en profondeur)} : on explore en profondeur, et on ajoute les sommets à la fin de l’ordre lorsqu’ils sont \og terminés\fg{} ; puis on inverse cet ordre.
+    \item \textbf{Algorithme de Kahn} : on répète
+    \begin{itemize}
+        \item prendre un sommet sans prédécesseur (degré entrant nul),
+        \item l’ajouter à l’ordre,
+        \item supprimer ses arêtes sortantes.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Intuition :} on enlève progressivement les tâches qui n’attendent plus rien (pas de prérequis), comme quand on fait la liste des cours qu’on peut suivre en respectant les prérequis. \\
+
+Dans un DAG, on peut trouver le \textbf{chemin le plus long} \emph{efficacement} (ce qui est en général impossible dans un graphe avec cycles, car ce problème est NP-difficile). \\
+
+On suppose que chaque sommet $v$ a une durée $d(v)$ (temps nécessaire pour accomplir la tâche $v$), et les arêtes indiquent les \textbf{dépendances}. \\
+
+On définit, pour chaque sommet $v$ :
+\[
+L(v) = d(v) + \max_{u \in \text{pred}(v)} L(u),
+\]
+où $\text{pred}(v)$ est l’ensemble des prédécesseurs de $v$ (les sommets ayant une arête vers $v$). \\
+
+Si $v$ n’a pas de prédécesseur, on prend simplement $L(v) = d(v)$. \\
+
+\textbf{Intuition :}
+\begin{itemize}
+    \item $L(v)$ = durée minimale pour \textbf{terminer} toutes les tâches nécessaires avant $v$, \emph{plus} la tâche $v$ elle-même.
+    \item On calcule $L(v)$ en suivant un \textbf{ordre topologique} : on est sûr que, quand on traite $v$, tous ses prédécesseurs $u$ ont déjà un $L(u)$ calculé. \\
+\end{itemize}
+
+La durée totale minimale du projet (aussi appelée \textbf{chemin critique} ou \textbf{chaîne critique}) est :
+\[
+\max_{v \in V} L(v).
+\]
+
+C’est la durée de la séquence de tâches la plus \og contraignante\fg{} : le chemin qui détermine la durée totale du projet.
+
+\subsection*{5. Applications} 
+
+Les DAGs apparaissent très souvent en pratique :
+\begin{itemize}
+    \item \textbf{Planification de tâches} : certaines tâches doivent être finies avant d’en commencer d’autres (prérequis).
+    \item \textbf{Ordonnancement} : organiser un projet, un pipeline de production, ou des jobs dans un système.
+    \item \textbf{Circuits logiques et flux de données} : un signal suit des portes logiques dans un ordre acyclique.
+    \item \textbf{Programmation dynamique} : chaque sous-problème dépend d’autres plus petits, ce qui forme un DAG de dépendances. \\
+\end{itemize}
+
+Dans beaucoup d’énoncés, le DAG n’est pas dessiné, mais il est \og caché\fg{} dans la structure du problème. \\
+
+\textbf{Intuition :} si tu peux raconter le problème comme
+\og on part d’un état initial, on fait une suite de choix, et on avance toujours \emph{vers la droite} sans jamais revenir en arrière\fg{}, alors il y a souvent un DAG de dépendances derrière.
+
+
+\newpage
+
+\section*{1. Planification des soins infirmiers}
+\textbf{Contexte : } Un hôpital dispose d’un certain nombre de patients ayant chacun besoin d’un temps de soins (en heures).
+Chaque infirmier peut travailler au maximum 8 heures par jour. \\
+
+\textbf{Objectif : } Affecter les patients aux infirmiers de manière à minimiser le nombre d’infirmiers nécessaires, tout en respectant la contrainte de 8 heures par infirmier. \\
+
+\textbf{Données :}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Patient} & \textbf{Temps de soins (h)}\\
+\midrule
+$P_1$ & 4 \\
+$P_2$ & 3 \\
+$P_3$ & 6 \\
+$P_4$ & 2 \\
+$P_5$ & 5 \\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Travail à faire :} \\
+\begin{enumerate}
+    \item Représentez le problème sous forme d’un DAG.
+    \item Justifiez pourquoi ce graphe est un DAG.
+    \item Implémenter votre solution en Julia.
+\end{enumerate}
+
+
+
+
+
+
+\begin{comment}
+ �� Problème : Planification optimale des soins infirmiers
+Contexte :
+
+Dans un hôpital, chaque infirmier a une capacité limitée de travail par jour (en heures), et chaque patient nécessite un certain nombre d’heures de soins. L’objectif est de assigner les soins aux infirmiers de manière à minimiser le nombre total d’infirmiers nécessaires, tout en respectant les contraintes de temps.
+Formulation :
+
+C’est une variante du problème du sac à dos (Knapsack Problem) :
+
+Chaque infirmier est un "sac" avec une capacité maximale (par exemple 8 heures).
+Chaque patient est un "objet" avec un poids (le nombre d’heures de soins requis).
+On veut répartir les patients dans le minimum de sacs sans dépasser la capacité de chaque sac.
+
+Pourquoi programmation dynamique ?
+
+La programmation dynamique permet de :
+
+Explorer toutes les combinaisons possibles de répartition.
+Mémoriser les sous-problèmes déjà résolus pour éviter les recalculs.
+Trouver une solution optimale en temps raisonnable.
+
+
+
+
+Minimax
+\end{comment}

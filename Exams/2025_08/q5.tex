@@ -1,0 +1,20 @@
+\titledquestion{Intégration multivariée}
+Calculez l'intégrale double suivante :
+$$\iint_D xy \, dx \, dy$$
+où $D$ est le domaine défini par $0 \leq x \leq 1$ et $x^2 \leq y \leq x$.
+
+\begin{parts}
+    \part Effectuez le calcul de cette intégrale.
+\end{parts}
+
+\begin{solutionbox}{14cm}
+    \begin{align*}
+        \iint_D xy \, dx \, dy &= \int_0^1 \int_{x^2}^x xy \, dy \, dx\\
+        &= \int_0^1 x \left[ \frac{y^2}{2} \right]_{x^2}^x \, dx\\
+        &= \int_0^1 x \left( \frac{x^2}{2} - \frac{x^4}{2} \right) \, dx\\
+        &= \int_0^1 \frac{x^3}{2} - \frac{x^5}{2} \, dx\\
+        &= \left[ \frac{x^4}{8} - \frac{x^6}{12} \right]_0^1\\
+        &= \frac{1}{8} - \frac{1}{12}\\
+        &= \frac{3 - 2}{24} = \frac{1}{24}
+    \end{align*}
+\end{solutionbox}

@@ -1,0 +1,50 @@
+\titledquestion{Mathématiques du signal}
+Lors d'une cardiographie, on détecte un signal audio réel des battements de c\oe ur suivant:
+$$x(t) = 2 \cos(2\pi f_1 t) + 0.5 \sin (2\pi f_2 t).$$
+Les fréquences $f_1$ et $f_2$ sont respectivement $f_1 = \SI{2000}{\hertz}$ et $f_2 = \SI{3000}{\hertz}$.
+Pour des raisons de stockage numérique, ce signal est échantillonné. La cadence (fréquence) d'échantillonnage par défaut est $f_e = \SI{8000}{\hertz}$.
+On obtient donc le signal échantillonné $x_n = x(n/8000)$.
+
+\vskip2ex
+
+\begin{parts}
+    \part Donner le graphe de la transformée de Fourier $X(\xi)$ de $x(t)$ ainsi que de la transformée discrète $X_k$ de $x_n$.
+\end{parts}
+
+\begin{solutionbox}{6cm}
+    On a
+    $$x(t) = \exp(2\pi f_1 t) + \exp(2\pi f_1 t) + \frac{\exp(2\pi f_2 t) - \exp(-2\pi f_2 t)}{4i}.$$
+    Voici un plot représentant les amplitudes (donc module des complexes, c'est à dire qu'on représente $|1/4i| = 1/4$) de chaque composante
+    du signal
+    \begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel={kHz}, axis x line=center, axis y line = center, 
+    xmin=-5, xmax=5, ymin=-1.5, ymax=1.5, yscale=0.4]
+            \draw[-latex,blue] (axis cs:3,0) -- (axis cs:3,1);
+            \draw[-latex,blue] (axis cs:-3,0) -- (axis cs:-3,1);
+            \draw[-latex,blue] (axis cs:2,0) -- (axis cs:2,0.25);
+            \draw[-latex,blue] (axis cs:-2,0) -- (axis cs:-2,0.25);
+        \end{axis}
+    \end{tikzpicture}
+    \end{center}
+\end{solutionbox}
+
+Afin de réduire le temps de calcul et le volume des fichiers enregistrés, votre collègue décide de diminuer la fréquence d'échantillonnage.
+Une vidéo fait 25 images par seconde, il ne voit pas pourquoi il faudrait 8000 valeurs par secondes pour le son.
+
+\vskip2ex
+
+\begin{parts}
+    \setcounter{partno}{1}
+    \part Y a-t-il une limite à ne pas franchir dans la diminution de la fréquence d'échantillonnage ?
+\end{parts}
+
+\begin{solutionbox}{5cm}
+    Avec une fréquence d'échantillonnage de $f_e$, la transformée de Fourier
+    sera périodique avec une période $f_e$.
+    Ça signifie qu'en plus des diracs en $-f_2, -f_1, f_1, f_2$,
+    il y en aura aussi en $-f_2 + f, -f_1 + f, f_1 + f, f_2 + f, -f_2 + 2f, -f_1 + 2f, ...$.
+    Si $-f_2 + f_e \le f_2$, c'est à dire $f_e \le 2f_2$, le signal utile va commencer à se mélanger avec le signal répété
+    par \emph{repli spectral}.
+    Il faut donc maintenir $f_e > 2f_2$.
+\end{solutionbox}

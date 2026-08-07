@@ -1,0 +1,187 @@
+\session{TP5 - Graphes (spanning)}
+
+\section*{Rappels Théoriques}
+
+\subsection*{1. Un graphe pondéré}
+
+Un \textbf{graphe non orienté pondéré} est défini par un triplet \( G = (V, E, w) \) où :
+\begin{itemize}
+    \item \( V \) : ensemble des \textbf{sommets} (ou nœuds),
+    \item \( E \subseteq \{ \{u,v\} : u,v \in V, u \neq v \} \) : ensemble des \textbf{arêtes},
+    \item \( w : E \to \mathbb{R}^+ \) : \textbf{poids} (ou coût) associé à chaque arête.
+\end{itemize}
+
+\textbf{Intuition :} un graphe, c’est un \textbf{réseau} :
+\begin{itemize}
+    \item les sommets = des \emph{villes}, des \emph{machines}, des \emph{personnes}…,
+    \item les arêtes = des \emph{routes}, des \emph{câbles}, des \emph{liens},
+    \item les poids = un \emph{coût}, une \emph{distance}, un \emph{temps}, etc.
+\end{itemize}
+
+Un graphe est dit \textbf{connexe} si, pour \emph{toute} paire de sommets, il existe un \textbf{chemin} qui les relie. \\
+\textbf{Intuition :} le graphe est connexe si \emph{tout est accessible} : à partir de n’importe quel sommet, on peut atteindre tous les autres en suivant des arêtes. 
+
+\subsection*{2. Arbres : des graphes simples sans boucles}
+
+Un \textbf{arbre} est un graphe connexe \textbf{sans cycle}. \\
+
+\textbf{Intuition :}
+\begin{itemize}
+    \item pas de “boucle” : on ne peut pas tourner en rond,
+    \item il n’y a qu’\textbf{un seul chemin} entre deux sommets.
+\end{itemize}
+
+Un arbre à \( n \) sommets contient toujours \( n-1 \) arêtes. \\
+En effet, si on a moins de \( n-1 \) arêtes, le graphe n’est pas assez “lié” pour être connexe. Si on a plus de \( n-1 \) arêtes, on est obligé de créer au moins un cycle. 
+
+\subsection*{3. Arbre couvrant (Spanning Tree)}
+
+Un \textbf{arbre couvrant} d’un graphe connexe \( G = (V, E) \) est un sous-graphe \( T = (V, E_T) \) qui :
+\begin{itemize}
+    \item contient \textbf{tous} les sommets de \( G \),
+    \item est \textbf{connexe},
+    \item ne contient \textbf{aucun cycle}.
+\end{itemize}
+
+\textbf{Intuition :} c’est une façon de \textbf{relier tous les sommets avec le minimum de “câbles”} : on garde toutes les villes, mais on ne garde que certaines routes, juste assez pour que tout reste connecté, sans boucle inutile. \\
+
+Un même graphe connexe peut avoir \textbf{plusieurs} arbres couvrants différents. 
+
+\subsection*{4. Arbre couvrant minimal (MST)}
+
+Quand les arêtes sont pondérées, on s’intéresse au \textbf{coût total} :
+\[
+w(T) = \sum_{e \in E_T} w(e).
+\] \\
+
+Un \textbf{arbre couvrant minimal (ACM)} ou \emph{Minimum Spanning Tree (MST)} est un arbre couvrant dont ce coût total est \textbf{le plus petit possible}. \\
+
+\textbf{Intuition :} on veut relier tous les sommets en payant \emph{le moins cher possible}. \\
+Exemples typiques :
+\begin{itemize}
+    \item construire un réseau de câbles entre des villes au coût minimal,
+    \item connecter des ordinateurs avec un minimum de longueur de câble,
+    \item simplifier un réseau en gardant l’essentiel des connexions.
+\end{itemize}
+
+
+\subsection*{5. Propriétés fondamentales}
+
+\begin{itemize}
+    \item Un MST d’un graphe connexe à \( n \) sommets comporte toujours \( n-1 \) arêtes.
+    
+    \item Si tous les poids d’arêtes sont distincts, le MST est \textbf{unique}.
+    
+    \item \textbf{Propriété de coupe.}  
+    On considère une \textbf{coupe}, c.-à-d. une séparation des sommets en deux groupes \( A \) et \( B \).  
+    Parmi toutes les arêtes qui traversent la coupe (qui relient un sommet de \( A \) à un sommet de \( B \)), 
+    l’arête de \textbf{plus faible poids} appartient forcément à \emph{un} MST.
+    
+    \textbf{Intuition :} si tu dois connecter deux “blocs” de sommets, tu as tout intérêt à choisir la route la moins chère entre ces deux blocs.
+    
+    \item \textbf{Propriété de cycle.}  
+    Dans \textbf{n’importe quel cycle}, l’arête de \textbf{plus grand poids} ne peut \emph{jamais} appartenir à un MST.
+    
+    \textbf{Intuition :} si tu as une boucle, tu peux toujours supprimer la route la plus chère de cette boucle : 
+    tout reste connecté, mais ça coûte moins cher. Donc un MST n’a aucune raison de garder cette arête.
+\end{itemize}
+
+Ces deux propriétés expliquent pourquoi les algorithmes comme Kruskal fonctionnent.
+
+\subsection*{6. Algorithme classique : Kruskal}
+
+\textbf{Idée générale :} on part de \textbf{zéro arête} et on ajoute progressivement les arêtes \textbf{les moins chères} possibles \emph{sans créer de cycle}. \\
+
+\begin{enumerate}
+    \item Trier toutes les arêtes par \textbf{poids croissant}.
+    \item Parcourir la liste :
+    \begin{itemize}
+        \item si l’ajout d’une arête \textbf{ne crée pas de cycle}, on l’ajoute à l’arbre,
+        \item sinon, on la \textbf{saute}.
+    \end{itemize}
+    \item Arrêter dès que l’on a \( n-1 \) arêtes : on a alors un MST. \\
+\end{enumerate}
+
+\textbf{Intuition :} \\
+\begin{itemize}
+    \item on choisit toujours la prochaine arête la \emph{moins chère} possible (stratégie “gourmande”),
+    \item on évite les cycles pour garder une structure d’arbre,
+    \item grâce à la propriété de coupe, on sait que cette stratégie donne bien un MST. \\
+\end{itemize}
+
+La complexité est \( O(E \log E) \) à cause du tri des arêtes. 
+
+\subsection*{7. Applications}
+
+\begin{itemize}
+    \item Réseaux électriques, télécoms ou de transport (minimisation du coût total).
+    \item Distribution logistique (réseaux de livraison, hôpitaux).
+    \item Clustering hiérarchique et génération de labyrinthes.
+\end{itemize}
+
+\newpage
+
+\section*{1. Réseau hospitalier optimal (Kruskal)}
+
+\textbf{Contexte :}  
+Un hôpital comprend plusieurs unités (urgences, chirurgie, pédiatrie, oncologie, réanimation) et un centre pharmaceutique.  
+Chaque unité doit être reliée au centre pharmaceutique via un réseau de tubes pneumatiques, au coût minimal.
+
+\medskip
+
+\textbf{Objectif :} Trouver un \textbf{arbre couvrant minimal} représentant le réseau optimal à l’aide de l’algorithme de \textbf{Kruskal}.
+
+\medskip
+
+\textbf{Données du graphe :}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Connexion (arête)} & \textbf{Coût (distance / travaux)} \\
+\midrule
+(Pharmacie, Urgences) & 4 \\
+(Pharmacie, Chirurgie) & 2 \\
+(Urgences, Pédiatrie) & 1 \\
+(Chirurgie, Oncologie) & 3 \\
+(Pédiatrie, Oncologie) & 5 \\
+(Chirurgie, Réanimation) & 6 \\
+(Oncologie, Réanimation) & 2 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Travail à faire :}
+\begin{enumerate}
+    \item Implémentez l’algorithme de Kruskal en Julia.
+    \item Déterminez les arêtes de l’arbre couvrant minimal.
+    \item Calculez le coût total du réseau.
+\end{enumerate}
+
+
+\begin{comment}
+    �� Exercice : Optimisation du réseau de distribution de médicaments dans un hôpital
+    Contexte :
+    
+    Un hôpital dispose de plusieurs unités de soins (urgences, chirurgie, pédiatrie, oncologie, etc.) et d’un centre pharmaceutique central. Chaque unité doit être approvisionnée en médicaments, mais les trajets entre les unités peuvent être longs, coûteux ou encombrés.
+    
+    L’objectif est de construire un réseau de distribution (via des chariots automatisés ou des tubes pneumatiques) qui relie toutes les unités au centre pharmaceutique avec un coût minimal, tout en évitant les boucles inutiles.
+    �� Problème :
+    
+    On modélise les unités comme des nœuds d’un graphe, et les trajets possibles entre elles comme des arêtes pondérées (le poids représentant le coût ou la distance du trajet).
+    Objectif :
+    
+    Trouver un arbre couvrant minimal (minimum spanning tree) du graphe, en utilisant l’algorithme de Kruskal, pour minimiser le coût total du réseau de distribution.
+    �� Lien avec Kruskal :
+    
+        Kruskal trie les arêtes par coût croissant.
+        Il ajoute les arêtes une à une, sans créer de cycle, jusqu’à ce que tous les nœuds soient connectés.
+        Cela garantit une connexion optimale entre les unités de soins.
+    
+    �� Objectifs pédagogiques :
+    
+        Appliquer un algorithme classique à un problème de logistique hospitalière.
+        Comprendre les notions de graphe, arbre couvrant, et optimisation.
+        Sensibiliser à la gestion des ressources et des infrastructures médicales.
+
+\end{comment}

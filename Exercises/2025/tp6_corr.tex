@@ -1,0 +1,129 @@
+\session{Correction TP6 - Graphes (DAG)}
+
+\section*{1. Planification des soins infirmiers}
+
+\textbf{Formulation : } 
+On cherche le nombre minimal d'infirmiers $n$ tel que :
+\[
+\forall i \in \{1, ...n\}, \quad \sum_{p \in S_i} t_p \leq C
+\]
+où :
+\begin{itemize}
+    \item $S_i$ est l’ensemble des patients pris en charge par l’infirmier $i$,
+    \item $t_p$ est le temps nécessaire pour le patient $p$,
+    \item $C=8$ est la capacité maximale journalière d'un infirmier.
+\end{itemize}
+
+Chaque infirmier est donc un sac, chaque patient un objet, et la durée des soins le poids de l’objet. \\
+
+\textbf{Modélisation :} 
+Le problème peut être vu comme un \textit{graphe d’états} :
+\begin{itemize}
+    \item chaque nœud représente la répartition actuelle (patients déjà affectés et capacités restantes),
+    \item chaque arête correspond à une décision (ajouter un patient dans un infirmier ou en ouvrir un nouveau).
+\end{itemize}
+
+Ce graphe est un \textbf{DAG} :
+à chaque étape, le nombre de patients restants diminue, il est donc impossible de former un cycle.
+Le but est de trouver le chemin le plus court menant à un état où tous les patients sont affectés. \\
+
+\textbf{Programmation dynamique :} 
+La PD explore ce DAG implicitement : chaque appel récursif correspond à un nœud (état), et les résultats intermédiaires sont mémorisés pour éviter les recalculs.
+
+On définit un sous-problème :
+\[
+f(S) = \min_{p \in S} \left(1 + f(S \setminus \{p\})\right)
+\]
+sous contrainte que la somme des durées ne dépasse pas $C$. 
+Comme cet espace d’états est trop vaste pour un calcul direct, on adopte une approche plus constructive. \\
+
+\textbf{Stratégie algorithmique :}
+\begin{itemize}
+    \item On commence par la borne inférieure :
+    \[
+    k_{\min} = \left\lceil \frac{\sum_p t_p}{C} \right\rceil
+    \]
+    \item On teste successivement $k_{\min}, k_{\min}+1, ...$ jusqu’à trouver une configuration faisable.
+    \item Pour chaque $k$, une recherche récursive tente d’ajouter les patients dans les bacs existants sans dépasser $C$.
+    \item Les états déjà explorés (mêmes capacités restantes) sont mémorisés.
+\end{itemize}
+
+\textbf{Intuition :}  
+On explore un DAG implicite où :
+\begin{itemize}
+    \item la racine représente l’état initial (aucun patient affecté),
+    \item les arêtes sont les choix d’affectation,
+    \item les feuilles sont les répartitions complètes valides.
+\end{itemize}
+
+\textbf{Exemple :}  
+Pour trois patients [6, 2, 3] et $C=8$ :
+\[
+[8,8,8] \rightarrow [2,8,8] \rightarrow [0,8,8] \rightarrow [0,5,8]
+\]
+Succès : toutes les tâches sont affectées sans dépasser la capacité. \\
+
+
+\begin{lstlisting}
+# Données
+patients = ["P1","P2","P3","P4","P5"]
+times = [4,3,6,2,5]
+const C = 8
+
+# Test de faisabilité : peut-on placer 'times' dans k bacs de capacité C ?
+function feasible_with_k(times::Vector{Int}, k::Int, C::Int)
+    items = sort(times; rev=true)
+    caps0 = fill(C, k)
+    cache = Dict{Tuple{Int,NTuple{Int,Int}}, Bool}()
+
+    function dfs(i::Int, caps::Vector{Int})
+        i > length(items) && return true
+        key = (i, tuple(sort(caps; rev=true)...))
+        if haskey(cache, key); return cache[key]; end
+        used = Set{Int}()
+        w = items[i]
+        for b in eachindex(caps)
+            cap = caps[b]
+            if cap >= w && !(cap in used)
+                used |= Set([cap])
+                caps[b] -= w
+                if dfs(i+1, caps)
+                    cache[key] = true
+                    caps[b] += w
+                    return true
+                end
+                caps[b] += w
+            end
+        end
+        cache[key] = false
+        return false
+    end
+
+    return dfs(1, copy(caps0))
+end
+
+# Recherche du nombre minimal d'infirmiers
+lower = cld(sum(times), C)
+best_k = nothing
+for k in lower:length(times)
+    if feasible_with_k(times, k, C)
+        best_k = k
+        break
+    end
+end
+
+println("Nombre minimal d'infirmiers nécessaires : ", best_k)
+\end{lstlisting}
+
+\textbf{Résultat attendu :}
+\begin{lstlisting}
+Nombre minimal d'infirmiers nécessaires : 3
+\end{lstlisting}
+
+Répartition possible :
+\begin{itemize}
+    \item Infirmier 1 : 6h + 2h
+    \item Infirmier 2 : 4h + 3h
+    \item Infirmier 3 : 5h
+\end{itemize}
+

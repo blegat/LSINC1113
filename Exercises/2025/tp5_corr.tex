@@ -1,0 +1,198 @@
+\session{Correction TP5 - Graphes (spanning)}
+
+\section*{1. Réseau hospitalier optimal (Kruskal)}
+
+\text{ } \\
+L’hôpital veut relier toutes ses unités (urgences, chirurgie, pédiatrie, oncologie, réanimation) à la pharmacie centrale avec un réseau de tubes pneumatiques minimal.
+Chaque lien possible entre deux unités a un coût (distance, temps, ou difficulté d’installation). \\
+
+\textbf{Notre objectif :}
+Relier toutes les unités avec un coût total minimal, sans cycle (boucle inutile).
+
+$\rightarrow$ C’est exactement ce que fait un arbre couvrant minimal (Minimum Spanning Tree — MST). \\
+
+\textbf{Rappel intuitif :}
+\begin{itemize}
+    \item \textbf{Couvrant} = relie tous les sommets du graphe.
+    \item \textbf{Arbre} = pas de cycle.
+    \item \textbf{Minimal} = la somme des poids des arêtes est la plus faible possible. \\
+\end{itemize}
+
+L’algorithme de \textbf{Kruskal} est basé sur un principe très simple et intuitif : “Commence par les connexions les moins chères, et ajoute-les tant qu’elles ne forment pas de boucle.” \\
+
+C’est une stratégie gloutonne (greedy algorithm) : à chaque étape, on fait le meilleur choix local (l’arête la moins chère), et à la fin, on obtient la meilleure solution globale.
+
+\subsection*{1. Données de départ}
+
+\textbf{Sommets :}  
+Pharmacie (Ph), Urgences (Ur), Chirurgie (Ch), Pédiatrie (Pe), Oncologie (On), Réanimation (Re)
+
+\medskip
+
+\textbf{Arêtes pondérées :}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Arête & Poids (coût) \\
+\midrule
+(Ph, Ur) & 4 \\
+(Ph, Ch) & 2 \\
+(Ur, Pe) & 1 \\
+(Ch, On) & 3 \\
+(Pe, On) & 5 \\
+(Ch, Re) & 6 \\
+(On, Re) & 2 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+L’objectif est de trouver un \textbf{arbre couvrant minimal (MST)} minimisant la somme des coûts.
+
+\subsection*{2. Étape 1 — Tri des arêtes par poids croissant}
+\[
+(Ur,Pe):1,\quad (Ph,Ch):2,\quad (On,Re):2,\quad (Ch,On):3,\quad (Ph,Ur):4,\quad (Pe,On):5,\quad (Ch,Re):6
+\]
+
+\subsection*{3. Étape 2 — Initialisation}
+
+Chaque sommet est dans sa propre composante :  
+\[
+\{Ph\}, \{Ur\}, \{Ch\}, \{Pe\}, \{On\}, \{Re\}
+\]
+
+Le MST est vide et le coût total est \(0\).
+
+\subsection*{4. Étape 3 — Parcours des arêtes et décisions}
+On va maintenant parcourir cette liste et construire le réseau petit à petit :
+\begin{itemize}
+    \item Ur - Pe (1) : ce sont deux unités isolées $\rightarrow$ pas de cycle. Donc on ajoute l'arête. (Intuition : le lien le moins cher, c’est toujours un bon début.) \\
+    $\{Ur, Pe\}, \{Ph\}, \{Ch\}, \{On\}, \{Re\}$
+
+    \item Ph – Ch (2) : ce sont deux unités isolées $\rightarrow$ pas de cycle. Donc on ajoute l'arête. \\
+    $\{Ur, Pe\}, \{Ph, Ch\}, \{On\}, \{Re\}$
+
+    \item On – Re (2) :  ce sont deux unités isolées $\rightarrow$ pas de cycle. Donc on ajoute l'arête. \\
+    $\{Ur, Pe\}, \{Ph, Ch\}, \{On, Re\}$ 
+
+    \item Ch – On (3) : Ch appartient à $\{Ph, Ch\}$, On à $\{On, Re\}$ $\rightarrow$ relier ces ensembles ne crée pas de boucle. On ajoute. On vient de connecter deux sous-réseaux séparés. \\
+    $\{Ur, Pe\}, \{Ph, Ch, On, Re\}$ 
+
+    \item Ph – Ur (4) : Ph est dans {Ph, Ch, On, Re}, Ur dans {Ur, Pe} $\rightarrow$ pas encore connectés. On peut donc ajouter et on relie les deux grands sous ensemble. Tout l'hôpital est connecté. \\
+    $\{Ur, Pe, Ph, Ch, On, Re\}$
+
+    \item Pe – On (5), Ch – Re (6) : ces arêtes relient déjà des sommets du même ensemble. Elles créeraient des cycles, donc on les rejette.
+    
+\end{itemize}
+
+\textbf{Arrêt :} après la 5\textsuperscript{e} arête ajoutée, le graphe est connexe (6 sommets $\Rightarrow$ 5 arêtes).
+
+\subsection*{5. Étape 4 — Résultat final}
+
+\textbf{Arbre couvrant minimal (MST) :}
+\[
+\{ (Ur,Pe),\ (Ph,Ch),\ (On,Re),\ (Ch,On),\ (Ph,Ur) \}
+\]
+
+\textbf{Coût total :}
+\[
+1 + 2 + 2 + 3 + 4 = \boxed{12}
+\]
+
+\subsection*{6. Vérifications}
+
+\begin{itemize}
+    \item \textbf{Cardinalité :} 6 sommets $\Rightarrow$ MST avec $5$ arêtes.
+    \item \textbf{Connexité :} tous les sommets sont reliés après la 5\textsuperscript{e} arête.
+    \item \textbf{Pas de cycle :} assuré par Union-Find.
+    \item \textbf{Optimalité :} respecte la propriété de coupe : l’arête (Ph, Ur) de coût 4 est la plus légère reliant les deux sous-ensembles $\Rightarrow$ nécessairement dans le MST.
+\end{itemize}
+
+\textbf{Conclusion :} le coût minimal pour connecter toutes les unités hospitalières au réseau est de \textbf{12 unités de distance ou de coût}.
+
+\subsection*{7. Code Julia correspondant}
+
+\begin{lstlisting}
+using Graphs
+using GraphPlot
+using Colors
+
+# ---------- Données ----------
+nodes = ["Pharmacie","Urgences","Chirurgie","Pédiatrie","Oncologie","Réanimation"]
+idx = Dict(n => i for (i,n) in enumerate(nodes))
+
+edge_list = [
+    ("Pharmacie", "Urgences", 4),
+    ("Pharmacie", "Chirurgie", 2),
+    ("Urgences", "Pédiatrie", 1),
+    ("Chirurgie", "Oncologie", 3),
+    ("Pédiatrie", "Oncologie", 5),
+    ("Chirurgie", "Réanimation", 6),
+    ("Oncologie", "Réanimation", 2)
+]
+
+# ---------- Graphe ----------
+g = SimpleGraph(length(nodes))
+wmap = Dict{Tuple{Int,Int}, Int}()
+for (u,v,w) in edge_list
+    a, b = idx[u], idx[v]
+    add_edge!(g, a, b)
+    wmap[(min(a,b), max(a,b))] = w
+end
+
+# ---------- MST rapide ----------
+function mst_edges(edge_list, idx)
+    sorted = sort(edge_list, by = e -> e[3])
+    parent = Dict(v => v for v in values(idx))
+    rank   = Dict(v => 0 for v in values(idx))
+    mst = Set{Tuple{Int,Int}}()
+
+    find(x) = parent[x] == x ? x : (parent[x] = find(parent[x]))
+    function union!(x,y)
+        rx, ry = find(x), find(y)
+        rx == ry && return false
+        if rank[rx] < rank[ry]
+            parent[rx] = ry
+        elseif rank[rx] > rank[ry]
+            parent[ry] = rx
+        else
+            parent[ry] = rx
+            rank[rx] += 1
+        end
+        return true
+    end
+
+    for (u,v,_) in sorted
+        a, b = idx[u], idx[v]
+        if union!(a,b)
+            push!(mst, (min(a,b), max(a,b)))
+        end
+    end
+    return mst
+end
+
+mst = mst_edges(edge_list, idx)
+
+# ---------- Couleurs et labels ----------
+edge_colors = Colorant[]
+edge_labels = String[]
+for e in Graphs.edges(g)
+    a, b = src(e), dst(e)
+    key = (min(a,b), max(a,b))
+    push!(edge_labels, string(wmap[key]))
+    if key in mst
+        push!(edge_colors, colorant"red")
+    else
+        push!(edge_colors, colorant"gray")
+    end
+end
+
+# ---------- Affichage ----------
+gplot(g;
+    nodelabel = nodes,
+    edgelabel = edge_labels,
+    edgestrokec = edge_colors,
+    layout = spring_layout
+)
+
+\end{lstlisting}
