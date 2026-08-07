@@ -289,19 +289,16 @@ md"""
 Comment calculer ``a^m`` pour un large ``m`` ?
 """
 
-# ╔═╡ 7881bb75-3ef9-496e-860b-03ced6b593c5
-@time big(2)^power
-
 # ╔═╡ a7d06375-e4dd-47b1-8aba-11dc4d62954b
 qa(md"Supposons que ``m`` est pair, c'est à dire ``m = 2k``...",
 md"""
-On a ``a^(2k) = (a^k)^2``. Si ``b = a^k``, on calcule le produit ``b \times b``.
+On a ``a^{2k} = (a^k)^2``. Si ``b = a^k``, on calcule le produit ``b \times b``.
 """)
 
 # ╔═╡ 6332b2f2-ed2f-448a-b1df-247b110e335b
 qa(md"Que faire si que ``m`` est impair, c'est à dire ``m = 2k + 1``...",
 md"""
-Si ``b = a^(2k)``, calcule le produit ``b \times a``.
+Si ``b = a^{2k}``, calcule le produit ``b \times a``.
 """)
 
 # ╔═╡ 6107d03d-1e45-4eb9-b8e2-51e4a72485e6
@@ -521,6 +518,7 @@ md"""
 
 # ╔═╡ ec14d629-b720-47cd-bc08-ff96f49271ab
 function discrete_log(a, g, p)
+	a = mod(a, p)
 	gx = one(a)
 	for x = 0:(p-2)
 		if a == gx
@@ -869,7 +867,9 @@ end
 x = discrete_log(3, g, p)
 
 # ╔═╡ 9bdb30ba-48a7-4e1b-96c2-ea0e059d5253
-fast_mod_power(g, x, p)
+if !isnothing(x)
+	fast_mod_power(g, x, p)
+end
 
 # ╔═╡ ce07d5c5-90a3-4c12-bada-30e4da1b99fd
 fast_mod_power.(g, 0:15, 17)
