@@ -11,7 +11,7 @@ using Polynomials, LinearAlgebra, PlutoUI, Plots
 include("utils.jl")
 
 # ╔═╡ b8949a96-8d97-4048-8022-ab8fabf326a1
-md"# Les nombes complexes"
+md"# Les nombres complexes"
 
 # ╔═╡ dfb5823d-19ee-47e3-9a5a-84dcb7b110f0
 md"""
@@ -191,7 +191,7 @@ md"On trouve alors les deux racines manquantes à l'aide des formules du cas qua
 md"### Le cas général"
 
 # ╔═╡ 8f9a5662-cc2c-454b-9e0e-9ea83dfeb30f
-md"Pour calculer les valeurs propres d'un polynôme de haut degré, il n'y a plus de formule. Mais on sait les calculer en reformulant le problème en problème de calcul de valeurs propre de la matrice companion. Comme on sait calculer numériquement les valeurs propres d'une matrices, ça nous permet de de calculer numériquement les valeurs propres d'un polynôme."
+md"Pour calculer les racines d'un polynôme de haut degré, il n'y a pas de formule. Mais on peut les calculer en reformulant le problème en problème de calcul de valeurs propre de la matrice companion. Comme on sait calculer numériquement les valeurs propres d'une matrices, ça nous permet de calculer numériquement les racines d'un polynôme."
 
 # ╔═╡ 86826288-8cf7-42e8-a4e4-eaeb5425083b
 md"""
@@ -1756,7 +1756,7 @@ version = "1.9.2+0"
 # ╠═833226b5-fa9d-4660-9143-4c05da4e9175
 # ╟─804a0fbf-1717-4f28-80bd-931a1dd7646b
 # ╟─8f9a5662-cc2c-454b-9e0e-9ea83dfeb30f
-# ╠═86826288-8cf7-42e8-a4e4-eaeb5425083b
+# ╟─86826288-8cf7-42e8-a4e4-eaeb5425083b
 # ╟─c0bba412-5a33-4f60-9e56-5867a0f0af2a
 # ╟─8a913621-7548-4924-862b-e4f54d09a182
 # ╠═33c89755-7826-4623-a270-0d0045481d1a
