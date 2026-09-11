@@ -13,6 +13,32 @@ include("utils.jl")
 # ╔═╡ b8949a96-8d97-4048-8022-ab8fabf326a1
 md"# Les nombres complexes"
 
+# ╔═╡ 05a95dbe-82a1-4862-a175-b6e73f6fe800
+md"""
+Un nombre complexe est défini comme 
+```math
+z = a + bi, \quad i^2 = -1, \quad a,b\in \mathbb{R}.
+```
+On appelle ``a`` la partie réelle de ``z`` et ``b`` la partie complexe.
+
+**Module et argument.**
+Le module d'un nombre complexe ``z = a + ib`` est la distance à l'origine :
+```math
+|z| = \sqrt{a^2 + b^2}.
+```
+L'argument de ``z``, noté ``\arg(z)``, est l'angle (en radians) entre le vecteur ``(a,b)`` et l'axe réel positif :
+```math
+\arg(z) = \theta = \arctan\!\left(\frac{b}{a}\right).
+```
+Il est défini à ``2k\pi`` près. L'argument principal est noté ``\mathrm{Arg}(z) \in (-\pi,\pi]``.
+
+
+Ceci est la représentation cartésienne de $z$, il existe aussi la représentation polaire
+```math
+z = r (\cos(\theta) + i \sin(\theta)), \quad r\geq 0.
+```
+"""
+
 # ╔═╡ dfb5823d-19ee-47e3-9a5a-84dcb7b110f0
 md"""
 | Cartésienne | Polaire   | Exponentielle |
@@ -111,7 +137,7 @@ P^{(k)}(\bar{z})
 	& = a_0 + a_1\bar{z} + a_2\overline{z^2} + \cdots + a_d\overline{z^d}\\
 & = \overline{\overline{a_0} + \overline{a_1}z + \overline{a_2}z^2 + \cdots + \overline{a_d}z^d}\\
 & = \overline{a_0 + a_1z + a_2z^2 + \cdots + a_dz^d}\\
-& = \overline{P(z)}
+& = \overline{P^{(k)}(z)}
 = \bar{0}
 = 0.
 \end{align}
@@ -297,6 +323,15 @@ E = eigen([
 	1 0 -11
 	0 1 6
 ])
+
+# ╔═╡ 42ebd795-92d6-4cda-8a5d-2314ed8d3520
+E.values[2]
+
+# ╔═╡ 919ef117-b4db-4910-9803-5e3704ca8585
+E.values[3]
+
+# ╔═╡ 3527bd3d-cb5f-413d-a3a1-423190d26cc6
+
 
 # ╔═╡ ae09d0ab-7db9-4e31-b010-111a8b2f895e
 md"On trouve la première racine"
@@ -1724,6 +1759,7 @@ version = "1.9.2+0"
 # ╟─b8949a96-8d97-4048-8022-ab8fabf326a1
 # ╟─175e6d18-e522-4a39-8635-59ad558df3b8
 # ╟─db3299a8-06ff-4b70-94ed-88192743d036
+# ╟─05a95dbe-82a1-4862-a175-b6e73f6fe800
 # ╟─dfb5823d-19ee-47e3-9a5a-84dcb7b110f0
 # ╟─92bfdadf-7c3d-4b1f-95cc-3a031ce1d7e1
 # ╟─d8c754cd-d509-4ad2-bd16-5645cfbc484e
@@ -1766,6 +1802,9 @@ version = "1.9.2+0"
 # ╟─a0f9e3ec-bbbc-4f80-8d80-d10f50753cc2
 # ╟─603534bb-74a9-4e24-a1f8-df47726eeebe
 # ╠═2ad434ca-b6ed-4c9b-822e-1c4cfc98c522
+# ╠═42ebd795-92d6-4cda-8a5d-2314ed8d3520
+# ╠═919ef117-b4db-4910-9803-5e3704ca8585
+# ╠═3527bd3d-cb5f-413d-a3a1-423190d26cc6
 # ╟─ae09d0ab-7db9-4e31-b010-111a8b2f895e
 # ╠═62335618-385c-4852-8657-c5ccb01f17c7
 # ╟─49cab393-1201-4076-9505-e9251fbe9ad8
