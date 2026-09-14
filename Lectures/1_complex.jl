@@ -99,6 +99,53 @@ qa(
 ```""",
 )
 
+# ╔═╡ 10e8e596-4e43-44ec-8f05-5e1e648fc873
+md"# Résoudre des équations polynomiales"
+
+# ╔═╡ d85c7c69-d68c-4861-9f21-b6d9959afd18
+md"""
+### Les nombres complexes nous ont été imposés par des équations *réelles*
+
+Considérons l'équation cubique réelle
+```math
+x^3 = 15x + 4 ,
+```
+qui a pour solution réelle ``x = 4`` (vérification : ``4^3 = 64 = 15\cdot 4 + 4``).
+
+La formule de Cardan du 16e siècle pour les racines d'une cubique donne
+```math
+x = \sqrt[3]{\,2 + \sqrt{-121}\,} \;+\; \sqrt[3]{\,2 - \sqrt{-121}\,}.
+```
+
+Cette formule nécessite de prendre la racine carrée d'un nombre *négatif*,
+alors même que l'équation, et sa solution ``x=4``, sont entièrement réelles.
+
+Voyons comment le calcul se déroule. On écrit d'abord ``\sqrt{-121} = 11i`` :
+```math
+x = \sqrt[3]{\,2 + 11i\,} \;+\; \sqrt[3]{\,2 - 11i\,}.
+```
+
+On peut vérifier que ``2 + 11i`` et ``2 - 11i`` sont eux-mêmes des cubes parfaits :
+```math
+(2 + i)^3 = 8 + 12i + 6i^2 + i^3 = 8 + 12i - 6 - i = 2 + 11i,
+```
+et de même, par conjugaison, ``(2 - i)^3 = 2 - 11i``. La formule de Cardan devient alors
+```math
+x = \sqrt[3]{(2+i)^3} + \sqrt[3]{(2-i)^3} = (2+i) + (2-i) = 4.
+```
+
+On voit explicitement les parties imaginaires ``+i`` et ``-i`` apparaître dans le calcul intermédiaire,
+puis s'annuler dans la dernière étape pour redonner la solution réelle ``x = 4``.
+
+**Morale.** Les nombres complexes n'ont pas été introduits comme une
+généralisation abstraite pour elle-même. Ils se sont imposés en
+mathématiques parce qu'ils sont nécessaires comme étape intermédiaire
+pour calculer des réponses réelles parfaitement ordinaires. Les parties
+imaginaires apparaissent, font leur travail, puis s'annulent --- un
+schéma que l'on retrouvera plus tard dans ce cours (par exemple dans la
+transformée de Fourier de signaux à valeurs réelles).
+"""
+
 # ╔═╡ f5bd1e83-166d-46b5-a201-bc9ea0ae6e80
 md"## Le théorème fondamental de l'algèbre"
 
@@ -1772,6 +1819,8 @@ version = "1.9.2+0"
 # ╟─8746c453-4ec5-45e4-b72c-6eceded1903f
 # ╟─ec9dda1a-58f2-4ff8-a318-4e90779bd01b
 # ╟─cf365493-4628-428a-9580-dda69cab9684
+# ╟─10e8e596-4e43-44ec-8f05-5e1e648fc873
+# ╟─d85c7c69-d68c-4861-9f21-b6d9959afd18
 # ╟─f5bd1e83-166d-46b5-a201-bc9ea0ae6e80
 # ╟─585e40db-66b5-45fc-8720-291810566ce4
 # ╟─64777fee-6b30-417a-a705-279c710b67cf
