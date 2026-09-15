@@ -1,0 +1,146 @@
+\session{TP7 - Graphes (shortest path)}
+
+\subsection*{1. Idée générale}
+
+On a un patient avec plusieurs \textbf{pathologies} (maladies) et une liste de \textbf{médicaments}. Chaque médicament : 
+\begin{itemize}
+    \item \textbf{guérit} certaines pathologies,
+    \item peut créer des \textbf{effets secondaires} (de nouvelles pathologies),
+    \item a un \textbf{prix} (coût $\ge 0$). \\
+\end{itemize}
+
+On cherche une \textbf{suite de médicaments} qui :
+\begin{itemize}
+    \item guérit \textbf{toutes} les pathologies,
+    \item pour un \textbf{coût total minimal}. \\
+\end{itemize}
+
+Pour raisonner proprement, on voit le problème comme un \textbf{graphe d’états} :
+\begin{itemize}
+    \item un \textbf{sommets} = un \textbf{état du patient} (le “set” de pathologies encore actives),
+    \item une \textbf{arête} = l’application d’un médicament qui transforme un état en un autre,
+    \item le \textbf{poids de l’arête} = le \textbf{prix} de ce médicament (coût $\ge 0$).\\
+\end{itemize}
+
+L’état \textbf{initial} = les pathologies de départ, l’état \textbf{final} désiré = l’état \(\mathbf{0}\) = \og plus aucune pathologie\fg{}.
+\[
+\Rightarrow\ \text{On cherche le \textbf{plus court chemin} (au sens du coût total) entre \textbf{l’état initial} et l’état \textbf{0}}.
+\]
+
+C’est exactement un \textbf{problème de plus court chemin dans un graphe pondéré à coûts positifs} $\Rightarrow$ algorithme de \textbf{Dijkstra}.
+
+
+\subsection*{2. Modélisation}
+
+Pour pouvoir le coder, on a besoin d’une représentation compacte des états. \\
+
+\begin{itemize}[label=\(\triangleright\)]
+  \item \textbf{États :}  
+  On code les pathologies par des bits dans un entier :
+  \[
+    s \in \{0,1\}^n
+  \]
+  (un \textbf{bitset}), où chaque bit vaut 1 si la pathologie correspondante est présente, 0 sinon.  
+  Exemple : \(s = 1010_2\) signifie que les pathologies 1 et 3 sont actives.
+
+  \item \textbf{Transition \(s \to s'\) par un médicament \(m\) :}\\[-0.5em]
+  \begin{itemize}
+      \item \(m.\texttt{cures}\) = bitset des pathologies que le médicament guérit,
+      \item \(m.\texttt{side\_effects}\) = bitset des pathologies qu’il ajoute.
+  \end{itemize}
+  Alors le nouvel état est :
+  \[
+     s' \;=\; (s \;\&\; \sim m.\texttt{cures}) \;\;|\;\; m.\texttt{side\_effects}.
+  \]
+  (On \textbf{retire} les pathologies guéries, puis on \textbf{ajoute} les effets secondaires.)
+
+  \item \textbf{Coût de la transition :}  
+  \[
+    c(s,m) = m.\texttt{price} \;\ge\; 0.
+  \]
+
+  \item \textbf{Objectif :}  
+  partir de l’état initial \(s_0\) et atteindre l’état \(0\) (aucune pathologie) avec un \textbf{coût total minimal}.
+\end{itemize}
+
+\subsection*{3. Pourquoi Dijkstra marche ici ?}
+
+L’algorithme de Dijkstra suppose que \textbf{tous les coûts d’arêtes sont} $\ge 0$.  
+C’est le cas ici : \textbf{un médicament ne “rend jamais de l’argent”}, il coûte toujours au moins 0.
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=1.4em,itemsep=0.4em]
+  \item \textbf{Les coûts augmentent toujours.}  
+  Chaque fois qu’on prend un médicament, on \textbf{ajoute} son prix au coût total.  
+  Faire des détours ou tourner en rond ne pourra donc \textbf{qu’augmenter} le coût.
+
+  \item \textbf{Premier sorti = coût optimal.}  
+  Dijkstra maintient une file de priorité avec les états atteints, triés par \textbf{coût cumulé}.  
+  Quand un état $s$ sort de la file (c’est le \og moins cher\fg{} restant), on sait qu’il n’existe \textbf{aucun chemin moins cher} pour y arriver. On peut donc \textbf{geler} son coût : il ne changera plus.
+
+  \item \textbf{On peut revisiter un état, mais seulement si c’est moins cher.}  
+  Il est possible qu’un autre chemin mène plus tard au \textbf{même état} $s$ (mêmes pathologies restantes).  
+  On ne le garde que si le coût est \textbf{plus petit} que celui qu’on connaissait déjà.  
+  Sinon, on l’ignore : \textbf{un cycle avec des coûts positifs ne pourra jamais améliorer le prix}.
+\end{enumerate}
+
+En particulier : dès que Dijkstra atteint l’état \(0\) (dans la file de priorité), le coût associé est \textbf{garanti minimal}.
+
+\subsection*{4. Recette pour coder Dijkstra (3 grandes étapes)}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.4em]
+  \item \textbf{Initialisation}
+  \begin{itemize}
+      \item Pour chaque état possible $s$, on stocke un \textbf{meilleur coût connu} $dist[s]$ (au début, $\infty$ partout).
+      \item On met $dist[s_0] = 0$ pour l’état initial.
+      \item On crée une \textbf{file de priorité} (min-heap) contenant $(0, s_0)$.
+      \item (Optionnel mais utile) On garde aussi un tableau $parent[s]$ pour mémoriser \emph{d’où} vient $s$ et \emph{quel médicament} a été utilisé.
+  \end{itemize}
+
+  \item \textbf{Boucle principale}
+  \begin{itemize}
+      \item Tant que la file n’est pas vide :
+      \begin{enumerate}
+          \item extraire $(\text{coût}, s)$, l’état au \textbf{coût minimal} restant ;
+          \item si $s = 0$, on peut s’arrêter : on a trouvé le \textbf{coût minimal} pour guérir toutes les pathologies ;
+          \item sinon, pour chaque médicament $m$ :
+          \begin{itemize}
+              \item calculer le nouvel état $s'$ après application de $m$,
+              \item coût candidat : $new\_cost = dist[s] + m.\texttt{price}$,
+              \item si $new\_cost < dist[s']$, alors on a trouvé un chemin \textbf{plus intéressant} vers $s'$ :
+              \begin{itemize}
+                    \item mettre à jour $dist[s']$,
+                    \item mettre $parent[s']$,
+                    \item insérer $(new\_cost, s')$ dans la file.
+              \end{itemize}
+          \end{itemize}
+      \end{enumerate}
+  \end{itemize}
+
+  \item \textbf{Reconstruction de la solution}
+  \begin{itemize}
+      \item Si $dist[0]$ est fini, on peut retrouver la séquence de médicaments en partant de $s=0$ et en remontant les $parent[s]$ jusqu’à $s_0$.
+      \item On obtient la suite \textbf{dans le bon ordre} en renversant la liste.
+  \end{itemize}
+\end{enumerate}
+
+\subsection*{5. Quelques astuces}
+
+\begin{itemize}[leftmargin=1.4em,itemsep=0.3em]
+  \item \textbf{No-op :}  
+  Si un médicament ne change pas l’état (on a $s' = s$), il ne sert à rien : on peut l’ignorer dans cet état.
+
+  \item \textbf{Effets secondaires :}  
+  Un médicament peut \textbf{réintroduire} des pathologies.  
+  On peut donc revisiter des états plus \og malades\fg{} qu’avant, mais ça coûtera toujours \textbf{plus cher} (prix supplémentaires).  
+  Donc, au pire, on tourne en rond avec un coût qui augmente, mais ça ne peut pas améliorer une solution.
+
+  \item \textbf{Ce qu’il faut retenir vraiment :}
+  \begin{itemize}
+      \item \textbf{état = pathologies restantes}, codées en bits ;
+      \item \textbf{transition = médicament}, qui modifie l’état et coûte un certain prix ;
+      \item comme tous les coûts sont $\ge 0$, \textbf{Dijkstra} assure que la première fois qu’on sort un état d’un certain coût, c’est le \textbf{meilleur} possible.
+  \end{itemize}
+\end{itemize}
+
+En une phrase : \\
+\emph{Dijkstra = “je prends toujours l’état atteignable le moins cher, je le fige, et j’essaie d’améliorer ses voisins” jusqu’à ce que l’état \(0\) soit atteint.}

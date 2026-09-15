@@ -1,0 +1,256 @@
+\session{TP1 - Nombres complexes}
+
+\section*{Rappels théoriques}
+\subsection*{1. Nombres Complexes}
+
+Un nombre complexe est une extension des nombres réels, défini comme :
+\[
+z = a + ib,
+\]
+où \( a \) et \( b \) sont des nombres réels, et \( i \) est l'unité imaginaire, définie par \( i^2 = -1 \). 
+On appelle \( a = \Re(z) \) la \textbf{partie réelle} et \( b = \Im(z) \) la \textbf{partie imaginaire}. \\
+
+Chaque nombre complexe peut être représenté comme un point ou un vecteur dans le \textbf{plan d’Argand} 
+(plan complexe), avec l’axe horizontal pour la partie réelle et l’axe vertical pour la partie imaginaire. 
+Par exemple, \( z = 3 + 4i \) correspond au point (3,4). \\
+
+\textbf{Module et argument.} 
+Le module d’un nombre complexe \( z = a + ib \) est la distance à l’origine :
+\[
+|z| = \sqrt{a^2 + b^2}.
+\]
+L’argument de \( z \), noté \( \arg(z) \), est l’angle (en radians) entre le vecteur \((a,b)\) et l’axe réel positif :
+\[
+\arg(z) = \theta = \arctan\!\left(\frac{b}{a}\right).
+\]
+Il est défini à \(2k\pi\) près. L’argument principal est noté \(\mathrm{Arg}(z) \in (-\pi,\pi]\). \\
+
+\textbf{Différentes formes.}
+Un nombre complexe peut être écrit sous trois formes équivalentes :
+\[
+\begin{array}{rcl}
+\text{Forme cartésienne} &:& z = a + ib \\
+\text{Forme trigonométrique} &:& z = r (\cos \theta + i \sin \theta) = r \cis(\theta) \\
+\text{Forme exponentielle (Euler)} &:& z = r e^{i\theta}
+\end{array}
+\]
+avec \(a = r \cos \theta\) et \(b = r \sin \theta\). \\
+
+\textbf{Puissances et racines.}
+La formule de Moivre donne :
+\[
+(r e^{i\theta})^n = r^n e^{in\theta}.
+\]
+Pour les racines \(n\)-ièmes :
+\[
+\sqrt[n]{z} = \sqrt[n]{r}\; e^{i(\theta + 2k\pi)/n}, \quad k=0,1,\dots,n-1.
+\]
+Exemple : les racines carrées de \( i = e^{i\pi/2} \) sont
+\(\sqrt{i} = e^{i\pi/4}\) et \( e^{i5\pi/4} \). \\
+
+\newpage
+
+\textbf{Conjugaison.}
+Le conjugué de \( z = a+ib \) est
+\[
+\overline{z} = a - ib,
+\]
+et on a
+\[
+z \cdot \overline{z} = |z|^2, 
+\quad
+\frac{1}{z} = \frac{\overline{z}}{|z|^2} \quad (z \neq 0).
+\]
+Géométriquement, \( \overline{z} \) est le symétrique de \( z \) par rapport à l’axe réel. \\
+
+\textbf{Polynômes et racines complexes.}
+Un polynôme de degré \( n \) à coefficients complexes s’écrit sous la forme :
+\[
+P(z) = z^n + a_{n-1}z^{n-1} + \cdots + a_1z + a_0, 
+\quad a_i \in \mathbb{C}.
+\]
+
+\begin{itemize}
+    \item \textbf{Théorème fondamental de l’algèbre :} 
+    tout polynôme non constant de degré \(n\) admet exactement \(n\) racines dans \(\mathbb{C}\), comptées avec leur multiplicité.
+    
+    \item \textbf{Multiplicité :} 
+    si \(P(z) = (z - \alpha)^k Q(z)\), alors \(\alpha\) est une racine de multiplicité \(k\).
+    
+    \item \textbf{Conjugaison des racines :} 
+    si les coefficients du polynôme sont réels, les racines non réelles apparaissent par paires conjuguées.
+    
+    \item \textbf{Factorisation :} 
+    tout polynôme de degré \(n\) à coefficients complexes peut se factoriser en produit de facteurs linéaires :
+    \[
+    P(z) = (z - \alpha_1)(z - \alpha_2)\cdots(z - \alpha_n).
+    \]
+\end{itemize}
+
+\textbf{Exemple.}  
+Le polynôme \(P(z) = z^2 + 1\) n’a pas de racine réelle.  
+Dans \(\mathbb{C}\), il se factorise en :
+\[
+z^2 + 1 = (z - i)(z + i).
+\]
+
+\subsection*{2. La matrice compagnon}
+
+La \textbf{matrice compagnon} est une représentation matricielle d’un polynôme, 
+permettant d’étudier ses racines comme valeurs propres d’une matrice. \\
+
+Pour un polynôme univarié de degré \(n\) :
+\[
+P(z) = z^n + a_{n-1}z^{n-1} + a_{n-2}z^{n-2} + \dots + a_1z + a_0,
+\]
+la matrice compagnon associée est :
+\[
+C = 
+\begin{pmatrix}
+0 & 0 & 0 & \dots & 0 & -a_0 \\
+1 & 0 & 0 & \dots & 0 & -a_1 \\
+0 & 1 & 0 & \dots & 0 & -a_2 \\
+0 & 0 & 1 & \dots & 0 & -a_3 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & 0 & \dots & 1 & -a_{n-1}
+\end{pmatrix}.
+\]
+
+Les valeurs propres de \(C\) sont exactement les racines de \(P(z)\). \\
+
+\textbf{Exemple.} 
+Pour \( P(z) = z^3 - 2z^2 + z - 5 \), on obtient
+\[
+C = 
+\begin{pmatrix}
+0 & 0 & 5 \\
+1 & 0 & -1 \\
+0 & 1 & 2
+\end{pmatrix},
+\]
+et les valeurs propres de \(C\) correspondent aux racines de \(P\).
+
+\newpage
+
+\section*{1. Conversion de formes}
+
+\begin{exercise}
+    Déterminer la partie réelle et la partie imaginaire des complexes suivants.
+    
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds z = 2 + i6$
+        \item $\ds z = 45 - i\pi$
+        \item $\ds z = \frac{4i + 2}{3}$
+        \item $\ds z = \frac{-12 - 7i}{7}$
+        \item $\ds z = 2\cis{(\frac\pi4)}$
+        \item $\ds z = \frac12\cis{(\frac\pi3)}$
+        \item $\ds z = 5e^{-i\frac\pi3}$
+        \item $\ds z = e^{i\frac\pi2}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\section*{2. Opérations sur les complexes}
+
+\begin{exercise}
+    \label{ex:complexes04}
+    Effectuer les opérations suivantes pour simplifier le nombre complexe au maximum. La réponse finale doit être dans la forme initiale de l'exercice : si vous effectuez une conversion durant l'exercice, revenez à la forme du début, une fois l'opération terminée.
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds z = (2 - i) + (1 + 2i)$
+        \item $\ds z = (\sqrt2\cis{(45^\circ)})(\sqrt2\cis{(300^\circ)})$
+        \item $\ds z = \frac{12\cis{(330^\circ)}}{4\cis{(210^\circ)}}$
+        \item $\ds z = (3\cis{(60^\circ)})^4$
+        \item $\ds z = (2 - i)(1 + 2i)$
+        \item $\ds z = (2 + i)^3$
+        \item $\ds z = 2\cis{(\frac\pi3)} + 4\cis{(\frac{5\pi}3)}$
+        \item $\ds z = (\sqrt3 + i)^3$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Calculer le complexe conjugué des nombres de l'exercice~\ref{ex:complexes04}.
+\end{exercise}
+
+\section*{3. Équations dans les complexes}
+\begin{exercise}
+    Résoudre les équations dans $\C$. Vous pouvez utiliser votre ordinateur mais pas le package \texttt{Polynomials.jl} (sauf les trois derniers). \\
+    \textit{Astuce :} pour les degrés élevés, construisez la matrice compagnon et 
+    calculez ses valeurs propres. 
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds (1 + i)z = -2 + 5i$
+        \item $\ds \frac1z = \frac{i}{1+i}$
+        \item $\ds 4 + z^2 = 0$
+        \item $\ds 3z^2 - 4z + 2 = 0$
+        \item $\ds z^2 - 5iz = 6$
+        \item $\ds z^4 + 5z^2 + 4 = 0$
+        \item $\ds 2z^2 + 5iz - 3 = 0$
+        \item $\ds z^4 - 6z^3 + 5iz^2 - 8z + 2i = 0$
+        \item $\ds 2z^5 + 3iz^4 - 4z^3 + 5iz^2 - 6z + 7 = 0$
+        \item $\ds z^7 - iz^6 + 2z^5 - 5iz^4 + 6z^3 - 4iz^2 + z - i = 0$
+    \end{enumerate}
+\end{exercise}
+
+\section*{4. Exercices théoriques}
+\begin{exercise}
+    Montrer que la multiplication complexe est \emph{(i)} associative, \emph{(ii)} commutative, \emph{(iii)} distributive et \emph{(iv)} absorbée par l'élément nul.
+\end{exercise}
+
+\begin{exercise}
+    Montrer que le conjugué du produit de deux complexes est le produit des conjugués.
+\end{exercise}
+
+\section*{5. Exercices supplémentaires}
+
+\begin{exercise}
+    \label{ex:complexe01}
+    Convertir les expressions suivantes dans les deux autres formes possibles.
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds z = 1 - i$
+        \item $\ds z = 1 + i$
+        \item $\ds z = \sqrt{3} + i$
+        \item $\ds z = 1 - i\sqrt3$
+        \item $\ds z = i$
+        \item $\ds z = \frac{-1}2 + \frac{\sqrt3}2i$
+        \item $\ds z = 5 \cis{(\frac\pi3)}$
+        \item $\ds z = 2 \cis{(\frac\pi6)}$
+        \item $\ds z = e^{i\frac\pi4}$
+        \item $\ds z = 4e^{i\frac{5\pi}3}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Représenter les complexes de l'exercice~\ref{ex:complexe01} dans le plan complexe.
+\end{exercise}
+
+\begin{exercise}
+    Simplifier les expressions suivantes.
+    \begin{multicols}{2}
+    \begin{enumerate}[label=(\alph*)]
+        \item $\ds \frac1{1+i}$
+        \item $\ds \frac{i}{i-1}$
+        \item $\ds \frac{i+1}{2j}$
+        \item $\ds \frac{1+i}{1-i} + \frac{1-i}{1+i}$
+    \end{enumerate}
+    \end{multicols}
+\end{exercise}
+
+\begin{exercise}
+    Montrer que $\ds i^3 = \frac1i$.
+\end{exercise}
+
+\begin{exercise}
+    Pour chacun des polynômes suivants :
+
+    \begin{enumerate}[label=(\alph*)]
+        \item \(P_1(z) = z^3 - 1\)
+        \item \(P_2(z) = z^4 + 1\)
+        \item \(P_3(z) = z^3 - 2z + 2\)
+        \item \(P_4(z) = 2z^5 + 3i z^4 - 4z^3 + 5i z^2 - 6z + 7\)
+    \end{enumerate}
+    Écrire explicitement la matrice compagnon \(C\) correspondante. Calculer numériquement les valeurs propres de \(C\) (sans \texttt{Polynomials.jl}) et les donner en forme exponentielle \(re^{i\theta}\) si possible.
+\end{exercise}
