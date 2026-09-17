@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.21
+# v1.0.3
 
 using Markdown
 using InteractiveUtils
@@ -166,7 +166,7 @@ mandrill = testimage("mandrill")
 md"##### Gaussian Kernel"
 
 # ╔═╡ 93cfa0b9-dbb6-4956-bd94-575fe233c9f4
-md"La fonction `gaussian(d)` donne une matrix de taille ``(2d + 1) \times (2d + 1)`` contenant la valeur d'une Gaussienne."
+md"La fonction `gaussian(d)` donne une matrice de taille ``(2d + 1) \times (2d + 1)`` contenant la valeur d'une Gaussienne."
 
 # ╔═╡ 5dd93a6b-f355-4927-8f3d-a3522f43934f
 md"d = $(@bind d Slider(1:10, default=5, show_value = true))"
@@ -399,15 +399,15 @@ md"`max_N` = $(@bind max_N Slider(2 .^ (2:5), default=8, show_value = true))"
 md"## Utilitaires"
 
 # ╔═╡ fad9cc89-a76c-4b93-9051-5f47b1251ab5
-import WAV
+import WAV, Base64
 
 # ╔═╡ 1817a169-0afc-4fff-be23-1ea510ff337a
 # See https://discourse.julialang.org/t/how-do-i-play-sound-in-a-notebook-preferably-pluto/49403/8?u=blegat
 function play_sound(sound, samplerate)
-	dir = mktempdir(cleanup = false)
-	file = joinpath(dir, "audio.wav")
-	WAV.wavwrite(Int.(trunc.(real.(sound*2^15))), file, Fs=samplerate, nbits=16)
-	md"""$(LocalResource(file))"""
+	buffer = IOBuffer()
+	WAV.wavwrite(Int.(trunc.(real.(sound*2^15))), buffer, Fs=samplerate, nbits=16)
+	audio_b64 = Base64.base64encode(take!(buffer))
+	HTML("""<audio controls src="data:audio/wav;base64,$(audio_b64)"></audio>""")
 end
 
 # ╔═╡ 04ac4af9-5789-4d0a-a958-1630d0a54299
@@ -734,7 +734,7 @@ WAV = "~1.2.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.12.2"
+julia_version = "1.12.7"
 manifest_format = "2.0"
 project_hash = "9afa3a6743313501000ee03f55e0eb2cf1aa2a1b"
 
@@ -969,7 +969,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.3.0+1"
+version = "1.3.1+2"
 
 [[deps.ComputationalResources]]
 git-tree-sha1 = "52cb3ec90e8a8bea0e62e275ba577ad0f74821f7"
@@ -1769,7 +1769,7 @@ version = "0.3.4"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2025.5.20"
+version = "2025.11.4"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
@@ -1845,7 +1845,7 @@ version = "1.6.0"
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.5.4+0"
+version = "3.5.6+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1902,7 +1902,7 @@ version = "0.44.2+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.12.0"
+version = "1.12.1"
 weakdeps = ["REPL"]
 
     [deps.Pkg.extensions]
@@ -2715,9 +2715,9 @@ version = "1.9.2+0"
 # ╟─df7fa000-70ce-462b-af19-fb9c4b022012
 # ╟─58d25489-0d99-4c33-ad22-5ffb2751c3c6
 # ╟─5010b40e-86c1-4ed1-b7ae-25086ad45205
-# ╟─04ac4af9-5789-4d0a-a958-1630d0a54299
-# ╟─5d64d5ac-ff4f-415a-85bb-c673da00e9a1
-# ╟─93534f3d-f9da-46c4-a9c3-d055530f3045
+# ╠═04ac4af9-5789-4d0a-a958-1630d0a54299
+# ╠═5d64d5ac-ff4f-415a-85bb-c673da00e9a1
+# ╠═93534f3d-f9da-46c4-a9c3-d055530f3045
 # ╟─8f77bda0-25b0-44fb-b235-afb6c2e725ce
 # ╟─83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
 # ╟─54e54a58-3fdf-43d8-a87a-22ff047a392e
@@ -2735,7 +2735,7 @@ version = "1.9.2+0"
 # ╟─4265ccd9-3bf2-4655-a0da-2d774baf32ac
 # ╟─c26a3bd3-cf79-426a-b439-2b29501cee4b
 # ╟─a315cbaf-a4b5-42ea-a0e0-f0b064b9995e
-# ╟─bb5eebce-e385-4c4f-b827-0ffcdead0799
+# ╠═bb5eebce-e385-4c4f-b827-0ffcdead0799
 # ╟─2488c83e-5e54-4d47-80d2-6ef41ca7ac7f
 # ╟─279e5f5e-4fc6-475f-8dab-c5740a470b0e
 # ╟─1dfad36a-05a5-4108-8c67-d4c866be89c0

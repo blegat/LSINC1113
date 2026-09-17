@@ -106,7 +106,8 @@ md"# Résoudre des équations polynomiales"
 md"""
 ### Les nombres complexes nous ont été imposés par des équations *réelles*
 
-Considérons l'équation cubique réelle
+**Exemple illustratif**: Considérons l'équation cubique réelle
+
 ```math
 x^3 = 15x + 4 ,
 ```
@@ -166,10 +167,21 @@ P(x) = (x - z)^m \cdot Q(x),
 ```
 où ``Q(z) \neq 0``, alors ``z`` est une racine de multiplicité ``m``.
 
+**Exemple**
+```math
+P(x) = (x-1)^2(x-2)
+```
+
 ### Propriété des paires conjuguées
 
-Si ``z = a + ib`` est une racine de multiplicité ``m``, alors la racine conjuguée ``\overline{z} = a - ib`` possède également une multiplicité ``m``.
+Si ``z = a + ib`` est une racine de multiplicité ``m``, alors la racine conjuguée 
+``\overline{z} = a - ib`` possède également une multiplicité ``m``.
+
+
+
 """
+
+
 
 # ╔═╡ bcbcd169-7cb1-4b68-9ac9-d8bd421f59a4
 qa(
@@ -370,6 +382,12 @@ E = eigen([
 	1 0 -11
 	0 1 6
 ])
+
+# ╔═╡ 459a9c27-2ecc-4a1c-a174-6a8598599726
+E.values[1]
+
+# ╔═╡ aa0f4c26-5857-4f47-87e5-42465f7780bd
+
 
 # ╔═╡ 42ebd795-92d6-4cda-8a5d-2314ed8d3520
 E.values[2]
@@ -1851,6 +1869,8 @@ version = "1.9.2+0"
 # ╟─a0f9e3ec-bbbc-4f80-8d80-d10f50753cc2
 # ╟─603534bb-74a9-4e24-a1f8-df47726eeebe
 # ╠═2ad434ca-b6ed-4c9b-822e-1c4cfc98c522
+# ╠═459a9c27-2ecc-4a1c-a174-6a8598599726
+# ╠═aa0f4c26-5857-4f47-87e5-42465f7780bd
 # ╠═42ebd795-92d6-4cda-8a5d-2314ed8d3520
 # ╠═919ef117-b4db-4910-9803-5e3704ca8585
 # ╠═3527bd3d-cb5f-413d-a3a1-423190d26cc6
