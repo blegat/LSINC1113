@@ -1176,7 +1176,8 @@ let
 	fs_audio = 2^13          # 8192 Hz
 	durée = 2                # secondes
 	# `step` (et non `stop`) : c'est Δt qui fait foi, la durée en découle.
-	t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+	# t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée) seems bugged
+	t_audio = range(1/fs_audio, stop=2, length=fs_audio)
 	son_la = cispi.(2*440*t_audio)
 	md"""
 	#### la
@@ -1188,7 +1189,9 @@ end
 let
 	fs_audio = 2^13
 	durée = 2
-	t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+	# t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+		t_audio = range(1/fs_audio, stop=2, length=fs_audio)
+
 	son_ré = cispi.(2*293.7*t_audio)
 	md"""
 	#### ré
@@ -1200,7 +1203,8 @@ end
 let
 	fs_audio = 2^13
 	durée = 2
-	t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+	# t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+		t_audio = range(1/fs_audio, stop=2, length=fs_audio)
 	son_la = cispi.(2*440*t_audio)
 	son_ré = cispi.(2*293.7*t_audio)
 	md"""
