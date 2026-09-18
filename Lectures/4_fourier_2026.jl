@@ -56,7 +56,7 @@ x(t) = \cos(2\pi f t)
 
 où ``f`` est la **fréquence** en Hertz (Hz) et ``t`` le **temps** en secondes.
 
-**D'où sort ce ``2\pi`` ?** Ce n'est pas une décoration. Le cosinus accomplit un tour complet quand son argument avance de ``2\pi`` : c'est sa période naturelle. En plaçant ``2\pi f`` devant le ``t``, on règle la vitesse à laquelle cet argument défile.
+**D'où sort ce ``2\pi`` ?** Le cosinus accomplit un tour complet quand son argument avance de ``2\pi`` : c'est sa période naturelle. En plaçant ``2\pi f`` devant le ``t``, on règle la vitesse à laquelle cet argument défile.
 
 Vérifions sur un exemple. Pour ``f = 5`` Hz :
 
@@ -94,7 +94,7 @@ Manipulez le curseur ci-dessous pour changer la fréquence ``f``, et observez de
 """
 
 # ╔═╡ c0000003-0000-4000-8000-000000000003
-md"`f` = $(@bind f_cos Slider(0.5:0.5:10, default=5, show_value = true)) Hz"
+md"`f` = $(@bind f_cos Slider(0.5:0.5:10, default=2, show_value = true)) Hz"
 
 # ╔═╡ c0000003-0000-4000-8000-000000000004
 let
@@ -122,18 +122,12 @@ md"""
 
 Un son réel est une onde **continue** : la pression de l'air varie à chaque instant, sans interruption. Mais un ordinateur ne sait pas stocker une infinité de valeurs.
 
-La solution s'appelle l'**échantillonnage** : on enregistre la valeur du signal à intervalles réguliers, et on ne garde que ces points. Le nombre de relevés par seconde est la **fréquence d'échantillonnage** ``f_e``, exprimée en Hertz (unités $\frac{1}{s}$).
+La solution s'appelle l'**échantillonnage** : on enregistre la valeur du signal à intervalles réguliers. Le nombre de relevés par seconde est la **fréquence d'échantillonnage** ``f_e``, exprimée en Hertz (unités $\frac{1}{s}$).
 
 Un CD audio, par exemple, prend **44 100 points par seconde**.
 
 Un son stocké dans un ordinateur, c'est donc simplement **une liste finie de nombres** — plus la convention qui dit à quelle cadence ils ont été relevés. C'est tout ce dont nous aurons besoin.
 """
-
-# ╔═╡ 83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
-# ╠═╡ disabled = true
-#=╠═╡
-md"Un son est un signal continu mais on va l'[échantillonner](https://fr.wikipedia.org/wiki/%C3%89chantillonnage_(signal)). C'est à dire qu'on va prendre un nombre fini de valeur par seconde à des distance égale dans le temps. Dans cet exemple, on prend une valeur toute les $(échantillonnage)ᵉ de seconde."
-  ╠═╡ =#
 
 # ╔═╡ b0000002-0000-4000-8000-000000000002
 md"""
@@ -226,9 +220,7 @@ md"""
 
 # ╔═╡ a0000001-0000-4000-8000-000000000003
 md"""
-Votre oreille vient de faire quelque chose de remarquable : dans le troisième extrait, elle a **entendu les deux notes séparément**. Vous n'avez pas perçu « un son bizarre », vous avez perçu « un *la* et un *ré* joués ensemble ».
-
-Voyons maintenant si l'œil y arrive aussi bien. Le curseur ci-dessous règle la fenêtre de temps affichée (quelques millisecondes suffisent pour voir les oscillations).
+Voyons maintenant le signal en temporel:
 """
 
 # ╔═╡ ef156c25-cb7d-4cd3-8412-d9f5f2bc7a3b
@@ -1178,38 +1170,42 @@ end
 
 # ╔═╡ 04ac4af9-5789-4d0a-a958-1630d0a54299
 let
-	échantillonnage = 2^13
-	Δt = 1 / échantillonnage
-	temps = range(Δt, stop=2, length=échantillonnage)
-	la = cispi.(2*440*temps)
+	# Ces trois cellules audio sont volontairement **indépendantes** des curseurs
+	# ci-dessus : elles utilisent des réglages fixes, choisis pour que le son soit
+	# audible. D'où les noms locaux `fs_audio` / `t_audio`.
+	fs_audio = 2^13          # 8192 Hz
+	durée = 2                # secondes
+	# `step` (et non `stop`) : c'est Δt qui fait foi, la durée en découle.
+	t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+	son_la = cispi.(2*440*t_audio)
 	md"""
 	#### la
-	$(play_sound(la, échantillonnage))
+	$(play_sound(son_la, fs_audio))
 	"""
 end
 
 # ╔═╡ 5d64d5ac-ff4f-415a-85bb-c673da00e9a1
 let
-	échantillonnage = 2^13
-	Δt = 1 / échantillonnage
-	temps = range(Δt, stop=2, length=échantillonnage)
-	ré = cispi.(2*293.7*temps)
+	fs_audio = 2^13
+	durée = 2
+	t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+	son_ré = cispi.(2*293.7*t_audio)
 	md"""
 	#### ré
-	$(play_sound(ré, échantillonnage))
+	$(play_sound(son_ré, fs_audio))
 	"""
 end
 
 # ╔═╡ 93534f3d-f9da-46c4-a9c3-d055530f3045
 let
-	échantillonnage = 2^13
-	Δt = 1 / échantillonnage
-	temps = range(Δt, stop=2, length=échantillonnage)
-	la = cispi.(2*440*temps)
-	ré = cispi.(2*293.7*temps)
+	fs_audio = 2^13
+	durée = 2
+	t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
+	son_la = cispi.(2*440*t_audio)
+	son_ré = cispi.(2*293.7*t_audio)
 	md"""
 	#### la + ré
-	$(play_sound(la + ré, échantillonnage))
+	$(play_sound(son_la + son_ré, fs_audio))
 	"""
 end
 
@@ -1382,7 +1378,7 @@ qa(
 	md"""
 Non — et c'est une nuance qui vaut la peine d'être notée. Les segments droits ne sont qu'une **commodité d'affichage** : ils relient les points pour que l'œil suive. Ce que la machine conserve réellement, ce sont **uniquement les points orange**, c'est-à-dire une simple liste de nombres.
 
-Entre deux points, l'ordinateur ne sait rien. Pour reconstruire une courbe continue à partir de ces valeurs, il faudra **interpoler**, et le choix de l'interpolation est une question à part entière — nous y reviendrons.
+Entre deux points, l'ordinateur ne sait rien. Pour reconstruire une courbe continue à partir de ces valeurs, il faudra **interpoler**, et le choix de l'interpolation est une question à part entière.
 
 Retenez pour l'instant la chose essentielle : *un son dans un ordinateur, c'est une liste finie de nombres, plus une convention* (la fréquence d'échantillonnage) *qui dit à quels instants ils ont été relevés.*
 """,
@@ -3609,11 +3605,10 @@ version = "1.9.2+0"
 # ╟─c0000003-0000-4000-8000-000000000002
 # ╟─c0000003-0000-4000-8000-000000000003
 # ╟─c0000003-0000-4000-8000-000000000004
-# ╠═b0000002-0000-4000-8000-000000000001
-# ╟─83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
-# ╠═b0000002-0000-4000-8000-000000000002
+# ╟─b0000002-0000-4000-8000-000000000001
+# ╟─b0000002-0000-4000-8000-000000000002
 # ╟─b0000002-0000-4000-8000-000000000003
-# ╠═b0000002-0000-4000-8000-000000000004
+# ╟─b0000002-0000-4000-8000-000000000004
 # ╟─b0000002-0000-4000-8000-000000000005
 # ╟─b0000002-0000-4000-8000-000000000006
 # ╟─8f77bda0-25b0-44fb-b235-afb6c2e725ce
