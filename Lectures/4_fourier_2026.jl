@@ -124,7 +124,9 @@ Un son réel est une onde **continue** : la pression de l'air varie à chaque in
 
 La solution s'appelle l'**échantillonnage** : on enregistre la valeur du signal à intervalles réguliers, et on ne garde que ces points. Le nombre de relevés par seconde est la **fréquence d'échantillonnage** ``f_e``, exprimée en Hertz (unités $\frac{1}{s}$).
 
-Un CD audio, par exemple, prend **44 100 points par seconde**. Entre deux points, on ne sait rien — et c'est justement là qu'est le risque.
+Un CD audio, par exemple, prend **44 100 points par seconde**.
+
+Un son stocké dans un ordinateur, c'est donc simplement **une liste finie de nombres** — plus la convention qui dit à quelle cadence ils ont été relevés. C'est tout ce dont nous aurons besoin.
 """
 
 # ╔═╡ 83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
@@ -135,13 +137,13 @@ md"Un son est un signal continu mais on va l'[échantillonner](https://fr.wikipe
 
 # ╔═╡ b0000002-0000-4000-8000-000000000002
 md"""
-Le graphe ci-dessous montre un cosinus à **5 Hz** (en bleu, la « vraie » onde continue) et les points effectivement retenus par l'échantillonnage (en orange). Le curseur règle ``f_e``. NB: 5 Hz veut dire 5 événements complets par seconde.
+Le graphe ci-dessous montre un cosinus à **5 Hz** (en bleu, la « vraie » onde continue) et les points effectivement retenus par l'échantillonnage (en orange). Le curseur règle ``f_e``. NB: 5 Hz veut dire 5 oscillations complètes par seconde.
 
-**À essayer** : partez de 100 Hz et descendez progressivement. Observez le moment où les points cessent de décrire la courbe bleue.
+**À essayer** : faites varier ``f_e`` et observez le compromis. Plus ``f_e`` est grand, plus les points collent à la courbe — mais plus il y a de nombres à stocker. Plus ``f_e`` est petit, plus le fichier est léger — mais moins il reste de détail.
 """
 
 # ╔═╡ b0000002-0000-4000-8000-000000000003
-md"`f_e` = $(@bind fe_demo Slider([100, 60, 40, 25, 20, 15, 12, 11, 10, 9, 8, 7, 6], default=40, show_value = true)) Hz"
+md"`f_e` = $(@bind fe_demo Slider([200, 150, 100, 80, 60, 40, 30, 25, 20, 15, 12], default=40, show_value = true)) Hz"
 
 # ╔═╡ b0000002-0000-4000-8000-000000000004
 let
@@ -157,24 +159,18 @@ let
 	t_échant = range(0, stop = durée, length = n_points)
 	points = cos.(2π * f_signal .* t_échant)
 
-	# Ce que l'on croit voir en reliant les points
-	respecté = fe_demo >= 2 * f_signal
-	perçue = abs(f_signal - fe_demo * round(f_signal / fe_demo))
-
 	plot(t_continu, onde,
 		label = "signal continu ($(f_signal) Hz)", color = :steelblue,
 		linewidth = 2, xlabel = "temps (s)", ylabel = "amplitude",
 		legend = :topright, size = (680, 320), ylim = (-1.4, 1.6))
 
-	# les points relevés, reliés par des segments : ce que la machine "voit"
+	# les points relevés : c'est tout ce que la machine conserve
 	plot!(t_échant, points,
-		label = "les points reliés", color = :darkorange,
+		label = "les $(n_points) points enregistrés", color = :darkorange,
 		linewidth = 1.5, linestyle = :dash,
 		marker = :circle, markersize = 4, markerstrokewidth = 0)
 
-	title!(respecté ?
-		"✓ f_e ≥ 10 Hz : l'information est préservée" :
-		"✗ f_e < 10 Hz : on croit voir du $(round(perçue, digits=1)) Hz !")
+	title!("f_e = $(fe_demo) Hz  →  $(n_points) valeurs stockées pour 1 seconde de son")
 end
 
 # ╔═╡ b0000002-0000-4000-8000-000000000006
@@ -563,22 +559,6 @@ let
 
 	Markdown.parse(join([entête, sépar, ligne1, ligne2], "\n"))
 end
-
-# ╔═╡ d0000004-0000-4000-8000-000000000006
-qa(
-	html"Pourquoi la seconde moitié du tableau est-elle lue en <b>négatif</b> ?",
-	md"""
-Parce que le spectre est **périodique** : ``X_{k+N} = X_k`` (on le démontrera au §3.2). La case ``k`` et la case ``k - N`` contiennent donc *le même nombre* — elles sont indistinguables.
-
-Prenons ``f_e = 1000`` Hz et ``N = 8``. La case ``k = 5`` correspond à ``625`` Hz en lecture brute, mais aussi à ``k = 5 - 8 = -3``, soit ``-375`` Hz. Par convention on retient la seconde : on lit la moitié haute du spectre comme les fréquences **négatives**.
-
-Le spectre couvre donc en réalité la bande
-```math
-\left[-\frac{f_e}{2},\ \frac{f_e}{2}\right)
-```
-de largeur ``f_e``, et ``f_e/2`` est la plus haute fréquence représentable : c'est la **fréquence de Nyquist**. Toute fréquence au-delà se replie dans cette bande — c'est exactement le phénomène du §3.2, et c'est de là que sortira le critère de Shannon ``f_e \ge 2 f_{\max}`` au §3.3.
-""",
-)
 
 # ╔═╡ d0000004-0000-4000-8000-000000000007
 md"""
@@ -1398,20 +1378,13 @@ end
 
 # ╔═╡ b0000002-0000-4000-8000-000000000005
 qa(
-	html"Que se passe-t-il quand on descend en dessous de 10 Hz ?",
+	html"Le trait orange relie les points par des segments droits. Est-ce vraiment ça, le signal ?",
 	md"""
-Les points orange **cessent de suivre la courbe bleue**. Pire : en les reliant, on voit apparaître une onde **beaucoup plus lente** que le signal d'origine — une oscillation qui n'existe pas.
+Non — et c'est une nuance qui vaut la peine d'être notée. Les segments droits ne sont qu'une **commodité d'affichage** : ils relient les points pour que l'œil suive. Ce que la machine conserve réellement, ce sont **uniquement les points orange**, c'est-à-dire une simple liste de nombres.
 
-C'est le **repliement spectral** (*aliasing*). Le signal à 5 Hz se déguise en un signal de fréquence plus basse, et une fois les points relevés, **rien ne permet de distinguer les deux**.
+Entre deux points, l'ordinateur ne sait rien. Pour reconstruire une courbe continue à partir de ces valeurs, il faudra **interpoler**, et le choix de l'interpolation est une question à part entière — nous y reviendrons.
 
-Le seuil est net : il faut ``f_e \ge 2 \times 5 = 10`` Hz. C'est le **théorème de Shannon–Nyquist**, sur lequel nous reviendrons en détail au §3.3 — une fois qu'on aura les outils pour comprendre *pourquoi* le facteur 2.
-
-Pour l'instant, retenez simplement : **échantillonner trop lentement détruit l'information, de façon irréversible**. C'est pour cela que le CD monte à 44 100 Hz alors que l'oreille ne dépasse pas ~20 000 Hz.
-
-!!! note "Juste au-dessus du seuil, ça a l'air moche — est-ce grave ?"
-	Entre 10 et 15 Hz, les points orange dessinent une ligne brisée qui ne *ressemble* plus beaucoup au cosinus. C'est normal, et pourtant **aucune information n'est perdue** : cette ligne brisée est un artefact du tracé, qui relie simplement les points par des segments droits.
-
-	Le théorème dit quelque chose de plus fort, et de plus surprenant : au-dessus de ``2f_{\max}``, la courbe d'origine peut être **reconstruite exactement** à partir des points — mais avec la bonne formule d'interpolation, pas avec des segments. En dessous du seuil, en revanche, l'information est bel et bien détruite, et aucune formule ne peut la retrouver.
+Retenez pour l'instant la chose essentielle : *un son dans un ordinateur, c'est une liste finie de nombres, plus une convention* (la fréquence d'échantillonnage) *qui dit à quels instants ils ont été relevés.*
 """,
 )
 
@@ -1419,9 +1392,9 @@ Pour l'instant, retenez simplement : **échantillonner trop lentement détruit l
 qa(
 	html"En regardant <b>uniquement</b> la courbe rouge (la + ré), sauriez-vous dire de quelles notes elle est faite ?",
 	md"""
-Honnêtement : non. On voit bien que la courbe rouge est périodique et qu'elle a une forme plus compliquée que les deux autres, mais **rien dans ce graphe ne crie « 440 Hz et 293.7 Hz »**.
+Non, on voit que la courbe rouge est périodique et qu'elle a une forme plus compliquée que les deux autres, mais **rien dans ce graphe n'indique « 440 Hz et 293.7 Hz »**.
 
-L'information y est pourtant, entièrement : la courbe rouge *est* la somme des deux autres, on n'a rien perdu. Elle est simplement **encodée d'une façon que l'œil ne sait pas lire**.
+L'information y est pourtant entièrement : la courbe rouge *est* la somme des deux autres, on n'a rien perdu. Elle est simplement **encodée d'une façon que l'œil ne sait pas lire**.
 """,
 )
 
@@ -1464,6 +1437,22 @@ Par contre, elles sont étroitement liées. On a
 \frac{k}{N}n = \frac{k}{N\Delta t} n\Delta t
 ```
 Si on décide que l'écart temporel entre ``x_n`` et ``x_{n+1}`` est ``\Delta t``, on a la variable temporelle ``t = n\Delta t``. Il faut alors que la frequence ``\xi = \frac{k}{N\Delta t}`` et donc l'écart fréquentiel entre ``X_k`` et ``X_{k+1}`` est ``\frac{1}{N\Delta t}``.
+""",
+)
+
+# ╔═╡ d0000004-0000-4000-8000-000000000006
+qa(
+	html"Pourquoi la seconde moitié du tableau est-elle lue en <b>négatif</b> ?",
+	md"""
+Parce que le spectre est **périodique** : ``X_{k+N} = X_k`` (on le démontrera au §3.2). La case ``k`` et la case ``k - N`` contiennent donc *le même nombre* — elles sont indistinguables.
+
+Prenons ``f_e = 1000`` Hz et ``N = 8``. La case ``k = 5`` correspond à ``625`` Hz en lecture brute, mais aussi à ``k = 5 - 8 = -3``, soit ``-375`` Hz. Par convention on retient la seconde : on lit la moitié haute du spectre comme les fréquences **négatives**.
+
+Le spectre couvre donc en réalité la bande
+```math
+\left[-\frac{f_e}{2},\ \frac{f_e}{2}\right)
+```
+de largeur ``f_e``, et ``f_e/2`` est la plus haute fréquence représentable : c'est la **fréquence de Nyquist**. Toute fréquence au-delà se replie dans cette bande — c'est exactement le phénomène du §3.2, et c'est de là que sortira le critère de Shannon ``f_e \ge 2 f_{\max}`` au §3.3.
 """,
 )
 
