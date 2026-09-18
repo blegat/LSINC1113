@@ -44,6 +44,78 @@ md"""
 
 """
 
+# ╔═╡ c0000003-0000-4000-8000-000000000001
+md"""
+### Un son pur : le cosinus
+
+Avant de parler de fréquences, fixons la brique de base. Le son le plus simple qui soit — une note pure, sans timbre ni harmonique — s'écrit :
+
+```math
+x(t) = \cos(2\pi f t)
+```
+
+où ``f`` est la **fréquence** en Hertz (Hz) et ``t`` le **temps** en secondes.
+
+**D'où sort ce ``2\pi`` ?** Ce n'est pas une décoration. Le cosinus accomplit un tour complet quand son argument avance de ``2\pi`` : c'est sa période naturelle. En plaçant ``2\pi f`` devant le ``t``, on règle la vitesse à laquelle cet argument défile.
+
+Vérifions sur un exemple. Pour ``f = 5`` Hz :
+
+```math
+x(t) = \cos(2\pi \cdot 5 \cdot t)
+```
+
+Évaluons l'argument en ``t = 1/5`` de seconde :
+
+```math
+2\pi \cdot 5 \cdot \tfrac{1}{5} = 2\pi
+```
+
+L'argument vaut exactement ``2\pi`` : **une oscillation complète** vient de se produire, en un cinquième de seconde. Il y en aura donc ``5`` en une seconde — et c'est précisément ce que veut dire « 5 Hz ».
+
+Deux quantités en découlent, qu'on retrouvera partout dans ce cours :
+
+- la **période** ``T = \dfrac{1}{f}``, la durée d'une oscillation — ici ``T = 0.2`` s ;
+- la **pulsation** ``\omega = 2\pi f``, en radians par seconde, qui permet l'écriture compacte
+
+```math
+x(t) = \cos(\omega t) = \cos(10\pi t) \qquad \text{pour } f = 5 \text{ Hz}
+```
+
+!!! tip "À retenir"
+	``f`` compte les **oscillations par seconde**, ``\omega`` compte les **radians par seconde**, et ``T = 1/f`` est la **durée d'une oscillation**. Les trois disent la même chose sous trois unités différentes.
+"""
+
+# ╔═╡ c0000003-0000-4000-8000-000000000002
+md"""
+Manipulez le curseur ci-dessous pour changer la fréquence ``f``, et observez deux choses :
+
+- plus ``f`` augmente, plus les oscillations se **resserrent** ;
+- le trait rouge marque la fin de la **première** oscillation, en ``t = T = 1/f``. Il se rapproche de zéro exactement à la même vitesse.
+"""
+
+# ╔═╡ c0000003-0000-4000-8000-000000000003
+md"`f` = $(@bind f_cos Slider(0.5:0.5:10, default=5, show_value = true)) Hz"
+
+# ╔═╡ c0000003-0000-4000-8000-000000000004
+let
+	durée = 2.0                                   # secondes affichées
+	t = range(0, stop = durée, length = 2000)
+	x = cos.(2π * f_cos .* t)
+
+	T = 1 / f_cos                                 # la période
+
+	plot(t, x,
+		label = "cos(2π · $(f_cos) · t)", color = :steelblue, linewidth = 2,
+		xlabel = "temps t (s)", ylabel = "x(t)",
+		ylim = (-1.35, 1.35), legend = :topright, size = (680, 320))
+
+	hline!([0], color = :black, linewidth = 0.5, label = nothing)
+	vline!([T], color = :crimson, linestyle = :dash, linewidth = 1.5,
+		label = "T = 1/f = $(round(T, digits = 3)) s")
+
+	title!("f = $(f_cos) Hz  →  $(f_cos) oscillations par seconde")
+end
+
 # ╔═╡ b0000002-0000-4000-8000-000000000001
 md"""
 ### Une précaution avant d'écouter : l'échantillonnage
@@ -54,6 +126,12 @@ La solution s'appelle l'**échantillonnage** : on enregistre la valeur du signal
 
 Un CD audio, par exemple, prend **44 100 points par seconde**. Entre deux points, on ne sait rien — et c'est justement là qu'est le risque.
 """
+
+# ╔═╡ 83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
+# ╠═╡ disabled = true
+#=╠═╡
+md"Un son est un signal continu mais on va l'[échantillonner](https://fr.wikipedia.org/wiki/%C3%89chantillonnage_(signal)). C'est à dire qu'on va prendre un nombre fini de valeur par seconde à des distance égale dans le temps. Dans cet exemple, on prend une valeur toute les $(échantillonnage)ᵉ de seconde."
+  ╠═╡ =#
 
 # ╔═╡ b0000002-0000-4000-8000-000000000002
 md"""
@@ -109,12 +187,6 @@ md"#### Signal temporel"
 
 # ╔═╡ 54e54a58-3fdf-43d8-a87a-22ff047a392e
 md"Fréquence d'échantillonnage = $(@bind échantillonnage Slider((2).^(4:13), default=1024, show_value = true))"
-
-# ╔═╡ 83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
-# ╠═╡ disabled = true
-#=╠═╡
-md"Un son est un signal continu mais on va l'[échantillonner](https://fr.wikipedia.org/wiki/%C3%89chantillonnage_(signal)). C'est à dire qu'on va prendre un nombre fini de valeur par seconde à des distance égale dans le temps. Dans cet exemple, on prend une valeur toute les $(échantillonnage)ᵉ de seconde."
-  ╠═╡ =#
 
 # ╔═╡ 83c1cbf7-e24d-4e9a-a309-c7b60e730344
 md"Ça correspond à une distance en seconde entre deux échantillons de:"
@@ -3418,6 +3490,10 @@ version = "1.9.2+0"
 # ╟─b8949a96-8d97-4048-8022-ab8fabf326a1
 # ╟─e04ac407-652c-4365-b6d0-ebbf73f487b8
 # ╟─a0000001-0000-4000-8000-000000000001
+# ╟─c0000003-0000-4000-8000-000000000001
+# ╟─c0000003-0000-4000-8000-000000000002
+# ╟─c0000003-0000-4000-8000-000000000003
+# ╟─c0000003-0000-4000-8000-000000000004
 # ╠═b0000002-0000-4000-8000-000000000001
 # ╟─83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
 # ╠═b0000002-0000-4000-8000-000000000002
