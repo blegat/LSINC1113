@@ -26,12 +26,9 @@ using PlutoUI, FFTW, Images, TestImages, ImageFiltering
 using Polynomials, LinearAlgebra
 
 # ╔═╡ b8949a96-8d97-4048-8022-ab8fabf326a1
-md"# À la fréquence de Fourier"
+md"# Domaine fréquentiel et transformée de Fourier"
 
-# ╔═╡ 4309cf1d-2a7a-4a84-996b-ecc99d62dad1
-md"## 1.1 La Transformée de Fourier"
-
-# ╔═╡ df7fa000-70ce-462b-af19-fb9c4b022012
+# ╔═╡ e04ac407-652c-4365-b6d0-ebbf73f487b8
 md"""
 ### À quoi ça sert ?
 
@@ -41,11 +38,71 @@ Un monde parallèle ou les choses deviennent plus simples (ou plus compliquées)
 * **1.2.2 Avantage computationel** L'opération de convolution devient une multiplication classique
 """
 
-# ╔═╡ 58d25489-0d99-4c33-ad22-5ffb2751c3c6
-md"### 1.1.1 Illustration : séparation des fréquences"
+# ╔═╡ a0000001-0000-4000-8000-000000000001
+md"""
+## 0. Signal sonore
 
-# ╔═╡ 5010b40e-86c1-4ed1-b7ae-25086ad45205
-md"#### Audio"
+"""
+
+# ╔═╡ b0000002-0000-4000-8000-000000000001
+md"""
+### Une précaution avant d'écouter : l'échantillonnage
+
+Un son réel est une onde **continue** : la pression de l'air varie à chaque instant, sans interruption. Mais un ordinateur ne sait pas stocker une infinité de valeurs.
+
+La solution s'appelle l'**échantillonnage** : on enregistre la valeur du signal à intervalles réguliers, et on ne garde que ces points. Le nombre de relevés par seconde est la **fréquence d'échantillonnage** ``f_e``, exprimée en Hertz (unités $\frac{1}{s}$).
+
+Un CD audio, par exemple, prend **44 100 points par seconde**. Entre deux points, on ne sait rien — et c'est justement là qu'est le risque.
+"""
+
+# ╔═╡ b0000002-0000-4000-8000-000000000002
+md"""
+Le graphe ci-dessous montre un cosinus à **5 Hz** (en bleu, la « vraie » onde continue) et les points effectivement retenus par l'échantillonnage (en orange). Le curseur règle ``f_e``. NB: 5 Hz veut dire 5 événements complets par seconde.
+
+**À essayer** : partez de 100 Hz et descendez progressivement. Observez le moment où les points cessent de décrire la courbe bleue.
+"""
+
+# ╔═╡ b0000002-0000-4000-8000-000000000003
+md"`f_e` = $(@bind fe_demo Slider([100, 60, 40, 25, 20, 15, 12, 11, 10, 9, 8, 7, 6], default=40, show_value = true)) Hz"
+
+# ╔═╡ b0000002-0000-4000-8000-000000000004
+let
+	f_signal = 5.0        # la fréquence du cosinus, en Hz
+	durée = 1.0           # une seconde
+
+	# La "vraie" onde continue (approchée par beaucoup de points)
+	t_continu = range(0, stop = durée, length = 2000)
+	onde = cos.(2π * f_signal .* t_continu)
+
+	# Les points effectivement échantillonnés à fe_demo Hz
+	n_points = max(2, round(Int, fe_demo * durée))
+	t_échant = range(0, stop = durée, length = n_points)
+	points = cos.(2π * f_signal .* t_échant)
+
+	# Ce que l'on croit voir en reliant les points
+	respecté = fe_demo >= 2 * f_signal
+	perçue = abs(f_signal - fe_demo * round(f_signal / fe_demo))
+
+	plot(t_continu, onde,
+		label = "signal continu ($(f_signal) Hz)", color = :steelblue,
+		linewidth = 2, xlabel = "temps (s)", ylabel = "amplitude",
+		legend = :topright, size = (680, 320), ylim = (-1.4, 1.6))
+
+	# les points relevés, reliés par des segments : ce que la machine "voit"
+	plot!(t_échant, points,
+		label = "les points reliés", color = :darkorange,
+		linewidth = 1.5, linestyle = :dash,
+		marker = :circle, markersize = 4, markerstrokewidth = 0)
+
+	title!(respecté ?
+		"✓ f_e ≥ 10 Hz : l'information est préservée" :
+		"✗ f_e < 10 Hz : on croit voir du $(round(perçue, digits=1)) Hz !")
+end
+
+# ╔═╡ b0000002-0000-4000-8000-000000000006
+md"""
+Fixons maintenant les réglages qui serviront à fabriquer nos deux notes. Les deux curseurs ci-dessous définissent la fréquence d'échantillonnage et le nombre de points ; tout le reste — la durée du signal, l'axe des temps — en découle.
+"""
 
 # ╔═╡ 8f77bda0-25b0-44fb-b235-afb6c2e725ce
 md"#### Signal temporel"
@@ -54,7 +111,10 @@ md"#### Signal temporel"
 md"Fréquence d'échantillonnage = $(@bind échantillonnage Slider((2).^(4:13), default=1024, show_value = true))"
 
 # ╔═╡ 83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
+# ╠═╡ disabled = true
+#=╠═╡
 md"Un son est un signal continu mais on va l'[échantillonner](https://fr.wikipedia.org/wiki/%C3%89chantillonnage_(signal)). C'est à dire qu'on va prendre un nombre fini de valeur par seconde à des distance égale dans le temps. Dans cet exemple, on prend une valeur toute les $(échantillonnage)ᵉ de seconde."
+  ╠═╡ =#
 
 # ╔═╡ 83c1cbf7-e24d-4e9a-a309-c7b60e730344
 md"Ça correspond à une distance en seconde entre deux échantillons de:"
@@ -74,6 +134,11 @@ md"En prenant $(nombre_échantillons), le signal dure $(temps_total) secondes. C
 # ╔═╡ f18256be-d172-4f10-9c6b-662015f535e4
 temps = range(Δt, stop=temps_total, length=nombre_échantillons)
 
+# ╔═╡ b0000002-0000-4000-8000-000000000007
+md"""
+Avec ces réglages, construisons les deux notes. Le *la* et le *ré* sont de simples cosinus, chacun à sa fréquence.
+"""
+
 # ╔═╡ b790ddf3-37ac-45d6-87aa-ebd06c829d82
 md"Le *la* est une note de musique de [fréquence 440 Hz](https://fr.wikipedia.org/wiki/La_440)"
 
@@ -86,6 +151,18 @@ md"La note de musique *ré* a une [fréquence de 293.7 Hz](https://fr.wikipedia.
 # ╔═╡ 0ba2c1bc-aa82-4fbd-a704-034274349c4d
 ré = cispi.(2*293.7*temps)
 
+# ╔═╡ a0000001-0000-4000-8000-000000000002
+md"""
+Écoutez ces trois extraits dans l'ordre. Le troisième est **littéralement la somme des deux premiers** : on additionne les deux signaux, échantillon par échantillon.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000003
+md"""
+Votre oreille vient de faire quelque chose de remarquable : dans le troisième extrait, elle a **entendu les deux notes séparément**. Vous n'avez pas perçu « un son bizarre », vous avez perçu « un *la* et un *ré* joués ensemble ».
+
+Voyons maintenant si l'œil y arrive aussi bien. Le curseur ci-dessous règle la fenêtre de temps affichée (quelques millisecondes suffisent pour voir les oscillations).
+"""
+
 # ╔═╡ ef156c25-cb7d-4cd3-8412-d9f5f2bc7a3b
 md"temps\_zoom = $(@bind temps_zoom Slider(range(Δt, stop=1000Δt, length=32), default=10 / 440, show_value = true))"
 
@@ -93,9 +170,173 @@ md"temps\_zoom = $(@bind temps_zoom Slider(range(Δt, stop=1000Δt, length=32), 
 begin
 	index_max = something(findfirst(t -> t >= temps_zoom, temps), length(temps))
 	plot(temps[1:index_max], real.(la[1:index_max]), label = "la")
-	plot!(temps[1:index_max], real.(ré[1:index_max]), label = "ré")
-	plot!(temps[1:index_max], real.(la[1:index_max] + ré[1:index_max]), label = "la + ré")
+	# plot!(temps[1:index_max], real.(ré[1:index_max]), label = "ré")
+	# plot!(temps[1:index_max], real.(la[1:index_max] + ré[1:index_max]), label = "la + ré")
 end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000005
+md"""
+!!! tip "Le fil conducteur de tout le cours"
+	Votre oreille sait faire une chose que le graphe temporel ne montre pas : **séparer les fréquences**. Ce cours construit l'outil mathématique qui fait la même chose, et qui s'appelle la **transformée de Fourier**.
+
+	Le plan tient en trois mots — **aller, travailler, revenir** :
+
+	1. **Aller** (§1) — passer du temps vers les fréquences. On va construire l'outil nous-mêmes, pas le recevoir tout fait.
+	2. **Travailler** (§2) — dans le monde des fréquences, des problèmes durs deviennent faciles : nettoyer un son, flouter une image, multiplier des polynômes.
+	3. **Revenir** (§3) — retourner vers le temps sans rien perdre… et comprendre les pièges quand on échantillonne mal.
+
+	Et enfin (§4) : **combien ça coûte ?** C'est l'algorithme *FFT*, l'un des plus importants du 20ᵉ siècle.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000006
+md"""
+!!! note "Une remarque technique avant de continuer"
+	Vous allez voir du code qui écrit les notes avec `cispi`, c'est-à-dire une **exponentielle complexe** ``e^{i2\pi f t}`` plutôt qu'un simple cosinus.
+
+	``e^{i2\pi f t} = \cos(2\pi f t) + i\,\sin(2\pi f t)``
+
+	Le son que vous entendez est la **partie réelle**, donc bel et bien un cosinus. Le nombre complexe n'est pas là pour faire joli : il transporte *en même temps* le cosinus et le sinus, et on verra en §1.1 que c'est précisément ce qui rend les calculs simples. Pour l'instant, retenez juste : **exponentielle complexe = une oscillation pure à une fréquence donnée**.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000010
+md"""
+# 1. Aller : construire la transformée
+
+On cherche une machine qui, nourrie avec le signal `la + ré`, réponde : *« il y a du 440 Hz, et il y a du 293.7 Hz »*.
+
+Plutôt que de sortir la formule d'un chapeau, on va la **fabriquer**. La question à se poser est modeste :
+
+> Étant donné un signal et une fréquence ``f`` qui m'intéresse, comment mesurer **la quantité de ``f`` présente dans ce signal** ?
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000011
+md"""
+### 1.1 L'idée : mesurer une ressemblance
+
+Voici la recette, en trois gestes. Elle est plus simple qu'elle n'en a l'air.
+
+1. Je fabrique une **onde de référence** parfaitement pure à la fréquence ``f`` que je teste.
+2. Je **multiplie** mon signal par cette onde de référence, point par point.
+3. J'**additionne** tous les produits obtenus. Ce nombre unique est ma mesure.
+
+Pourquoi est-ce que ça marche ? Regardons les deux cas possibles.
+
+- **Si la fréquence ``f`` est présente dans le signal**, les deux courbes montent et descendent *ensemble*. Quand l'une est positive, l'autre l'est aussi ; quand l'une est négative, l'autre aussi. Le produit de deux nombres de même signe est **positif**. Les produits s'accumulent donc tous dans le même sens et la somme devient **grande**.
+
+- **Si la fréquence ``f`` est absente**, les deux courbes se décalent sans cesse : parfois en phase, parfois en opposition. Les produits sont tantôt positifs, tantôt négatifs, et ils **se compensent**. La somme retombe à ``0``.
+
+C'est tout. La transformée de Fourier n'est rien d'autre que cette mesure, répétée pour toutes les fréquences.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000012
+md"""
+Testons-le sur notre signal `la + ré`. Déplacez le curseur pour choisir la fréquence testée ``f`` et observez les trois graphes ainsi que la somme affichée en dessous.
+
+**À essayer** : amenez le curseur sur **440** puis sur **294**, et comparez avec n'importe quelle valeur intermédiaire, par exemple **350**.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000013
+md"fréquence testée `f_test` = $(@bind f_test Slider(200:1:600, default=350, show_value = true)) Hz"
+
+# ╔═╡ a0000001-0000-4000-8000-000000000014
+let
+	# Un signal court et lisible : la + ré, sur 40 ms
+	fs = 8192
+	N = 512
+	t = (0:N-1) ./ fs
+	signal = cos.(2π * 440 .* t) .+ cos.(2π * 293.7 .* t)
+
+	# L'onde de référence à la fréquence que l'on teste
+	référence = cos.(2π * f_test .* t)
+
+	# Le produit des deux, point par point
+	produit = signal .* référence
+
+	# La mesure : la somme de tous les produits
+	mesure = sum(produit)
+
+	p1 = plot(t, signal, label = "signal (la + ré)", color = :steelblue,
+		legend = :topright, ylabel = "amplitude")
+	p2 = plot(t, référence, label = "référence à $(f_test) Hz", color = :darkorange,
+		legend = :topright, ylabel = "amplitude")
+	p3 = plot(t, produit, label = "produit", color = :seagreen,
+		legend = :topright, xlabel = "temps (s)", ylabel = "amplitude")
+	hline!(p3, [0], color = :black, linewidth = 0.5, label = nothing)
+
+	plot(p1, p2, p3, layout = (3, 1), size = (680, 460),
+		plot_title = "somme des produits = $(round(mesure, digits = 1))")
+end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000016
+md"""
+!!! note "Pourquoi le nombre complexe, enfin"
+	Il reste un défaut à la recette ci-dessus. Notre référence est un **cosinus**, qui vaut ``1`` en ``t = 0``. Si le signal à détecter est un **sinus** — la même fréquence, mais décalée d'un quart de période — il est en permanence en décalage avec la référence, les produits se compensent, et la mesure retombe à zéro. On raterait une fréquence pourtant bien présente, uniquement à cause de son **déphasage**.
+
+	La parade est élégante : on teste le cosinus **et** le sinus en même temps, en utilisant comme référence l'exponentielle complexe
+
+	```math
+	e^{-i 2\pi f t} = \cos(2\pi f t) - i \sin(2\pi f t)
+	```
+
+	La **partie réelle** du résultat mesure la ressemblance avec le cosinus, la **partie imaginaire** celle avec le sinus. Le **module** ``|X|`` combine les deux et donne l'amplitude de la fréquence *quel que soit son déphasage*. C'est pour cela qu'on trace presque toujours ``|X|`` — et c'est aussi pour cela que les nombres complexes du cours n°1 reviennent ici.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000020
+md"""
+### 1.2 La définition
+
+On vient de construire la formule à la main. Il ne reste qu'à l'écrire proprement.
+
+Notre signal n'est pas une fonction continue : c'est une **liste de ``N`` nombres** ``x_0, x_1, \dots, x_{N-1}``, les échantillons. « Multiplier puis additionner » s'écrit donc avec un ``\sum``, et on obtient la **transformée de Fourier discrète** (*Discrete Fourier Transform*, DFT) — celle que l'ordinateur calcule réellement.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000021
+md"""
+**La transformée de Fourier discrète et son inverse :**
+```math
+\begin{align}
+  X_k & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{k}{N} n}\\
+  x_n & = \frac{1}{N}\sum_{k=0}^{N-1} X_k e^{i 2\pi \frac{k}{N} n}
+\end{align}
+```
+
+Relisez la première ligne **en la comparant à ce qu'on vient de faire au §1.1** :
+
+| Dans la formule | Ce qu'on a fait à la main |
+|---|---|
+| ``x_n`` | le signal |
+| ``e^{-i 2\pi \frac{k}{N} n}`` | l'onde de référence |
+| le produit ``x_n \cdot e^{\dots}`` | « je multiplie point par point » |
+| le ``\sum_{n=0}^{N-1}`` | « j'additionne tout » |
+| l'indice ``k`` | « la fréquence que je teste » |
+
+**C'est la même chose.** La formule ne dit rien de plus que le slider que vous venez de manipuler : pour chaque fréquence ``k``, elle mesure la ressemblance entre le signal et une oscillation pure.
+
+La deuxième ligne (l'inverse) est quasiment identique — seuls le signe de l'exposant et le facteur ``1/N`` changent. C'est ce qui nous permettra de **revenir** au §3.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000022
+md"""
+Et si le signal était une vraie fonction continue ``f(t)`` plutôt qu'une liste de points ? La somme devient une intégrale, et on obtient la **transformée de Fourier continue** — c'est celle que vous manipulerez à la main aux séances d'exercices :
+
+```math
+\begin{align}
+  F(\xi) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi\xi t} \text{d}t\\
+  f(t) & = \int_{-\infty}^\infty F(\xi) e^{i 2\pi\xi t} \text{d}\xi
+\end{align}
+```
+
+``\sum`` devient ``\int``, ``x_n`` devient ``f(t)`` : **c'est le même objet, la même idée**. Une version compte des échantillons, l'autre balaie un continuum.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000030
+md"""
+### 1.3 Lire un spectre
+
+Appliquons `fft` à nos trois signaux. Le résultat s'appelle le **spectre** : en abscisse les fréquences, en ordonnée « combien il y en a ».
+
+Le menu déroulant permet de basculer entre le module, la partie réelle et la partie imaginaire — c'est le module (`abs`) qui est le plus parlant, pour la raison expliquée à la fin du §1.1.
+"""
 
 # ╔═╡ c26a3bd3-cf79-426a-b439-2b29501cee4b
 md"#### Signal fréquentiel"
@@ -116,12 +357,236 @@ let
 	plot!(f, sel.(fft(la + ré)), label = "la + ré", linewidth=2, color = :red)
 end
 
+# ╔═╡ a0000001-0000-4000-8000-000000000031
+md"""
+Voilà le résultat qu'on cherchait depuis le début du cours. Le signal `la + ré`, illisible dans le temps, devient ici **deux pics nets**, aux bons endroits. Et remarquez que la courbe rouge (`la + ré`) est exactement la superposition des deux autres : **la transformée est linéaire**, la somme des signaux donne la somme des spectres.
+
+Ce que l'œil ne savait pas lire sur la courbe temporelle se lit maintenant d'un coup d'œil.
+"""
+
+# ╔═╡ a2359c44-3150-4b0a-8675-90d1627b5c07
+md"""
+**Intuition**
+Le signal pur "la" est
+``f_{\text{la}}(t) = \exp(2\pi 440 t i) = \cos(2\pi 440 t) + i \sin(2\pi 440 t)``.
+Si j'évalue en ``t = 1/440 s``, j'obtiens la fin d'une période:
+``\exp(2\pi i) = \cos(2\pi) + i \sin(2\pi)``.
+Ces exponentielles pures sont *orthogonales*, c'est à dire que ces intégrales entre fréquences différentes sont nulles.
+```math
+\begin{align}
+  F(440) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi 440 t} \text{d}t = \int_{-\infty}^\infty 1 \text{d}t = \infty\\
+  F(293.7) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi 293.7 t} \text{d}t = 0
+\end{align}
+```
+Cet intégrale permet donc de détecter la quantité d'une certaine fréquence dans un signal, en ignorant toutes les autres fréquences!
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000040
+md"""
+### 1.4 Le pont avec les séances d'exercices
+
+Une mise au point importante, parce que les deux visages de Fourier peuvent dérouter.
+
+Aux **séances d'exercices**, vous calculez des transformées **à la main**, sur des signaux idéaux : l'échelon ``u(t)``, l'impulsion de Dirac ``\delta(t)``, la fonction ``\mathrm{sinc}``. Vous intégrez, vous utilisez les formules d'Euler, vous obtenez une formule close.
+
+**Ici**, on ne calcule aucune intégrale : on donne ``N`` nombres à l'ordinateur et il rend ``N`` nombres.
+
+Ce sont les **deux faces du même objet** :
+
+| Aux exercices — continu, à la main | Ici — discret, à la machine |
+|---|---|
+| ``F(\xi) = \int f(t)\,e^{-i2\pi \xi t}\,dt`` | ``X_k = \sum_n x_n e^{-i 2\pi kn/N}`` |
+| ``f(t)`` définie pour **tout** ``t`` | ``N`` échantillons ``x_0,\dots,x_{N-1}`` |
+| ``\xi`` parcourt un **continuum** | ``N`` fréquences discrètes ``k`` |
+| un Dirac ``\delta(\xi - f_0)`` | **un pic** sur une case du spectre |
+| durée infinie | durée finie ``N\Delta t`` |
+
+Les exercices servent à **comprendre le mécanisme** sur des cas simples ; le notebook sert à **l'appliquer** à de vrais signaux. Quand vous calculerez la transformée de ``e^{-at}u(t)`` à la main, vous ferez exactement ce que `fft` fait ici en une microseconde.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000041
+md"""
+Reste une question très concrète : `fft` rend une liste de nombres, **sans unité**. Comment savoir à quelle fréquence en Hz correspond la case ``k`` ? Les deux questions ci-dessous y répondent, et elles sont indispensables pour lire correctement n'importe quel spectre.
+"""
+
 # ╔═╡ 2488c83e-5e54-4d47-80d2-6ef41ca7ac7f
 md"On a la valeur de la transformée de fourier, tous les $(1/temps_total) Hz"
 
+# ╔═╡ a0000001-0000-4000-8000-000000000050
+md"""
+# 2. Travailler : ce qu'on y gagne
+
+Nous savons aller dans le domaine des fréquences. **Pourquoi y aller ?**
+
+Parce que certaines opérations qui sont difficiles, voire impossibles, dans le domaine temporel y deviennent **triviales**. On va en voir quatre, de la plus parlante à la plus surprenante :
+
+- **2.1** nettoyer un son de son bruit — en une ligne ;
+- **2.2** la convolution, qui devient une simple multiplication ;
+- **2.3** flouter et analyser une image ;
+- **2.4** multiplier des polynômes (et de très grands nombres) bien plus vite.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000051
+md"""
+## 2.1 Nettoyer un son
+
+Voici une situation très concrète. On dispose d'un enregistrement — ici un accord de trois notes — **pollué par un sifflement aigu** : une fréquence parasite que l'on veut supprimer sans abîmer la musique.
+
+Dans le domaine temporel, le problème paraît désespéré : le sifflement est **mélangé au signal utile à chaque instant**. Il n'y a aucun morceau de la courbe qu'on pourrait couper — le parasite est *partout*, additionné à la musique en chaque point.
+
+Construisons le signal et écoutons le dégât.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000052
+begin
+	fs_audio = 8192              # fréquence d'échantillonnage (Hz)
+	durée = 2                    # secondes
+	t_audio = range(0, stop = durée, length = fs_audio * durée)
+
+	# Un accord de do majeur : do - mi - sol
+	accord = 0.5 * (
+		cos.(2π * 261.6 .* t_audio) .+      # do
+		cos.(2π * 329.6 .* t_audio) .+      # mi
+		cos.(2π * 392.0 .* t_audio)         # sol
+	)
+
+	# Le parasite : un sifflement aigu à 3000 Hz
+	sifflement = 0.6 * cos.(2π * 3000 .* t_audio)
+
+	accord_bruité = accord .+ sifflement
+end;
+
+# ╔═╡ a0000001-0000-4000-8000-000000000053
+md"""
+**L'accord propre** — ce qu'on voudrait entendre :
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000055
+md"""
+**L'accord pollué** — ce qu'on a réellement enregistré. Le sifflement est franchement désagréable :
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000057
+md"""
+Regardons d'abord le signal **dans le temps**. Voici quelques millisecondes, zoomées :
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000058
+let
+	n = 400
+	plot(t_audio[1:n], accord_bruité[1:n],
+		label = "accord + sifflement", color = :crimson,
+		xlabel = "temps (s)", ylabel = "amplitude",
+		title = "Dans le temps : où est le sifflement ?", size = (680, 260))
+end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000059
+md"""
+Impossible de désigner le parasite sur ce graphe : il est **fondu dans la courbe**. On voit bien de petites oscillations rapides greffées sur les grandes, mais il n'existe aucun intervalle de temps qu'on pourrait supprimer sans détruire aussi la musique.
+
+Passons maintenant dans le domaine des fréquences.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000060
+let
+	N = length(accord_bruité)
+	spectre = abs.(fft(accord_bruité))
+	freqs = (0:N-1) .* (fs_audio / N)
+	moitié = 1:div(N, 2)          # on n'affiche que les fréquences positives
+
+	plot(freqs[moitié], spectre[moitié],
+		label = nothing, color = :crimson,
+		xlabel = "fréquence (Hz)", ylabel = "amplitude",
+		title = "Dans les fréquences : le sifflement est isolé",
+		size = (680, 300))
+	vline!([3000], color = :black, linestyle = :dash, linewidth = 1,
+		label = "le parasite, bien à part")
+end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000061
+md"""
+**Voilà toute la magie du cours, en une image.**
+
+À gauche, trois pics serrés : ce sont le *do*, le *mi* et le *sol*, la musique qu'on veut garder. Loin à droite, isolé, un quatrième pic : le sifflement à 3000 Hz.
+
+Ce qui était **inextricablement mélangé dans le temps est parfaitement rangé dans les fréquences**. Et un objet bien rangé, on peut le retirer proprement.
+
+L'opération de nettoyage tient maintenant en une ligne : *mettre à zéro tout ce qui est au-dessus d'un certain seuil*.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000062
+md"seuil de coupure = $(@bind seuil Slider(200:50:4000, default=1000, show_value = true)) Hz"
+
+# ╔═╡ a0000001-0000-4000-8000-000000000063
+accord_filtré = let
+	N = length(accord_bruité)
+	freqs = (0:N-1) .* (fs_audio / N)
+
+	# Le spectre du signal pollué
+	Y = fft(accord_bruité)
+
+	# ── LE FILTRE, EN UNE LIGNE ──
+	# Toute fréquence au-dessus du seuil est mise à zéro.
+	# Attention à la symétrie : une fréquence f apparaît en f ET en fs - f.
+	Y[(freqs .> seuil) .& (freqs .< fs_audio - seuil)] .= 0
+
+	# Retour dans le temps
+	real.(ifft(Y))
+end;
+
+# ╔═╡ a0000001-0000-4000-8000-000000000064
+let
+	N = length(accord_filtré)
+	freqs = (0:N-1) .* (fs_audio / N)
+	moitié = 1:div(N, 2)
+
+	plot(freqs[moitié], abs.(fft(accord_bruité))[moitié],
+		label = "avant filtrage", color = :crimson, alpha = 0.35)
+	plot!(freqs[moitié], abs.(fft(accord_filtré))[moitié],
+		label = "après filtrage", color = :seagreen, linewidth = 2,
+		xlabel = "fréquence (Hz)", ylabel = "amplitude",
+		title = "Le spectre, avant et après", size = (680, 300))
+	vline!([seuil], color = :black, linestyle = :dash, label = "seuil")
+end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000065
+md"""
+**Le moment de vérité : écoutez le résultat.** Le sifflement a disparu, l'accord est intact.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000067
+md"""
+**Jouez avec le curseur du seuil et réécoutez à chaque fois.** C'est l'expérience la plus instructive du cours :
+
+- au-dessus de **3000 Hz** : le sifflement revient — on ne coupe plus assez haut ;
+- entre **400 et 3000 Hz** : l'accord est propre, le parasite est éliminé ;
+- en dessous de **392 Hz** : on commence à manger le *sol*, puis le *mi*, puis le *do*. L'accord s'appauvrit et devient sourd.
+
+Ce curseur, c'est exactement le **bouton des aigus** de votre chaîne hi-fi, et c'est la brique de base de tout égaliseur audio. Vous venez d'en écrire un en une ligne.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000069
+md"""
+!!! tip "Le schéma à retenir"
+	Ce que nous venons de faire est le motif universel du traitement du signal :
+
+	``\text{signal} \;\xrightarrow{\;\texttt{fft}\;}\; \text{spectre} \;\xrightarrow{\;\text{opération facile}\;}\; \text{spectre modifié} \;\xrightarrow{\;\texttt{ifft}\;}\; \text{signal traité}``
+
+	On fait un détour par le monde des fréquences **parce que le travail y est plus simple**, puis on revient. Les sections qui suivent sont toutes des variantes de ce même aller-retour.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000070
+md"""
+## 2.2 La convolution devient une multiplication
+
+Le filtre du §2.1 a un nom dans le domaine temporel : c'est une **convolution**. C'est l'opération qui décrit ce que fait tout système physique à un signal — un haut-parleur, une salle qui résonne, une lentille photo légèrement floue, un circuit électronique.
+
+Sa définition est un peu rebutante au premier abord : pour chaque point de sortie, on fait une **somme de produits décalés**.
+"""
+
 # ╔═╡ 279e5f5e-4fc6-475f-8dab-c5740a470b0e
 md"""
-### 1.1.2 Calcul rapide de convolution
+**Définitions.**
 
 La convolution continue:
 ```math
@@ -156,14 +621,45 @@ f \ast g = \mathcal{F}^{-1}(\mathcal{F}(f) \cdot \mathcal{F}(g))
 ```
 """
 
+# ╔═╡ a0000001-0000-4000-8000-000000000071
+md"""
+Cette définition a un coût bien réel. Pour chacun des ``n`` points de sortie, il faut faire une somme sur ``n`` termes : **``n^2`` opérations**.
+
+Et c'est ici qu'intervient le résultat le plus utile de tout le cours — le **théorème de convolution** :
+
+```math
+f \ast g = \mathcal{F}^{-1}\big(\mathcal{F}(f) \cdot \mathcal{F}(g)\big)
+```
+
+En clair : **convoluer dans le temps, c'est multiplier point par point dans les fréquences**. Cette double somme pénible devient une simple multiplication terme à terme.
+
+C'est exactement ce que nous avons fait sans le dire au §2.1 : mettre des cases du spectre à zéro *est* une multiplication du spectre (par un masque de 0 et de 1), donc *est* une convolution du signal. Nous avons convolué sans jamais écrire la double somme.
+
+Les sections **2.3** et **2.4** montrent le gain de vitesse que cela représente, sur des images puis sur des polynômes.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000072
+md"""
+## 2.3 Application : les images
+
+Une image est un signal comme un autre, simplement en **deux dimensions** : au lieu d'une valeur par instant, une valeur par pixel. Tout ce qu'on vient de voir s'y applique.
+
+Convoluer une image avec un petit motif — qu'on appelle un **noyau** (*kernel*) — permet de la flouter, de la nettoyer, ou d'en détecter les contours. C'est l'opération de base du traitement d'images… et la brique élémentaire des réseaux de neurones convolutifs.
+"""
+
 # ╔═╡ 7cdf9587-af9f-4346-b619-ba8bdf6d6799
-md"#### 1.1.2.1 Illustration: convolution d'images"
+md"#### Illustration : convolution d'images"
 
 # ╔═╡ d4ac67de-9442-464c-be8b-e8ff468dd996
 mandrill = testimage("mandrill")
 
 # ╔═╡ 54ced290-6da4-4f24-a18a-e46ac116448c
 md"##### Gaussian Kernel"
+
+# ╔═╡ a0000001-0000-4000-8000-000000000073
+md"""
+Le noyau gaussien ci-dessous est une petite « bosse ». Convoluer avec lui revient à **remplacer chaque pixel par une moyenne pondérée de ses voisins** — d'où le flou. Le curseur `d` règle la largeur de la bosse, donc l'intensité du flou.
+"""
 
 # ╔═╡ 93cfa0b9-dbb6-4956-bd94-575fe233c9f4
 md"La fonction `gaussian(d)` donne une matrice de taille ``(2d + 1) \times (2d + 1)`` contenant la valeur d'une Gaussienne."
@@ -186,6 +682,29 @@ md"La convolution est obtenue avec `reflect`."
 # ╔═╡ e1c25e06-3259-4a56-b26a-60903e57f92b
 imfilter(mandrill, reflect(Kernel.gaussian(d)))
 
+# ╔═╡ 101663c2-acca-4eb7-858c-20a70c2103e9
+md"##### Autre kernels"
+
+# ╔═╡ ae1e22a7-b4af-4f83-8f28-97534d7e0c20
+imfilter(mandrill, Kernel.Laplacian())
+
+# ╔═╡ e7b74b94-bf5f-4455-9fc7-922ce7d4c284
+convert(AbstractArray, Kernel.Laplacian())
+
+# ╔═╡ eeafd828-82a7-449e-b083-f22eb0d07079
+md"Différents kernels permettent d'analyser des aspects différents d'une image. Le kernel à utilisé peut aussi être **appris**, c'est la base des **Convolutional Neural Networks** (CNNs) !"
+
+# ╔═╡ a0000001-0000-4000-8000-000000000074
+md"""
+### Et la vitesse ?
+
+Comparons les deux façons de calculer cette convolution : directement (*FIR*, la double somme) ou en passant par Fourier (*FFT*).
+
+Le résultat est spectaculaire, et il justifie à lui seul l'existence de la section 4 : dès que l'image grandit un peu, la méthode directe s'effondre alors que la méthode par Fourier tient bon.
+
+Nous verrons **pourquoi** la FFT est si rapide au §4 — c'est la dernière pièce du puzzle.
+"""
+
 # ╔═╡ 802cbd16-2126-4d4f-aca2-df29024d5fdf
 md"##### Performance"
 
@@ -205,20 +724,19 @@ let
 	plot!(n, fft_time ∘ Int, label = "Fast Fourier Transform (FFT)")
 end
 
-# ╔═╡ e7b74b94-bf5f-4455-9fc7-922ce7d4c284
-convert(AbstractArray, Kernel.Laplacian())
+# ╔═╡ a0000001-0000-4000-8000-000000000075
+md"""
+## 2.4 Application : multiplier des polynômes
 
-# ╔═╡ 101663c2-acca-4eb7-858c-20a70c2103e9
-md"##### Autre kernels"
+Dernier exemple, et le plus inattendu — il n'y a ni son ni image ici, juste de l'algèbre.
 
-# ╔═╡ ae1e22a7-b4af-4f83-8f28-97534d7e0c20
-imfilter(mandrill, Kernel.Laplacian())
+Quand on multiplie deux polynômes, les coefficients du résultat sont obtenus par… une **convolution** des coefficients de départ. Chaque coefficient du produit est une somme de produits croisés : exactement la formule du §2.2.
 
-# ╔═╡ eeafd828-82a7-449e-b083-f22eb0d07079
-md"Différents kernels permettent d'analyser des aspects différents d'une image. Le kernel à utilisé peut aussi être **appris**, c'est la base des **Convolutional Neural Networks** (CNNs) !"
+Donc le même truc s'applique : ``\mathcal{F}``, multiplication terme à terme, ``\mathcal{F}^{-1}``. On passe de ``n^2`` à ``n\log n``.
+"""
 
 # ╔═╡ 66fd9f77-6c2a-418d-9650-39033396b584
-md"#### 1.1.2.2 Illustration : Le produit de polynômes"
+md"#### Illustration : le produit de polynômes"
 
 # ╔═╡ 0230ce41-bf49-4363-b344-3c475ef6474d
 deg = 4
@@ -255,52 +773,73 @@ let
 	plot!(n, fft_time ∘ Int, label = "With FFT")
 end
 
-# ╔═╡ 44f73082-7cdb-47b9-bb86-f952ac7c4498
+# ╔═╡ a0000001-0000-4000-8000-000000000080
 md"""
-### 1.1.2 Définition de la transformée de Fourier
+# 3. Retour : reconstruire, et les pièges
 
-La transformée de Fourier continue et son inverse:
-```math
-\begin{align}
-  F(\xi) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi\xi t} \text{d}t\\
-  f(t) & = \int_{-\infty}^\infty F(\xi) e^{i 2\pi\xi t} \text{d}\xi
-\end{align}
-```
-La transformée de Fourier discrète et son inverse:
-```math
-\begin{align}
-  X_k & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{k}{N} n}\\
-  x_n & = \frac{1}{N}\sum_{k=0}^{N-1} X_k e^{i 2\pi \frac{k}{N} n}
-\end{align}
-```
+Nous savons aller dans les fréquences (§1) et y travailler (§2). Reste la troisième étape, celle qui rend tout le reste utilisable : **revenir**.
+
+Deux questions se posent, et elles sont de nature très différente :
+
+- **3.1** L'aller-retour est-il **exact** ? Est-ce qu'on perd de l'information en chemin ?
+- **3.2–3.3** Que se passe-t-il quand on n'a **pas assez d'échantillons** ? C'est là qu'apparaît le piège le plus célèbre du traitement du signal.
 """
 
-# ╔═╡ a2359c44-3150-4b0a-8675-90d1627b5c07
+# ╔═╡ a0000001-0000-4000-8000-000000000081
 md"""
-**Intuition**
-Le signal pur "la" est
-``f_{\text{la}}(t) = \exp(2\pi 440 t i) = \cos(2\pi 440 t) + i \sin(2\pi 440 t)``.
-Si j'évalue en ``t = 1/440 s``, j'obtiens la fin d'une période:
-``\exp(2\pi i) = \cos(2\pi) + i \sin(2\pi)``.
-Ces exponentielles pures sont *orthogonales*, c'est à dire que ces intégrales entre fréquences différentes sont nulles.
-```math
-\begin{align}
-  F(440) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi 440 t} \text{d}t = \int_{-\infty}^\infty 1 \text{d}t = \infty\\
-  F(293.7) & = \int_{-\infty}^\infty f(t) e^{-i 2\pi 293.7 t} \text{d}t = 0
-\end{align}
-```
-Cet intégrale permet donc de détecter la quantité d'une certaine fréquence dans un signal, en ignorant toutes les autres fréquences!
+## 3.1 L'aller-retour ne perd rien
+
+Question légitime : en passant par les fréquences, ne perd-on pas un peu du signal en route ? Vérifions-le directement — prenons notre accord, faisons l'aller-retour `fft` puis `ifft`, et comparons au signal de départ.
 """
 
-# ╔═╡ 86368d24-c206-42dc-afdb-1e762b3ac14c
-md"Rajouter linearité : TODO"
+# ╔═╡ a0000001-0000-4000-8000-000000000082
+let
+	aller_retour = real.(ifft(fft(accord)))
+	différence = accord .- aller_retour
 
-# ╔═╡ f0eda0e0-0a52-403a-a73d-3a604cbe557c
-md"TODO : même dimension en temporel et fréquentiel"
+	plot(t_audio[1:2000], différence[1:2000],
+		label = nothing, color = :purple,
+		xlabel = "temps (s)", ylabel = "accord − ifft(fft(accord))",
+		title = "L'erreur de l'aller-retour",
+		ylim = (-1e-15, 1e-15), size = (680, 260))
+end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000083
+md"""
+Lisez bien **l'échelle de l'axe vertical** : ``10^{-15}``. La différence n'est pas « petite », elle est **nulle** — ce qu'on voit n'est que le bruit d'arrondi de l'arithmétique à virgule flottante, à la limite de la précision de la machine.
+
+```math
+\mathcal{F}^{-1}\big(\mathcal{F}(x)\big) = x
+```
+
+**Conclusion capitale : le spectre contient exactement la même information que le signal.** Rien n'est perdu, rien n'est ajouté. Ce ne sont pas deux objets différents, mais **deux points de vue sur le même objet** — comme décrire un lieu par ses coordonnées GPS ou par son adresse postale.
+
+C'est ce qui rend légitime tout le §2 : si l'aller-retour n'était qu'approximatif, filtrer un son abîmerait la musique à chaque passage. Ici, seul ce qu'on a **délibérément** modifié dans le spectre change.
+
+Le triptyque **aller → travailler → revenir** est maintenant complet.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000090
+md"""
+## 3.2 Le piège : le repliement spectral
+
+Tout ce qui précède supposait une chose qu'on n'a jamais questionnée : que nos ``N`` échantillons décrivent **fidèlement** le signal continu d'origine.
+
+Que se passe-t-il si on n'en prend pas assez ?
+
+La réponse est le phénomène le plus contre-intuitif du domaine — le **repliement spectral** (*aliasing*). Il faut d'abord comprendre une propriété surprenante de la DFT : elle considère **implicitement** que le signal se répète à l'infini.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000091
+md"""
+Cette périodicité cachée a une conséquence directe. Si on réduit le nombre de points du spectre, le signal temporel devient plus court — et **ce qui dépasse ne disparaît pas : il se replie et vient s'additionner par-dessus le début**.
+
+L'illustration ci-dessous le montre sur une somme de deux gaussiennes. Jouez avec `ratio` : c'est le facteur de sous-échantillonnage.
+"""
 
 # ╔═╡ d29773c7-a413-46a9-8c62-2f54d4de1730
 md"""
-### 1.1.3 Le replis spectral
+**Le mécanisme du repliement.**
 
 On vient de voir que le signal est extrapolé périodiquement par la transformée de fourier discrète.
 Si on prend un signal de `0` à `t_max` et qu'on divise la fréquence d'échantillonnage de sa transformée de fourier par 2.
@@ -333,8 +872,53 @@ let
 	plot!(x[1:length(xs)], xs, label = "rééchantilloné")
 end
 
+# ╔═╡ a0000001-0000-4000-8000-000000000100
+md"""
+## 3.3 Shannon–Nyquist : la règle à retenir
+
+Nous venons de voir le repliement **subir**. Existe-t-il une règle pour l'**éviter** ? Oui, et c'est le théorème central de la numérisation du son et de l'image.
+
+!!! danger "Théorème de Shannon–Nyquist"
+	Si un signal ne contient **aucune fréquence au-dessus de ``f_{\max}``**, alors il suffit de l'échantillonner à une fréquence
+
+	```math
+	f_e \ge 2\,f_{\max}
+	```
+
+	pour pouvoir le reconstruire **parfaitement** à partir de ses échantillons.
+
+**D'où vient le facteur 2 ?** De la symétrie du spectre découverte au §1.3 : un signal réel à ``f_{\max}`` occupe *deux* pics, en ``+f_{\max}`` et en ``-f_{\max}``. La bande réellement occupée est donc large de ``2f_{\max}``, et il faut au moins autant de place pour la loger sans chevauchement.
+
+Si ``f_e < 2 f_{\max}``, les copies du spectre se chevauchent : les hautes fréquences se **replient** dans les basses et viennent se déguiser en fréquences qu'elles ne sont pas. Le dégât est **irréversible** — une fois les copies additionnées, aucun filtre ne peut les re-séparer.
+
+C'est pour cela que le CD audio échantillonne à **44 100 Hz** : l'oreille humaine monte à environ 20 000 Hz, et ``2 \times 20\,000 = 40\,000``, avec une marge de sécurité.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000101
+md"""
+**Entendons le repliement.** On prend un *la* à 440 Hz et on le échantillonne à des fréquences de plus en plus basses.
+
+Tant que ``f_e > 880`` Hz, Shannon est respecté et on entend un *la*. En dessous, la note **change** — on entend une fréquence qui n'a jamais été jouée : son alias.
+"""
+
+# ╔═╡ a0000001-0000-4000-8000-000000000102
+md"fréquence d'échantillonnage `fe_test` = $(@bind fe_test Slider([8192, 4096, 2048, 1024, 880, 700, 600, 500], default=8192, show_value = true)) Hz"
+
+# ╔═╡ a0000001-0000-4000-8000-000000000110
+md"""
+# 4. Le coût : l'algorithme FFT
+
+Il reste une dette à payer. Au §2.3, le graphe de performance montrait la méthode « Fourier » écraser la méthode directe, et nous avons dit : *on verra pourquoi plus tard*. Nous y sommes.
+
+Le problème est le suivant. La DFT du §1.2 demande, pour **chacune** des ``N`` fréquences, une somme sur ``N`` échantillons : cela fait ``N^2`` opérations. Pour une seconde de son à 44 100 Hz, ``N^2 \approx 2\cdot 10^9`` — beaucoup trop lent pour être utile.
+
+La **FFT** (*Fast Fourier Transform*) ramène ce coût à ``N\log N``, soit environ **700 000** opérations au lieu de deux milliards. Ce n'est pas une optimisation de détail : c'est ce qui rend possible l'audio numérique, la compression JPEG, l'imagerie médicale et la téléphonie mobile. L'algorithme figure au [top 10 des algorithmes du 20ᵉ siècle](https://archive.siam.org/pdf/news/637.pdf).
+
+**L'idée en une phrase** : la matrice de la DFT est bourrée de **redondances**, et en les exploitant on peut ramener un problème de taille ``N`` à deux problèmes de taille ``N/2``. C'est un *diviser pour régner*, et c'est ce que nous allons découvrir en regardant la matrice.
+"""
+
 # ╔═╡ 78026d88-7051-11ef-29f0-67f85176a548
-md"## 1.2 Fast Fourier Transform"
+md"## 4.1 L'algorithme *Fast Fourier Transform*"
 
 # ╔═╡ dc4c4d53-feb2-40ce-b20e-3386aab2a45f
 md"""
@@ -377,9 +961,6 @@ md"Besoin d'un indice ? $(@bind colored_arrows CheckBox())"
 # ╔═╡ c64e6062-3793-4556-9001-bf184cd090e9
 md"On peut le vérifier numériquement également:"
 
-# ╔═╡ f952619b-194a-4088-a2bb-b8210392417a
-isapprox(0.0, 1e-300, atol = 1e-8)
-
 # ╔═╡ 6119e719-4e14-4516-ac7e-a236cfb4fcfa
 md"Vérifions le à nouveau numériquement:"
 
@@ -394,6 +975,13 @@ md"En se rappelant que l'intuition géométrique des `N` racines de l'unité, on
 
 # ╔═╡ bcf5ecbc-ccb6-48ce-9146-55b641f770f2
 md"`max_N` = $(@bind max_N Slider(2 .^ (2:5), default=8, show_value = true))"
+
+# ╔═╡ a0000001-0000-4000-8000-000000000111
+md"""
+Voilà la clé. Un problème de taille ``N`` se ramène à **deux** problèmes de taille ``N/2``, plus un travail linéaire de recombinaison. On recommence sur chaque moitié, et ainsi de suite jusqu'à des problèmes de taille 1.
+
+Il y a ``\log_2 N`` niveaux de découpage, et chaque niveau coûte ``N`` : d'où le ``N \log N``.
+"""
 
 # ╔═╡ 59130f1a-4fcd-4ae1-9ecf-1818dfc07612
 md"## Utilitaires"
@@ -444,6 +1032,38 @@ let
 	md"""
 	#### la + ré
 	$(play_sound(la + ré, échantillonnage))
+	"""
+end
+
+# ╔═╡ a0000001-0000-4000-8000-000000000054
+play_sound(accord ./ maximum(abs.(accord)), fs_audio)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000056
+play_sound(accord_bruité ./ maximum(abs.(accord_bruité)), fs_audio)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000066
+play_sound(accord_filtré ./ maximum(abs.(accord_filtré)), fs_audio)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000103
+let
+	f_note = 440
+	durée = 2
+	n = round(Int, fe_test * durée)
+	t = range(0, stop = durée, length = n)
+	signal = cos.(2π * f_note .* t)
+
+	# La fréquence réellement perçue après repliement :
+	# toute fréquence se replie dans la bande [0, fe/2]
+	alias = abs(f_note - fe_test * round(f_note / fe_test))
+	respecté = fe_test >= 2 * f_note
+
+	md"""
+	Shannon respecté ? **$(respecté ? "oui ✓" : "NON ✗")** — il faudrait ``f_e \ge 880`` Hz.
+
+	Fréquence réellement entendue : **$(round(alias, digits = 1)) Hz**
+	$(respecté ? "(c'est bien le *la* d'origine)" : "(ce n'est plus le *la* ! la note s'est repliée)")
+
+	$(play_sound(signal, fe_test))
 	"""
 end
 
@@ -578,6 +1198,89 @@ function qa(question, answer)
 	return HTMLTag("details", Join(HTMLTag("summary", question), answer))
 end
 
+# ╔═╡ b0000002-0000-4000-8000-000000000005
+qa(
+	html"Que se passe-t-il quand on descend en dessous de 10 Hz ?",
+	md"""
+Les points orange **cessent de suivre la courbe bleue**. Pire : en les reliant, on voit apparaître une onde **beaucoup plus lente** que le signal d'origine — une oscillation qui n'existe pas.
+
+C'est le **repliement spectral** (*aliasing*). Le signal à 5 Hz se déguise en un signal de fréquence plus basse, et une fois les points relevés, **rien ne permet de distinguer les deux**.
+
+Le seuil est net : il faut ``f_e \ge 2 \times 5 = 10`` Hz. C'est le **théorème de Shannon–Nyquist**, sur lequel nous reviendrons en détail au §3.3 — une fois qu'on aura les outils pour comprendre *pourquoi* le facteur 2.
+
+Pour l'instant, retenez simplement : **échantillonner trop lentement détruit l'information, de façon irréversible**. C'est pour cela que le CD monte à 44 100 Hz alors que l'oreille ne dépasse pas ~20 000 Hz.
+
+!!! note "Juste au-dessus du seuil, ça a l'air moche — est-ce grave ?"
+	Entre 10 et 15 Hz, les points orange dessinent une ligne brisée qui ne *ressemble* plus beaucoup au cosinus. C'est normal, et pourtant **aucune information n'est perdue** : cette ligne brisée est un artefact du tracé, qui relie simplement les points par des segments droits.
+
+	Le théorème dit quelque chose de plus fort, et de plus surprenant : au-dessus de ``2f_{\max}``, la courbe d'origine peut être **reconstruite exactement** à partir des points — mais avec la bonne formule d'interpolation, pas avec des segments. En dessous du seuil, en revanche, l'information est bel et bien détruite, et aucune formule ne peut la retrouver.
+""",
+)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000004
+qa(
+	html"En regardant <b>uniquement</b> la courbe rouge (la + ré), sauriez-vous dire de quelles notes elle est faite ?",
+	md"""
+Honnêtement : non. On voit bien que la courbe rouge est périodique et qu'elle a une forme plus compliquée que les deux autres, mais **rien dans ce graphe ne crie « 440 Hz et 293.7 Hz »**.
+
+L'information y est pourtant, entièrement : la courbe rouge *est* la somme des deux autres, on n'a rien perdu. Elle est simplement **encodée d'une façon que l'œil ne sait pas lire**.
+""",
+)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000015
+qa(
+	html"Qu'observez-vous en balayant le curseur ?",
+	md"""
+La somme reste **proche de zéro** presque partout — le graphe du produit oscille autour de l'axe et se compense.
+
+Mais à **440 Hz** et à **294 Hz**, elle explose d'un coup : le produit devient franchement positif sur toute la durée (regardez le troisième graphe, il passe au-dessus de l'axe), et la somme monte à plusieurs centaines.
+
+**La machine fonctionne.** Elle ne « connaît » pas la musique : elle mesure juste une ressemblance, fréquence par fréquence. Et cette mesure suffit à retrouver les deux notes que votre oreille avait entendues au §0.
+""",
+)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000032
+qa(
+	html"Et si on avait pris des <b>cosinus</b> plutôt que des exponentielles complexes ?",
+	md"""
+On verrait **deux fois plus de pics**. C'est une conséquence de la formule d'Euler :
+```math
+\cos(2\pi f t) = \tfrac{1}{2}\left(e^{i 2\pi f t} + e^{-i 2\pi f t}\right)
+```
+
+Un cosinus réel n'est pas *une* oscillation pure, mais la **somme de deux** exponentielles complexes : l'une à ``+f``, l'autre à ``-f``. Son spectre montre donc deux pics, chacun avec la moitié de l'amplitude.
+
+Ici nos notes sont construites avec `cispi`, c'est-à-dire directement des exponentielles complexes ``e^{i 2\pi f t}`` : chacune n'a donc **qu'un seul** pic. C'est plus propre pour une première lecture — mais dès qu'on travaillera sur du son réel (§2.1), les spectres seront **symétriques**.
+
+**Retenez cette symétrie** : elle a l'air d'un détail cosmétique, mais c'est elle qui expliquera le facteur 2 du théorème de Shannon au §3.3.
+""",
+)
+
+# ╔═╡ 3524f1bf-8e39-4d04-9dc3-e434e65db409
+qa(
+	html"Que vaut la distance entre deux valeurs successive en temporel et en fréquentiel pour les signaux discrets ?",
+	md"""
+L'échelle temporelle ou fréquentielle n'est pas contenue dans ``X_k`` ou ``x_n``.
+Par contre, elles sont étroitement liées. On a
+```math
+\frac{k}{N}n = \frac{k}{N\Delta t} n\Delta t
+```
+Si on décide que l'écart temporel entre ``x_n`` et ``x_{n+1}`` est ``\Delta t``, on a ``t = n\Delta t``. Il faut alors que ``\xi = \frac{k}{N\Delta t}`` et donc l'écart fréquentiel entre ``X_k`` et ``X_{k+1}`` est ``\frac{1}{N\Delta t}``.
+""",
+)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000068
+qa(
+	html"Pourquoi ne pouvait-on pas faire ce nettoyage directement sur le signal temporel ?",
+	md"""
+Parce que dans le temps, le sifflement et la musique sont **additionnés en chaque point**. L'échantillon ``x_n`` vaut `musique(n) + parasite(n)` : c'est un seul nombre, et **rien dans ce nombre ne dit quelle part vient d'où**. Supprimer des instants reviendrait à faire des trous dans la musique.
+
+Dans le domaine des fréquences, les deux contributions occupent des **cases différentes** : la musique en bas du spectre, le parasite en haut. Elles ne se mélangent plus, donc on peut en effacer une sans toucher à l'autre.
+
+**C'est la réponse à la question « à quoi sert Fourier ? »** : la transformée ne crée aucune information — on l'a vu, l'aller-retour est exact — mais elle **réorganise** l'information de sorte que ce qui était mélangé devienne séparé.
+""",
+)
+
 # ╔═╡ 1dfad36a-05a5-4108-8c67-d4c866be89c0
 qa(
 	html"Quel est la complexité de la convolution vs produit classique s'ils sont discrets de longueur n ?",
@@ -628,19 +1331,6 @@ qa(
 	md"Un nombre représenté par les chiffres ``a_na_{n-1}\cdots a_1a_0`` est égal à ``a_n 10^n + a_{n-1} 10^{n-1} + \cdots + a_1 10 + a_0`` ou encore ``p(10)`` où ``p(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0``. Le produit de nombre peut donc être calculé via un produit de polynôme!",
 )
 
-# ╔═╡ 3524f1bf-8e39-4d04-9dc3-e434e65db409
-qa(
-	html"Que vaut la distance entre deux valeurs successive en temporel et en fréquentiel pour les signaux discrets ?",
-	md"""
-L'échelle temporelle ou fréquentielle n'est pas contenue dans ``X_k`` ou ``x_n``.
-Par contre, elles sont étroitement liées. On a
-```math
-\frac{k}{N}n = \frac{k}{N\Delta t} n\Delta t
-```
-Si on décide que l'écart temporel entre ``x_n`` et ``x_{n+1}`` est ``\Delta t``, on a ``t = n\Delta t``. Il faut alors que ``\xi = \frac{k}{N\Delta t}`` et donc l'écart fréquentiel entre ``X_k`` et ``X_{k+1}`` est ``\frac{1}{N\Delta t}``.
-""",
-)
-
 # ╔═╡ 57373c5b-a34a-4e48-af42-27a0bd05a173
 qa(
 	html"Que vaut le signal en dehors de ses N points ?",
@@ -663,6 +1353,20 @@ qa(
 	html"Que va-t-il advenir de la deuxième moitié du signal ?",
 	md"""
 Le nouveau signal de `0` à `t_max/2` sera la somme du signal de `0` à `t_max/2` et du signal de `t_max/2` à `t_max`.
+""",
+)
+
+# ╔═╡ a0000001-0000-4000-8000-000000000104
+qa(
+	html"Pourquoi est-ce si grave ? Ne suffit-il pas de filtrer après coup ?",
+	md"""
+Non, et c'est bien là le drame. Le repliement n'est pas un bruit **ajouté** par-dessus le signal : les fréquences repliées **se superposent** aux vraies, et se confondent avec elles.
+
+Une fois que le 5000 Hz est venu se déguiser en 200 Hz, **plus rien ne distingue ce faux 200 Hz du vrai**. C'est la même case du spectre, c'est le même nombre. Aucun filtre, aucun algorithme ne peut défaire la somme.
+
+D'où la règle d'or de toute chaîne d'acquisition : on place **toujours** un filtre analogique *avant* le convertisseur, pour supprimer les fréquences trop hautes **avant** qu'elles ne soient échantillonnées. On l'appelle un *filtre anti-repliement*.
+
+**Retenez la leçon** : en numérique, on ne répare pas un repliement ; on l'empêche.
 """,
 )
 
@@ -2712,15 +3416,16 @@ version = "1.9.2+0"
 
 # ╔═╡ Cell order:
 # ╟─b8949a96-8d97-4048-8022-ab8fabf326a1
-# ╟─4309cf1d-2a7a-4a84-996b-ecc99d62dad1
-# ╠═df7fa000-70ce-462b-af19-fb9c4b022012
-# ╟─58d25489-0d99-4c33-ad22-5ffb2751c3c6
-# ╟─5010b40e-86c1-4ed1-b7ae-25086ad45205
-# ╠═04ac4af9-5789-4d0a-a958-1630d0a54299
-# ╠═5d64d5ac-ff4f-415a-85bb-c673da00e9a1
-# ╠═93534f3d-f9da-46c4-a9c3-d055530f3045
-# ╟─8f77bda0-25b0-44fb-b235-afb6c2e725ce
+# ╟─e04ac407-652c-4365-b6d0-ebbf73f487b8
+# ╟─a0000001-0000-4000-8000-000000000001
+# ╠═b0000002-0000-4000-8000-000000000001
 # ╟─83f8f109-50fa-4174-8fcd-6bd9d8ef2d65
+# ╠═b0000002-0000-4000-8000-000000000002
+# ╟─b0000002-0000-4000-8000-000000000003
+# ╠═b0000002-0000-4000-8000-000000000004
+# ╟─b0000002-0000-4000-8000-000000000005
+# ╟─b0000002-0000-4000-8000-000000000006
+# ╟─8f77bda0-25b0-44fb-b235-afb6c2e725ce
 # ╟─54e54a58-3fdf-43d8-a87a-22ff047a392e
 # ╟─83c1cbf7-e24d-4e9a-a309-c7b60e730344
 # ╠═44dbdbff-18a2-43ab-b8e5-399bf8fe9639
@@ -2728,37 +3433,89 @@ version = "1.9.2+0"
 # ╠═40490a0f-9a06-4283-9d3a-d2c96b6b14df
 # ╟─41155d3b-ba20-49ee-af03-babd4ce10c68
 # ╠═f18256be-d172-4f10-9c6b-662015f535e4
+# ╟─b0000002-0000-4000-8000-000000000007
 # ╟─b790ddf3-37ac-45d6-87aa-ebd06c829d82
 # ╠═02084ab9-305a-4317-9fad-a4acf8cc5cd3
 # ╟─4a11717b-4086-44f3-9a50-b531d51c6944
 # ╠═0ba2c1bc-aa82-4fbd-a704-034274349c4d
+# ╟─a0000001-0000-4000-8000-000000000002
+# ╠═04ac4af9-5789-4d0a-a958-1630d0a54299
+# ╠═5d64d5ac-ff4f-415a-85bb-c673da00e9a1
+# ╠═93534f3d-f9da-46c4-a9c3-d055530f3045
+# ╟─a0000001-0000-4000-8000-000000000003
 # ╟─ef156c25-cb7d-4cd3-8412-d9f5f2bc7a3b
-# ╟─4265ccd9-3bf2-4655-a0da-2d774baf32ac
+# ╠═4265ccd9-3bf2-4655-a0da-2d774baf32ac
+# ╟─a0000001-0000-4000-8000-000000000004
+# ╟─a0000001-0000-4000-8000-000000000005
+# ╟─a0000001-0000-4000-8000-000000000006
+# ╟─a0000001-0000-4000-8000-000000000010
+# ╟─a0000001-0000-4000-8000-000000000011
+# ╟─a0000001-0000-4000-8000-000000000012
+# ╟─a0000001-0000-4000-8000-000000000013
+# ╠═a0000001-0000-4000-8000-000000000014
+# ╟─a0000001-0000-4000-8000-000000000015
+# ╟─a0000001-0000-4000-8000-000000000016
+# ╟─a0000001-0000-4000-8000-000000000020
+# ╟─a0000001-0000-4000-8000-000000000021
+# ╟─a0000001-0000-4000-8000-000000000022
+# ╟─a0000001-0000-4000-8000-000000000030
 # ╟─c26a3bd3-cf79-426a-b439-2b29501cee4b
 # ╟─a315cbaf-a4b5-42ea-a0e0-f0b064b9995e
 # ╠═bb5eebce-e385-4c4f-b827-0ffcdead0799
+# ╟─a0000001-0000-4000-8000-000000000031
+# ╟─a0000001-0000-4000-8000-000000000032
+# ╟─a2359c44-3150-4b0a-8675-90d1627b5c07
+# ╟─a0000001-0000-4000-8000-000000000040
+# ╟─a0000001-0000-4000-8000-000000000041
 # ╟─2488c83e-5e54-4d47-80d2-6ef41ca7ac7f
+# ╟─3524f1bf-8e39-4d04-9dc3-e434e65db409
+# ╟─a0000001-0000-4000-8000-000000000050
+# ╟─a0000001-0000-4000-8000-000000000051
+# ╠═a0000001-0000-4000-8000-000000000052
+# ╟─a0000001-0000-4000-8000-000000000053
+# ╠═a0000001-0000-4000-8000-000000000054
+# ╟─a0000001-0000-4000-8000-000000000055
+# ╠═a0000001-0000-4000-8000-000000000056
+# ╟─a0000001-0000-4000-8000-000000000057
+# ╠═a0000001-0000-4000-8000-000000000058
+# ╟─a0000001-0000-4000-8000-000000000059
+# ╠═a0000001-0000-4000-8000-000000000060
+# ╟─a0000001-0000-4000-8000-000000000061
+# ╟─a0000001-0000-4000-8000-000000000062
+# ╠═a0000001-0000-4000-8000-000000000063
+# ╠═a0000001-0000-4000-8000-000000000064
+# ╟─a0000001-0000-4000-8000-000000000065
+# ╠═a0000001-0000-4000-8000-000000000066
+# ╟─a0000001-0000-4000-8000-000000000067
+# ╟─a0000001-0000-4000-8000-000000000068
+# ╟─a0000001-0000-4000-8000-000000000069
+# ╟─a0000001-0000-4000-8000-000000000070
 # ╟─279e5f5e-4fc6-475f-8dab-c5740a470b0e
+# ╟─a0000001-0000-4000-8000-000000000071
 # ╟─1dfad36a-05a5-4108-8c67-d4c866be89c0
+# ╟─a0000001-0000-4000-8000-000000000072
 # ╟─7cdf9587-af9f-4346-b619-ba8bdf6d6799
 # ╠═d4ac67de-9442-464c-be8b-e8ff468dd996
 # ╟─54ced290-6da4-4f24-a18a-e46ac116448c
+# ╟─a0000001-0000-4000-8000-000000000073
 # ╟─93cfa0b9-dbb6-4956-bd94-575fe233c9f4
-# ╠═3855c981-206d-46e6-8a9b-eda011769208
 # ╟─5dd93a6b-f355-4927-8f3d-a3522f43934f
+# ╠═3855c981-206d-46e6-8a9b-eda011769208
 # ╟─53045a43-9941-4b3f-a0be-d6de969ee124
 # ╠═8f9cccf1-ec8d-448d-a86f-3955f6c238d8
 # ╟─5edc270e-a7c6-4e44-97b0-7697adca16a2
 # ╠═e1c25e06-3259-4a56-b26a-60903e57f92b
 # ╟─13d00d91-dae3-451c-924a-6b120c0a605d
+# ╟─101663c2-acca-4eb7-858c-20a70c2103e9
+# ╠═ae1e22a7-b4af-4f83-8f28-97534d7e0c20
+# ╠═e7b74b94-bf5f-4455-9fc7-922ce7d4c284
+# ╟─eeafd828-82a7-449e-b083-f22eb0d07079
+# ╟─a0000001-0000-4000-8000-000000000074
 # ╟─802cbd16-2126-4d4f-aca2-df29024d5fdf
 # ╠═9fae43f1-61cd-43c6-b383-d9bbd4c2a1ac
 # ╠═31aca097-4a85-4d63-b114-6d1828648e87
-# ╠═e7b74b94-bf5f-4455-9fc7-922ce7d4c284
 # ╟─6b9a064c-1097-4754-af85-5dcaa435b893
-# ╟─101663c2-acca-4eb7-858c-20a70c2103e9
-# ╠═ae1e22a7-b4af-4f83-8f28-97534d7e0c20
-# ╟─eeafd828-82a7-449e-b083-f22eb0d07079
+# ╟─a0000001-0000-4000-8000-000000000075
 # ╟─66fd9f77-6c2a-418d-9650-39033396b584
 # ╠═0230ce41-bf49-4363-b344-3c475ef6474d
 # ╠═680c44ba-02b9-41d1-b85f-86f49a85ca7a
@@ -2769,12 +3526,13 @@ version = "1.9.2+0"
 # ╠═9500f893-7eb0-4f24-83eb-5a2240279062
 # ╟─976ac813-8f46-4912-a04a-ec586155867d
 # ╟─87dbf272-1d03-4f9e-b7e1-9b76197b0a83
-# ╟─44f73082-7cdb-47b9-bb86-f952ac7c4498
-# ╟─a2359c44-3150-4b0a-8675-90d1627b5c07
-# ╟─86368d24-c206-42dc-afdb-1e762b3ac14c
-# ╟─3524f1bf-8e39-4d04-9dc3-e434e65db409
-# ╟─f0eda0e0-0a52-403a-a73d-3a604cbe557c
+# ╟─a0000001-0000-4000-8000-000000000080
+# ╟─a0000001-0000-4000-8000-000000000081
+# ╠═a0000001-0000-4000-8000-000000000082
+# ╟─a0000001-0000-4000-8000-000000000083
+# ╟─a0000001-0000-4000-8000-000000000090
 # ╟─57373c5b-a34a-4e48-af42-27a0bd05a173
+# ╟─a0000001-0000-4000-8000-000000000091
 # ╟─d29773c7-a413-46a9-8c62-2f54d4de1730
 # ╟─b915e8c7-bc11-4f3f-88f0-a82dfe447643
 # ╟─49d078e2-d865-4f2f-9cfc-3c2d5a535088
@@ -2782,6 +3540,12 @@ version = "1.9.2+0"
 # ╟─56ff3957-0295-41fe-839f-12dae0fdd14f
 # ╟─4980c4ff-7da0-4747-b779-891569d604fd
 # ╟─5032f1f1-47a1-4ff3-b3fd-49d60e5e28a5
+# ╟─a0000001-0000-4000-8000-000000000100
+# ╟─a0000001-0000-4000-8000-000000000101
+# ╟─a0000001-0000-4000-8000-000000000102
+# ╠═a0000001-0000-4000-8000-000000000103
+# ╟─a0000001-0000-4000-8000-000000000104
+# ╟─a0000001-0000-4000-8000-000000000110
 # ╟─78026d88-7051-11ef-29f0-67f85176a548
 # ╟─dc4c4d53-feb2-40ce-b20e-3386aab2a45f
 # ╟─5f9eeb76-0a9d-40ad-858e-4ab67af46427
@@ -2796,7 +3560,6 @@ version = "1.9.2+0"
 # ╠═8676e10b-6c41-4e8f-a56b-ca548b9690dd
 # ╠═faf71e8e-7ba0-44fa-800d-949a42fbacec
 # ╠═fd5ef1e7-bc1e-4382-b5c6-e960ecb3c893
-# ╠═f952619b-194a-4088-a2bb-b8210392417a
 # ╟─7c96fc08-da4a-48e6-a43e-cd24c9aaef42
 # ╠═3739ddf4-ecb8-49d5-a70c-aa347c6fb17d
 # ╠═ecf827b8-6a01-4e3b-9856-451239a7b175
@@ -2812,6 +3575,7 @@ version = "1.9.2+0"
 # ╟─f53db6db-d9f9-4371-a551-e3bfc2d6b162
 # ╟─bcf5ecbc-ccb6-48ce-9146-55b641f770f2
 # ╟─43c13895-a651-4e61-8fda-abdde42718da
+# ╟─a0000001-0000-4000-8000-000000000111
 # ╟─e965ef01-1fb1-4479-941d-68404ebaf735
 # ╟─59130f1a-4fcd-4ae1-9ecf-1818dfc07612
 # ╠═583c3b75-71cf-48f6-b93d-2201c6c7d520
