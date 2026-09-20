@@ -48,13 +48,13 @@ md"""
 md"""
 ### Un son pur : le cosinus
 
-Avant de parler de fréquences, fixons la brique de base. Le son le plus simple qui soit — une note pure, sans timbre ni harmonique — s'écrit :
+Avant de parler de fréquences, fixons la brique de base. Le son le plus simple qui soit — une note pure qui s'écrit :
 
 ```math
 x(t) = \cos(2\pi f t)
 ```
 
-où ``f`` est la **fréquence** en Hertz (Hz) et ``t`` le **temps** en secondes.
+où ``f`` est la **fréquence** en Hertz (Hz $= s^{-1}$) et ``t`` le **temps** en secondes.
 
 **D'où sort ce ``2\pi`` ?** Le cosinus accomplit un tour complet quand son argument avance de ``2\pi`` : c'est sa période naturelle. En plaçant ``2\pi f`` devant le ``t``, on règle la vitesse à laquelle cet argument défile.
 
@@ -72,7 +72,7 @@ x(t) = \cos(2\pi \cdot 5 \cdot t)
 
 L'argument vaut exactement ``2\pi`` : **une oscillation complète** vient de se produire, en un cinquième de seconde. Il y en aura donc ``5`` en une seconde — et c'est précisément ce que veut dire « 5 Hz ».
 
-Deux quantités en découlent, qu'on retrouvera partout dans ce cours :
+Deux quantités en découlent :
 
 - la **période** ``T = \dfrac{1}{f}``, la durée d'une oscillation — ici ``T = 0.2`` s ;
 - la **pulsation** ``\omega = 2\pi f``, en radians par seconde, qui permet l'écriture compacte
@@ -126,12 +126,12 @@ La solution s'appelle l'**échantillonnage** : on enregistre la valeur du signal
 
 Un CD audio, par exemple, prend **44 100 points par seconde**.
 
-Un son stocké dans un ordinateur, c'est donc simplement **une liste finie de nombres** — plus la convention qui dit à quelle cadence ils ont été relevés. C'est tout ce dont nous aurons besoin.
+Un son stocké dans un ordinateur, c'est donc simplement **une liste finie de nombres**, accompagnés de la convention qui dit à quelle cadence ils ont été relevés.
 """
 
 # ╔═╡ b0000002-0000-4000-8000-000000000002
 md"""
-Le graphe ci-dessous montre un cosinus à **5 Hz** (en bleu, la « vraie » onde continue) et les points effectivement retenus par l'échantillonnage (en orange). Le curseur règle ``f_e``. NB: 5 Hz veut dire 5 oscillations complètes par seconde.
+Le graphe ci-dessous montre un cosinus à **5 Hz** (en bleu, la « vraie » onde continue) et les points effectivement retenus par l'échantillonnage (en orange). Le curseur règle ``f_e``. 
 
 **À essayer** : faites varier ``f_e`` et observez le compromis. Plus ``f_e`` est grand, plus les points collent à la courbe — mais plus il y a de nombres à stocker. Plus ``f_e`` est petit, plus le fichier est léger — mais moins il reste de détail.
 """
@@ -169,7 +169,7 @@ end
 
 # ╔═╡ b0000002-0000-4000-8000-000000000006
 md"""
-Fixons maintenant les réglages qui serviront à fabriquer nos deux notes. Les deux curseurs ci-dessous définissent la fréquence d'échantillonnage et le nombre de points ; tout le reste — la durée du signal, l'axe des temps — en découle.
+Fixons maintenant les réglages qui serviront à fabriquer deux notes. Les deux curseurs ci-dessous définissent la fréquence d'échantillonnage et le nombre de points ; tout le reste — la durée du signal, l'axe des temps — en découle.
 """
 
 # ╔═╡ 8f77bda0-25b0-44fb-b235-afb6c2e725ce
@@ -179,7 +179,7 @@ md"#### Signal temporel"
 md"Fréquence d'échantillonnage = $(@bind échantillonnage Slider((2).^(4:13), default=1024, show_value = true))"
 
 # ╔═╡ 83c1cbf7-e24d-4e9a-a309-c7b60e730344
-md"Ça correspond à une distance en seconde entre deux échantillons de:"
+md"Ça correspond à un écart entre deux échantillons de: (mesuré en secondes)"
 
 # ╔═╡ 44dbdbff-18a2-43ab-b8e5-399bf8fe9639
 Δt = 1 / échantillonnage
@@ -206,6 +206,7 @@ md"Le *la* est une note de musique de [fréquence 440 Hz](https://fr.wikipedia.o
 
 # ╔═╡ 02084ab9-305a-4317-9fad-a4acf8cc5cd3
 la = cispi.(2*440*temps)
+#More accurate method for cis(pi*x)
 
 # ╔═╡ 4a11717b-4086-44f3-9a50-b531d51c6944
 md"La note de musique *ré* a une [fréquence de 293.7 Hz](https://fr.wikipedia.org/wiki/Musique_occidentale)"
@@ -241,7 +242,7 @@ md"""
 
 	Le plan tient en trois mots — **aller, travailler, revenir** :
 
-	1. **Aller** (§1) — passer du temps vers les fréquences. On va construire la transformation nous-mêmes.
+	1. **Aller** (§1) — passer du temps domaine temporel vers les fréquences. On va construire la transformation.
 	2. **Travailler** (§2) — dans le monde des fréquences, des problèmes durs deviennent faciles : nettoyer un son, flouter une image, multiplier des polynômes.
 	3. **Revenir** (§3) — retourner vers un signal temporel sans rien perdre… et comprendre les pièges quand on échantillonne mal.
 
@@ -406,7 +407,8 @@ md"#### Signal fréquentiel"
 
 # ╔═╡ bb5eebce-e385-4c4f-b827-0ffcdead0799
 let
-	f = range(0, stop = échantillonnage - 1/temps_total, length=length(la))
+	# f = range(0, stop = échantillonnage - 1/temps_total, length=length(la))
+	f = (0:length(la)-1) .* (échantillonnage / length(la))
 	sel = Dict(
 		"abs" => abs,
 		"real" => real,
@@ -459,7 +461,7 @@ Ce sont les **deux faces du même objet** :
 | un Dirac ``\delta(\xi - f_0)`` | **un pic** sur une case du spectre |
 | durée infinie | durée finie ``N\Delta t`` |
 
-Les exercices servent à **comprendre le mécanisme** sur des cas simples ; le notebook sert à **l'appliquer** à de vrais signaux. Quand vous calculerez la transformée de ``e^{-at}u(t)`` à la main, vous ferez exactement ce que `fft` fait ici en une microseconde.
+Les exercices servent à **comprendre le mécanisme** sur des cas simples ; le notebook sert à **l'appliquer** à de vrais signaux. Quand vous calculerez la transformée de ``e^{-at}u(t)`` à la main, vous ferez exactement ce que `fft` fait ici numériquement.
 """
 
 # ╔═╡ a0000001-0000-4000-8000-000000000041
@@ -630,7 +632,7 @@ md"""
 
 # ╔═╡ a0000001-0000-4000-8000-000000000055
 md"""
-**L'accord pollué** — ce qu'on a réellement enregistré. Le sifflement est franchement désagréable :
+**L'accord pollué** — ce qu'on a réellement enregistré. Le sifflement est désagréable :
 """
 
 # ╔═╡ a0000001-0000-4000-8000-000000000057
@@ -667,7 +669,7 @@ let
 		title = "Dans les fréquences : le sifflement est isolé",
 		size = (680, 300))
 	vline!([3000], color = :black, linestyle = :dash, linewidth = 1,
-		label = "le parasite, bien à part")
+		label = "le bruit parasite")
 end
 
 # ╔═╡ a0000001-0000-4000-8000-000000000061
@@ -747,7 +749,7 @@ md"""
 ## 2.2 La convolution devient une multiplication
 
 Le filtre du §2.1 a un nom dans le domaine temporel : c'est une **convolution**. C'est l'opération qui décrit ce que fait tout système physique à un signal — un haut-parleur, une salle qui résonne, une lentille photo légèrement floue, un circuit électronique.
- ##TODO## MORE INTUITION ABOUT CONVOLUTION
+
 Pour chaque point de sortie, on fait une **somme de produits décalés**.
 """
 
@@ -1175,9 +1177,7 @@ let
 	# audible. D'où les noms locaux `fs_audio` / `t_audio`.
 	fs_audio = 2^13          # 8192 Hz
 	durée = 2                # secondes
-	# `step` (et non `stop`) : c'est Δt qui fait foi, la durée en découle.
-	# t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée) seems bugged
-	t_audio = range(1/fs_audio, stop=2, length=fs_audio)
+	t_audio = range(start=1/fs_audio, stop=2, length=fs_audio)
 	son_la = cispi.(2*440*t_audio)
 	md"""
 	#### la
@@ -1189,9 +1189,7 @@ end
 let
 	fs_audio = 2^13
 	durée = 2
-	# t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
-		t_audio = range(1/fs_audio, stop=2, length=fs_audio)
-
+	t_audio = range(1/fs_audio, stop=2, length=fs_audio)
 	son_ré = cispi.(2*293.7*t_audio)
 	md"""
 	#### ré
@@ -1203,8 +1201,7 @@ end
 let
 	fs_audio = 2^13
 	durée = 2
-	# t_audio = range(0, step = 1/fs_audio, length = fs_audio * durée)
-		t_audio = range(1/fs_audio, stop=2, length=fs_audio)
+	t_audio = range(1/fs_audio, stop=2, length=fs_audio)
 	son_la = cispi.(2*440*t_audio)
 	son_ré = cispi.(2*293.7*t_audio)
 	md"""
@@ -1394,7 +1391,7 @@ qa(
 	md"""
 Non, on voit que la courbe rouge est périodique et qu'elle a une forme plus compliquée que les deux autres, mais **rien dans ce graphe n'indique « 440 Hz et 293.7 Hz »**.
 
-L'information y est pourtant entièrement : la courbe rouge *est* la somme des deux autres, on n'a rien perdu. Elle est simplement **encodée d'une façon que l'œil ne sait pas lire**.
+L'information y est pourtant : la courbe rouge est la somme des deux autres, on n'a rien perdu. Elle est simplement **encodée d'une façon que l'œil ne sait pas lire**.
 """,
 )
 
@@ -1402,7 +1399,7 @@ L'information y est pourtant entièrement : la courbe rouge *est* la somme des d
 qa(
 	html"Qu'observez-vous en balayant le curseur ?",
 	md"""
-La somme reste **proche de zéro** presque partout — le graphe du produit oscille autour de l'axe et se compense.
+La somme du produit calculé entrée par entrée reste **proche de zéro** presque partout — le graphe du produit oscille autour de l'axe et se compense.
 
 Mais à **440 Hz** et à **294 Hz**, elle explose d'un coup : le produit devient franchement positif sur toute la durée (regardez le troisième graphe, il passe au-dessus de l'axe), et la somme monte à plusieurs centaines.
 
@@ -1411,6 +1408,8 @@ Mais à **440 Hz** et à **294 Hz**, elle explose d'un coup : le produit devient
 )
 
 # ╔═╡ a0000001-0000-4000-8000-000000000032
+# ╠═╡ disabled = true
+#=╠═╡
 qa(
 	html"Et si on avait pris des <b>cosinus</b> plutôt que des exponentielles complexes ?",
 	md"""
@@ -1426,6 +1425,7 @@ Ici nos notes sont construites avec `cispi`, c'est-à-dire directement des expon
 **Retenez cette symétrie** : elle a l'air d'un détail cosmétique, mais c'est elle qui expliquera le facteur 2 du théorème de Shannon au §3.3.
 """,
 )
+  ╠═╡ =#
 
 # ╔═╡ 3524f1bf-8e39-4d04-9dc3-e434e65db409
 qa(
@@ -3618,7 +3618,7 @@ version = "1.9.2+0"
 # ╟─8f77bda0-25b0-44fb-b235-afb6c2e725ce
 # ╟─54e54a58-3fdf-43d8-a87a-22ff047a392e
 # ╟─83c1cbf7-e24d-4e9a-a309-c7b60e730344
-# ╠═44dbdbff-18a2-43ab-b8e5-399bf8fe9639
+# ╟─44dbdbff-18a2-43ab-b8e5-399bf8fe9639
 # ╟─590c895f-d7d4-467a-90cd-90bfba59c2b5
 # ╠═40490a0f-9a06-4283-9d3a-d2c96b6b14df
 # ╟─41155d3b-ba20-49ee-af03-babd4ce10c68
