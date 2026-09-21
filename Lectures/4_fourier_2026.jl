@@ -54,7 +54,7 @@ Avant de parler de fréquences, fixons la brique de base. Le son le plus simple 
 x(t) = \cos(2\pi f t)
 ```
 
-où ``f`` est la **fréquence** en Hertz (Hz $= s^{-1}$) et ``t`` le **temps** en secondes.
+où ``f`` est la **fréquence** en Hertz (Hz $= s^{-1}$) et ``t`` le **temps** en secondes. La fréquence est le **nombre d'oscillations par seconde**.
 
 **D'où sort ce ``2\pi`` ?** Le cosinus accomplit un tour complet quand son argument avance de ``2\pi`` : c'est sa période naturelle. En plaçant ``2\pi f`` devant le ``t``, on règle la vitesse à laquelle cet argument défile.
 
@@ -176,13 +176,16 @@ Fixons maintenant les réglages qui serviront à fabriquer deux notes. Les deux 
 md"#### Signal temporel"
 
 # ╔═╡ 54e54a58-3fdf-43d8-a87a-22ff047a392e
-md"Fréquence d'échantillonnage = $(@bind échantillonnage Slider((2).^(4:13), default=1024, show_value = true))"
+md"Fréquence d'échantillonnage = $(@bind échantillonnage Slider((2).^(4:13), default=8192, show_value = true))"
+
+# ╔═╡ 22e383c7-7f92-46da-8dc4-a2eeed7186cb
+fe = échantillonnage
 
 # ╔═╡ 83c1cbf7-e24d-4e9a-a309-c7b60e730344
 md"Ça correspond à un écart entre deux échantillons de: (mesuré en secondes)"
 
 # ╔═╡ 44dbdbff-18a2-43ab-b8e5-399bf8fe9639
-Δt = 1 / échantillonnage
+Δt = 1 / fe
 
 # ╔═╡ 590c895f-d7d4-467a-90cd-90bfba59c2b5
 md"nombre\_échantillons = $(@bind nombre_échantillons Slider((2).^(4:13), default=1024, show_value = true))"
@@ -191,7 +194,7 @@ md"nombre\_échantillons = $(@bind nombre_échantillons Slider((2).^(4:13), defa
 temps_total = nombre_échantillons * Δt
 
 # ╔═╡ 41155d3b-ba20-49ee-af03-babd4ce10c68
-md"En prenant $(nombre_échantillons), le signal dure $(temps_total) secondes. Comme ces nombres sont équidistants (distance de `Δt` secondes entre eux), on peut représenter cette suite de façon compact comme suit:"
+md"En prenant $(nombre_échantillons) échantillons, le signal dure $(temps_total) secondes. Comme ces nombres sont équidistants (distance de `Δt` secondes entre eux), on peut représenter cette suite de façon compact comme suit:"
 
 # ╔═╡ f18256be-d172-4f10-9c6b-662015f535e4
 temps = range(Δt, stop=temps_total, length=nombre_échantillons)
@@ -1389,7 +1392,7 @@ Retenez pour l'instant la chose essentielle : *un son dans un ordinateur, c'est 
 qa(
 	html"En regardant <b>uniquement</b> la courbe rouge (la + ré), sauriez-vous dire de quelles notes elle est faite ?",
 	md"""
-Non, on voit que la courbe rouge est périodique et qu'elle a une forme plus compliquée que les deux autres, mais **rien dans ce graphe n'indique « 440 Hz et 293.7 Hz »**.
+Non, on voit que la courbe rouge est périodique et qu'elle a une forme plus compliquée que les deux autres. On pourrait calculer la période et la fréquence de la courbe verte, mais **rien cela ne permet pas de retrouver « 440 Hz et 293.7 Hz »**.
 
 L'information y est pourtant : la courbe rouge est la somme des deux autres, on n'a rien perdu. Elle est simplement **encodée d'une façon que l'œil ne sait pas lire**.
 """,
@@ -3616,9 +3619,10 @@ version = "1.9.2+0"
 # ╟─b0000002-0000-4000-8000-000000000005
 # ╟─b0000002-0000-4000-8000-000000000006
 # ╟─8f77bda0-25b0-44fb-b235-afb6c2e725ce
-# ╟─54e54a58-3fdf-43d8-a87a-22ff047a392e
+# ╠═54e54a58-3fdf-43d8-a87a-22ff047a392e
+# ╠═22e383c7-7f92-46da-8dc4-a2eeed7186cb
 # ╟─83c1cbf7-e24d-4e9a-a309-c7b60e730344
-# ╟─44dbdbff-18a2-43ab-b8e5-399bf8fe9639
+# ╠═44dbdbff-18a2-43ab-b8e5-399bf8fe9639
 # ╟─590c895f-d7d4-467a-90cd-90bfba59c2b5
 # ╠═40490a0f-9a06-4283-9d3a-d2c96b6b14df
 # ╟─41155d3b-ba20-49ee-af03-babd4ce10c68
