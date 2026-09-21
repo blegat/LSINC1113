@@ -494,7 +494,7 @@ Aucune information n'est créée ni perdue : on change de **base** dans un espac
 | Intervalle couvert | ``[0,\ N\Delta t)`` ``[\mathrm{s}]`` | ``[0,\ f_e)`` ``[\mathrm{Hz}]`` |
 | Largeur | ``N\Delta t`` (la durée) | ``N\Delta\xi = f_e`` |
 
-Les lignes « pas » et « largeur » sont **croisées**, et c'est la source de toutes les confusions :
+Les lignes « pas » et « largeur » sont **croisées** :
 
 ```math
 \underbrace{\Delta t}_{\text{pas en temps}} \ \longrightarrow\ \underbrace{f_e = 1/\Delta t}_{\textbf{largeur en fréquence}},
@@ -503,6 +503,14 @@ Les lignes « pas » et « largeur » sont **croisées**, et c'est la source de 
 ```
 
 En une phrase : **la finesse d'un domaine fixe l'étendue de l'autre.** Échantillonner plus finement (petit ``\Delta t``) élargit la bande de fréquences accessible ; enregistrer plus longtemps (grand ``N\Delta t``) affine la résolution. Ce sont deux réglages **indépendants**.
+"""
+
+# ╔═╡ c719face-cb7b-4511-9d2c-6972d31dd931
+md"""
+!!! note "A retenir"
+	Avec $f_e$ échantillons par seconde en temporel, on peut mesurer des fréquences entre $0$ et $f_e$. Donc, pour mesurer des hautes fréquences dans le signal (des oscillations rapides), il faut augmenter la fréquence d'échantillonage (logique). Autrement dit, **l'inverse du pas en temporel donne la largeur du domaine en fréquences**.
+
+	Cette observation est **symmétrique**. L'écart entre deux échantillons en fréquences est $\Delta_\xi = \frac{1}{N\Delta t},$ dont l'inverse $N\Delta t$ donne la durée du signal en temporel. Donc, pour augmenter la précision pour détecter des fréquences proches, il faut augmenter la durée du signal.
 """
 
 # ╔═╡ d0000004-0000-4000-8000-000000000001
@@ -853,9 +861,6 @@ md"La convolution est obtenue avec `reflect`."
 
 # ╔═╡ e1c25e06-3259-4a56-b26a-60903e57f92b
 imfilter(mandrill, reflect(Kernel.gaussian(d)))
-
-# ╔═╡ 9786c531-8afd-4e3b-84cf-52c3a3c1ff7e
-md""" **TODO** what is the cross correlation really and what does the function reflect do?"""
 
 # ╔═╡ 101663c2-acca-4eb7-858c-20a70c2103e9
 md"##### Autre kernels"
@@ -1406,7 +1411,7 @@ La somme du produit calculé entrée par entrée reste **proche de zéro** presq
 
 Mais à **440 Hz** et à **294 Hz**, elle explose d'un coup : le produit devient franchement positif sur toute la durée (regardez le troisième graphe, il passe au-dessus de l'axe), et la somme monte à plusieurs centaines.
 
-**La machine fonctionne.** elle mesure juste une ressemblance, fréquence par fréquence. 
+**La transformée de Fourier** mesure une ressemblance, fréquence par fréquence. 
 """,
 )
 
@@ -3641,14 +3646,14 @@ version = "1.9.2+0"
 # ╠═4265ccd9-3bf2-4655-a0da-2d774baf32ac
 # ╟─a0000001-0000-4000-8000-000000000004
 # ╟─a0000001-0000-4000-8000-000000000005
-# ╟─a0000001-0000-4000-8000-000000000006
+# ╠═a0000001-0000-4000-8000-000000000006
 # ╟─a0000001-0000-4000-8000-000000000010
 # ╟─a0000001-0000-4000-8000-000000000011
 # ╟─a0000001-0000-4000-8000-000000000012
 # ╟─a0000001-0000-4000-8000-000000000013
 # ╟─a0000001-0000-4000-8000-000000000014
 # ╟─a0000001-0000-4000-8000-000000000015
-# ╟─a0000001-0000-4000-8000-000000000016
+# ╠═a0000001-0000-4000-8000-000000000016
 # ╟─a0000001-0000-4000-8000-000000000020
 # ╟─a0000001-0000-4000-8000-000000000021
 # ╟─a0000001-0000-4000-8000-000000000022
@@ -3663,11 +3668,12 @@ version = "1.9.2+0"
 # ╟─a0000001-0000-4000-8000-000000000041
 # ╟─3524f1bf-8e39-4d04-9dc3-e434e65db409
 # ╟─4f47f18c-3c4e-4443-bf64-68ea38377dbb
+# ╟─c719face-cb7b-4511-9d2c-6972d31dd931
 # ╟─d0000004-0000-4000-8000-000000000001
 # ╟─d0000004-0000-4000-8000-000000000002
 # ╟─d0000004-0000-4000-8000-000000000003
 # ╟─d0000004-0000-4000-8000-000000000004
-# ╠═d0000004-0000-4000-8000-000000000005
+# ╟─d0000004-0000-4000-8000-000000000005
 # ╟─d0000004-0000-4000-8000-000000000006
 # ╟─d0000004-0000-4000-8000-000000000007
 # ╠═d0000004-0000-4000-8000-000000000008
@@ -3708,7 +3714,6 @@ version = "1.9.2+0"
 # ╠═8f9cccf1-ec8d-448d-a86f-3955f6c238d8
 # ╟─5edc270e-a7c6-4e44-97b0-7697adca16a2
 # ╠═e1c25e06-3259-4a56-b26a-60903e57f92b
-# ╟─9786c531-8afd-4e3b-84cf-52c3a3c1ff7e
 # ╟─13d00d91-dae3-451c-924a-6b120c0a605d
 # ╟─101663c2-acca-4eb7-858c-20a70c2103e9
 # ╠═ae1e22a7-b4af-4f83-8f28-97534d7e0c20
