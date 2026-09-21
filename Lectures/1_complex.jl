@@ -385,17 +385,11 @@ E = eigen([
 # ╔═╡ 459a9c27-2ecc-4a1c-a174-6a8598599726
 E.values[1]
 
-# ╔═╡ aa0f4c26-5857-4f47-87e5-42465f7780bd
-
-
 # ╔═╡ 42ebd795-92d6-4cda-8a5d-2314ed8d3520
 E.values[2]
 
 # ╔═╡ 919ef117-b4db-4910-9803-5e3704ca8585
 E.values[3]
-
-# ╔═╡ 3527bd3d-cb5f-413d-a3a1-423190d26cc6
-
 
 # ╔═╡ ae09d0ab-7db9-4e31-b010-111a8b2f895e
 md"On trouve la première racine"
