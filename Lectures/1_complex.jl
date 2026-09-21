@@ -106,8 +106,7 @@ md"# Résoudre des équations polynomiales"
 md"""
 ### Les nombres complexes nous ont été imposés par des équations *réelles*
 
-**Exemple illustratif**: Considérons l'équation cubique réelle
-
+Considérons l'équation cubique réelle
 ```math
 x^3 = 15x + 4 ,
 ```

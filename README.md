@@ -15,17 +15,17 @@ See the README in each subfolder for more details and troubleshooting:
 
 | Week  |   Monday   |   Lecture          |   Exercise              |  Project  |
 |-------|------------|--------------------|-------------------------|-----------|
-| S1    | 15/09/2025 | Complexes          | Complexes               | 🚀 roots  |
-| S2    | 22/09/2025 | Th. Nombres        | Th. Nomb. (**Lecture**) | 🏁 roots  |
-| S3    | 29/09/2025 | Th. nombres        | Recurrence              |           |
-| S4    | 06/10/2025 | Crypto             | Th. nombres             |           |
-| S5    | 13/10/2025 | Graphes            | Th. nombres             | 🚀 crypto |
-| S6    | 20/10/2025 | Graphes            | Spanning                |           |
-|       | 27/10/2025 | 🎃                 |                         |           |
-| S7    | 03/11/2025 | DAG (**Exercise**) | Shortest Path           | 🏁 crypto |
-| S8    | 10/11/2025 | Max-Flow (**Exercise**) |                         | 🚀 graph  |
-| S9    | 17/11/2025 |                    | Graphes                 | 🏁 graph  |
-| S10   | 24/11/2025 | Fourier            | Fourier                 | 🚀 FFTB   |
-| S11   | 01/12/2025 | Fourier            | Fourier                 |           |
-| S12   | 08/12/2025 | Gradient           | Gradient                |           |
-| S13   | 15/12/2025 | Intégrale          | Intégrale               | 🏁 FFTB   |
+| S1    | 14/09/2026 | Complexes          | Complexes               | 🚀 roots  |
+| S2    | 21/09/2026 | Fourier            | Fourier                 | 🏁 roots  |
+| S3    | 28/09/2026 | Fourier            | Fourier                 | 🚀 FFTB   |
+| S4    | 05/10/2026 | Gradient           | Gradient                |           |
+| S5    | 12/10/2026 | Intégrale          | Intégrale               | 🏁 FFTB   |
+| S6    | 19/10/2026 | Intégrale/Graphes  | Graphes/Spanning        | 🚀 graph  |
+|       | 26/10/2026 | 🎃                 |                         |           |
+| S7    | 02/11/2026 | Graphes            | Shortest Path           |           |
+| S8    | 09/11/2026 | Graphes            | DAG                     |           |
+| S9    | 16/11/2026 | Graphes            |  Max-Flow               | 🏁 graph  |
+| S10   | 23/11/2026 | Th. Nombres        | Th. Nomb.               | 🚀 crypto |
+| S11   | 30/11/2026 | Th. nombres        | Recurrence              |           |
+| S12   | 07/12/2026 | Crypto             | Th. nombres             |           |
+| S13   | 14/12/2026 |                    | Th. nombres             | 🏁 crypto |
