@@ -410,7 +410,6 @@ md"#### Signal fréquentiel"
 
 # ╔═╡ bb5eebce-e385-4c4f-b827-0ffcdead0799
 let
-	# f = range(0, stop = échantillonnage - 1/temps_total, length=length(la))
 	f = (0:length(la)-1) .* (échantillonnage / length(la))
 	sel = Dict(
 		"abs" => abs,
@@ -428,6 +427,26 @@ Voilà le résultat qu'on cherchait depuis le début du cours. Le signal `la + r
 
 Ce que l'œil ne savait pas lire sur la courbe temporelle se lit maintenant d'un coup d'œil.
 """
+
+# ╔═╡ a0000001-0000-4000-8000-000000000032
+# ╠═╡ disabled = true
+#=╠═╡
+qa(
+	html"Et si on avait pris des <b>cosinus</b> plutôt que des exponentielles complexes ?",
+	md"""
+On verrait **deux fois plus de pics**. C'est une conséquence de la formule d'Euler :
+```math
+\cos(2\pi f t) = \tfrac{1}{2}\left(e^{i 2\pi f t} + e^{-i 2\pi f t}\right)
+```
+
+Un cosinus réel n'est pas *une* oscillation pure, mais la **somme de deux** exponentielles complexes : l'une à ``+f``, l'autre à ``-f``. Son spectre montre donc deux pics, chacun avec la moitié de l'amplitude.
+
+Ici nos notes sont construites avec `cispi`, c'est-à-dire directement des exponentielles complexes ``e^{i 2\pi f t}`` : chacune n'a donc **qu'un seul** pic. C'est plus propre pour une première lecture — mais dès qu'on travaillera sur du son réel (§2.1), les spectres seront **symétriques**.
+
+**Retenez cette symétrie** : elle a l'air d'un détail cosmétique, mais c'est elle qui expliquera le facteur 2 du théorème de Shannon au §3.3.
+""",
+)
+  ╠═╡ =#
 
 # ╔═╡ a2359c44-3150-4b0a-8675-90d1627b5c07
 md"""
@@ -911,6 +930,9 @@ md"""
 Dernier exemple, et le plus inattendu — il n'y a ni son ni image ici, juste de l'algèbre.
 
 Quand on multiplie deux polynômes, les coefficients du résultat sont obtenus par… une **convolution** des coefficients de départ. Chaque coefficient du produit est une somme de produits croisés : exactement la formule du §2.2.
+
+En effet, soit $p(x) = a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n$ et $q(x) = b_0 + b_1 x + b_2 x_2 + \dots + b_n x^n$, on a 
+$$c_k = \sum_{i} a_i b_{k-i}$$
 
 Donc le même truc s'applique : ``\mathcal{F}``, multiplication terme à terme, ``\mathcal{F}^{-1}``. On passe de ``n^2`` à ``n\log n``.
 """
@@ -1414,26 +1436,6 @@ Mais à **440 Hz** et à **294 Hz**, elle explose d'un coup : le produit devient
 **La transformée de Fourier** mesure une ressemblance, fréquence par fréquence. 
 """,
 )
-
-# ╔═╡ a0000001-0000-4000-8000-000000000032
-# ╠═╡ disabled = true
-#=╠═╡
-qa(
-	html"Et si on avait pris des <b>cosinus</b> plutôt que des exponentielles complexes ?",
-	md"""
-On verrait **deux fois plus de pics**. C'est une conséquence de la formule d'Euler :
-```math
-\cos(2\pi f t) = \tfrac{1}{2}\left(e^{i 2\pi f t} + e^{-i 2\pi f t}\right)
-```
-
-Un cosinus réel n'est pas *une* oscillation pure, mais la **somme de deux** exponentielles complexes : l'une à ``+f``, l'autre à ``-f``. Son spectre montre donc deux pics, chacun avec la moitié de l'amplitude.
-
-Ici nos notes sont construites avec `cispi`, c'est-à-dire directement des exponentielles complexes ``e^{i 2\pi f t}`` : chacune n'a donc **qu'un seul** pic. C'est plus propre pour une première lecture — mais dès qu'on travaillera sur du son réel (§2.1), les spectres seront **symétriques**.
-
-**Retenez cette symétrie** : elle a l'air d'un détail cosmétique, mais c'est elle qui expliquera le facteur 2 du théorème de Shannon au §3.3.
-""",
-)
-  ╠═╡ =#
 
 # ╔═╡ 3524f1bf-8e39-4d04-9dc3-e434e65db409
 qa(
@@ -3616,7 +3618,7 @@ version = "1.9.2+0"
 # ╟─c0000003-0000-4000-8000-000000000001
 # ╟─c0000003-0000-4000-8000-000000000002
 # ╟─c0000003-0000-4000-8000-000000000003
-# ╟─c0000003-0000-4000-8000-000000000004
+# ╠═c0000003-0000-4000-8000-000000000004
 # ╟─b0000002-0000-4000-8000-000000000001
 # ╟─b0000002-0000-4000-8000-000000000002
 # ╟─b0000002-0000-4000-8000-000000000003
@@ -3646,14 +3648,14 @@ version = "1.9.2+0"
 # ╠═4265ccd9-3bf2-4655-a0da-2d774baf32ac
 # ╟─a0000001-0000-4000-8000-000000000004
 # ╟─a0000001-0000-4000-8000-000000000005
-# ╠═a0000001-0000-4000-8000-000000000006
+# ╟─a0000001-0000-4000-8000-000000000006
 # ╟─a0000001-0000-4000-8000-000000000010
 # ╟─a0000001-0000-4000-8000-000000000011
 # ╟─a0000001-0000-4000-8000-000000000012
 # ╟─a0000001-0000-4000-8000-000000000013
-# ╟─a0000001-0000-4000-8000-000000000014
+# ╠═a0000001-0000-4000-8000-000000000014
 # ╟─a0000001-0000-4000-8000-000000000015
-# ╠═a0000001-0000-4000-8000-000000000016
+# ╟─a0000001-0000-4000-8000-000000000016
 # ╟─a0000001-0000-4000-8000-000000000020
 # ╟─a0000001-0000-4000-8000-000000000021
 # ╟─a0000001-0000-4000-8000-000000000022
@@ -3723,7 +3725,7 @@ version = "1.9.2+0"
 # ╟─802cbd16-2126-4d4f-aca2-df29024d5fdf
 # ╠═9fae43f1-61cd-43c6-b383-d9bbd4c2a1ac
 # ╠═31aca097-4a85-4d63-b114-6d1828648e87
-# ╟─6b9a064c-1097-4754-af85-5dcaa435b893
+# ╠═6b9a064c-1097-4754-af85-5dcaa435b893
 # ╟─a0000001-0000-4000-8000-000000000075
 # ╟─66fd9f77-6c2a-418d-9650-39033396b584
 # ╠═0230ce41-bf49-4363-b344-3c475ef6474d
