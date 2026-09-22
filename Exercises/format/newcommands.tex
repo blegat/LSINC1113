@@ -34,9 +34,16 @@
 % ==  Inner commands  ==========================================
 % ==  For exercices, solutions, titles of the sessions... ======
 
-% Fomatting titles for sessions associated with a counter
+% Number sessions in input order; corrections follow their session.
 \newcounter{session}
-\newcommand{\session}[1]{{
+\newcommand{\session}[1]{%
+    \refstepcounter{session}%
+    \sessiontitle{TP\thesession{} - #1}%
+}
+\newcommand{\sessioncorrection}[1]{%
+    \sessiontitle{Correction TP\thesession{} - #1}%
+}
+\newcommand{\sessiontitle}[1]{{
     \newpage
     \begin{center}
         \sf \Large \centering

@@ -80,25 +80,29 @@
     
 % -- Fin des commandes nécessaires au document ! ---------
 
+\renewcommand{\thepart}{\arabic{part}}
+
 \begin{document}
 \input{format/newcommands.tex}
 
 % Les exercices qui formeront un syllabus
-\part*{Partie 1 - Nombres complexes}
+\part{Nombres complexes}
 \input{2025/tp1}
 \input{2025/tp1_corr}
 
-\part*{Partie 2 - Principe de récurrence et ordre de grandeur}
-\input{2025/tp2}
-\input{2025/tp2_corr}
+\part{Transformée de Fourier}
+\input{2025/tp9}
+\input{2025/tp9_corr}
+\input{2025/tp10}
+\input{2025/tp10_corr}
 
-\part*{Partie 3 - Théorie des nombres}
-\input{2025/tp3}
-\input{2025/tp3_corr}
-\input{2025/tp4}
-\input{2025/tp4_corr}
+\part{Fonction à deux variables}
+\input{2025/tp11}
+\input{2025/tp11_corr}
+\input{2025/tp12}
+\input{2025/tp12_corr}
 
-\part*{Partie 4 - Graphes}
+\part{Graphes}
 \input{2025/tp5}
 \input{2025/tp5_corr}
 \input{2025/tp6}
@@ -106,15 +110,14 @@
 \input{2025/tp7}
 \input{2025/tp8}
 
-\part*{Partie 5 - Transformée de Fourier}
-\input{2025/tp9}
-\input{2025/tp9_corr}
-\input{2025/tp10}
-\input{2025/tp10_corr}
+\part{Principe de récurrence et ordre de grandeur}
+\input{2025/tp2}
+\input{2025/tp2_corr}
 
-\part*{Partie 6 - Fonction à deux variables}
-\input{2025/tp11}
-\input{2025/tp11_corr}
-\input{2025/tp12}
-\input{2025/tp12_corr}
+\part{Théorie des nombres}
+\input{2025/tp3}
+\input{2025/tp3_corr}
+\input{2025/tp4}
+\input{2025/tp4_corr}
+
 \end{document}
