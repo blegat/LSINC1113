@@ -1008,7 +1008,7 @@ end
 
 # ╔═╡ a0000001-0000-4000-8000-000000000083
 md"""
-Lisez bien **l'échelle de l'axe vertical** : ``10^{-15}``. La différence n'est pas « petite », elle est **nulle** — ce qu'on voit n'est que le bruit d'arrondi de l'arithmétique à virgule flottante, à la limite de la précision de la machine.
+Lisez bien **l'échelle de l'axe vertical** : ``10^{-15}``. La différence est **nulle** — ce qu'on voit n'est que le bruit d'arrondi de l'arithmétique à virgule flottante, à la limite de la précision de la machine.
 
 ```math
 \mathcal{F}^{-1}\big(\mathcal{F}(x)\big) = x
@@ -1018,7 +1018,7 @@ Lisez bien **l'échelle de l'axe vertical** : ``10^{-15}``. La différence n'est
 
 C'est ce qui rend légitime tout le §2 : si l'aller-retour n'était qu'approximatif, filtrer un son abîmerait la musique à chaque passage. Ici, seul ce qu'on a **délibérément** modifié dans le spectre change.
 
-Le triptyque **aller → travailler → revenir** est maintenant complet.
+La procédure **aller → travailler → revenir** est maintenant complète.
 """
 
 # ╔═╡ a0000001-0000-4000-8000-000000000090
@@ -1029,7 +1029,7 @@ Tout ce qui précède supposait une chose qu'on n'a jamais questionnée : que no
 
 Que se passe-t-il si on n'en prend pas assez ?
 
-La réponse est le phénomène le plus contre-intuitif du domaine — le **repliement spectral** (*aliasing*). Il faut d'abord comprendre une propriété surprenante de la DFT : elle considère **implicitement** que le signal se répète à l'infini.
+La réponse est le phénomène du **repliement spectral** (*aliasing*). Il faut d'abord comprendre une propriété surprenante de la DFT : elle considère **implicitement** que le signal se répète à l'infini.
 """
 
 # ╔═╡ a0000001-0000-4000-8000-000000000091
@@ -1073,6 +1073,28 @@ let
 	xs = real.(ifft(Xs))
 	plot!(x[1:length(xs)], xs, label = "rééchantilloné")
 end
+
+# ╔═╡ 430da6d3-aea2-4ff3-8ac5-cee61932396d
+md"""
+## L'exemple le plus basique
+"""
+
+# ╔═╡ 0b13d258-6a94-4f04-8928-5c923a3942f0
+let
+	f_0 = 4
+	f_e = 5
+	Δt = 1/f_e
+	duration = 1
+	t = range(start=0.0, step=Δt, length= duration*f_e)
+	xt = cos.(2*π*f_0.*t)
+
+	X = abs.(fft(xt))
+	retour = real.(ifft(fft(xt)))
+	plot(t,xt, label = "signal original")
+	plot!(t,retour,label = "return signal")
+
+end
+	
 
 # ╔═╡ a0000001-0000-4000-8000-000000000100
 md"""
@@ -1540,7 +1562,7 @@ qa(
   & = X_k
 \end{align}
 ```
-Le signal est donc périodique !
+Le signal fréquentiel est donc périodique !
 Plus précisément, la discrétisation en temporelle rend le signal fréquentiel périodique et la discrétisation en fréquentiel rend le signal temporel périodique.
 """,
 )
@@ -3741,7 +3763,7 @@ version = "1.9.2+0"
 # ╟─a0000001-0000-4000-8000-000000000081
 # ╠═a0000001-0000-4000-8000-000000000082
 # ╟─a0000001-0000-4000-8000-000000000083
-# ╟─a0000001-0000-4000-8000-000000000090
+# ╠═a0000001-0000-4000-8000-000000000090
 # ╟─57373c5b-a34a-4e48-af42-27a0bd05a173
 # ╟─a0000001-0000-4000-8000-000000000091
 # ╟─d29773c7-a413-46a9-8c62-2f54d4de1730
@@ -3750,7 +3772,9 @@ version = "1.9.2+0"
 # ╟─b80ff616-8bb7-4132-88c7-ed10c3c6786c
 # ╟─56ff3957-0295-41fe-839f-12dae0fdd14f
 # ╟─4980c4ff-7da0-4747-b779-891569d604fd
-# ╟─5032f1f1-47a1-4ff3-b3fd-49d60e5e28a5
+# ╠═5032f1f1-47a1-4ff3-b3fd-49d60e5e28a5
+# ╟─430da6d3-aea2-4ff3-8ac5-cee61932396d
+# ╠═0b13d258-6a94-4f04-8928-5c923a3942f0
 # ╟─a0000001-0000-4000-8000-000000000100
 # ╟─a0000001-0000-4000-8000-000000000101
 # ╟─a0000001-0000-4000-8000-000000000102
