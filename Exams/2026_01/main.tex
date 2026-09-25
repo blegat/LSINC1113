@@ -1,0 +1,25 @@
+%\documentclass[addpoints,12pt,a4paper]{exam}
+\documentclass[addpoints,answers,12pt,a4paper]{exam}   % print solutions
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+
+\newcommand{\ExamDate}{7 janvier 2026}
+\input{../utils/preamble}
+
+\begin{document}
+    \input{../utils/rules}
+
+	\begin{questions}
+        \input{integral}
+        \clearpage
+        \input{recur}
+        \clearpage
+        \input{fft}
+        \clearpage
+        \input{diffie}
+        \clearpage
+        \input{graph}
+    \end{questions}
+
+\end{document}
