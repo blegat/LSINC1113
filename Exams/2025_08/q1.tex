@@ -1,0 +1,40 @@
+\titledquestion{Mathématiques du signal}
+
+Considérons le signal suivant :
+$$x(t) = \sin(\pi t) - \cos(2\pi t).$$
+
+\vskip2ex
+
+\begin{parts}
+    \part Quelle est la transformée de Fourier de $x(t)$ ?
+    \begin{solutionbox}{11cm}
+        Pour trouver la transformée de Fourier de $x(t)$, on utilise les formules classiques :
+        
+        \begin{align*}
+            \sin(\pi t) &= \frac{e^{i\pi t} - e^{-i\pi t}}{2i}\\
+            \cos(2\pi t) &= \frac{e^{i2\pi t} + e^{-i2\pi t}}{2}
+        \end{align*}
+        
+        Donc :
+        \begin{align*}
+            x(t) &= \frac{e^{i\pi t} - e^{-i\pi t}}{2i} - \frac{e^{i2\pi t} + e^{-i2\pi t}}{2}\\
+            &= \frac{1}{2i}e^{i\pi t} - \frac{1}{2i}e^{-i\pi t} - \frac{1}{2}e^{i2\pi t} - \frac{1}{2}e^{-i2\pi t}
+        \end{align*}
+        
+        La transformée de Fourier est :
+        $$X(f) = \frac{1}{2i}\delta(f - 0.5) - \frac{1}{2i}\delta(f + 0.5) - \frac{1}{2}\delta(f - 1) - \frac{1}{2}\delta(f + 1)$$
+        
+        où $f_1 = 0.5$ Hz et $f_2 = 1$ Hz.
+    \end{solutionbox}
+    \part À quelle fréquence faut-il échantillonner $x(t)$ pour ne pas avoir de repliement spectral ?
+    \begin{solutionbox}{6cm}
+        Pour éviter le repliement spectral, il faut respecter le théorème de Shannon-Nyquist.
+        
+        La fréquence maximale du signal est $f_{max} = 1$ Hz (correspondant à $\cos(2\pi t)$).
+        
+        Donc la fréquence d'échantillonnage minimale est :
+        $$f_e > 2f_{max} = 2 \times 1 = 2 \text{ Hz}$$
+        
+        Il faut échantillonner à une fréquence strictement supérieure à 2 Hz.
+    \end{solutionbox}
+\end{parts}

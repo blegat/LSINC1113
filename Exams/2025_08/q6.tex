@@ -1,0 +1,30 @@
+\titledquestion{Logique}
+Soit $P$, $Q$ et $R$ trois propositions logiques. Déterminez si les deux propositions suivantes sont logiquement équivalentes :
+
+\begin{align*}
+    A: &\quad \neg((P \land Q) \lor (P \land R))\\
+    B: &\quad \neg P \lor (\neg Q \land \neg R)
+\end{align*}
+
+\begin{parts}
+    \part Justifiez votre réponse en utilisant les lois de De Morgan et les propriétés de distributivité.
+\end{parts}
+
+\begin{solutionbox}{16cm}
+    Ces deux propositions sont logiquement équivalentes. On peut le démontrer en appliquant successivement les lois logiques :
+    
+    \begin{align*}
+        \neg((P \land Q) \lor (P \land R)) &\equiv \neg(P \land Q) \land \neg(P \land R) \quad \text{(De Morgan)}\\
+        &\equiv (\neg P \lor \neg Q) \land (\neg P \lor \neg R) \quad \text{(De Morgan)}\\
+        &\equiv \neg P \lor (\neg Q \land \neg R) \quad \text{(Distributivité)}
+    \end{align*}
+    
+    Donc $A \equiv B$.
+    
+    On peut également factoriser l'expression $A$ différemment :
+    \begin{align*}
+        (P \land Q) \lor (P \land R) &\equiv P \land (Q \lor R) \quad \text{(Distributivité)}
+    \end{align*}
+    
+    Donc $A \equiv \neg(P \land (Q \lor R)) \equiv \neg P \lor \neg(Q \lor R) \equiv \neg P \lor (\neg Q \land \neg R)$.
+\end{solutionbox}

@@ -1,0 +1,59 @@
+\titledquestion{Cryptographie}
+
+Alice et Bob veulent communiquer de manière sécurisée.
+Ils utilisent le protocole de Diffie-Hellman pour échanger une clé secrète.
+Ils choisissent un nombre premier $p = 17$ et une racine primitive $g = 3$ modulo $p$.
+Alice choisit un nombre secret $a$ et envoie $A = g^a \mod p$ à Bob.
+Vous arrivez à intercepter la valeur de $A$, $A = 7$.
+
+\begin{parts}
+   \part Que valent les puissances $g^2, g^3$ modulo $p$ ?
+    \begin{solutionbox}{2.5cm}
+        $g^2 = 9$ et $g^3 = 27 \equiv 10 \pmod{17}$.
+    \end{solutionbox}
+
+    \part Quel est l'inverse $g^{-1}$ de $g$ modulo $p$ ?
+    \begin{solutionbox}{2.5cm}
+        $g^{-1} = 6$ car $3 \cdot 6 \equiv 1 \pmod{17}$.
+    \end{solutionbox}
+
+     \part Que valent les puissances $g^{-4}, g^{-8}, g^{-12}$ modulo $p$ ?
+     \begin{solutionbox}{5cm}
+        \begin{align*}
+            g^{-2} = 6^2 \equiv 36 \equiv 2 \pmod{17}\\
+            g^{-4} = 2^2 \equiv 4 \pmod{17}\\
+            g^{-8} = 4^2 \equiv 16 \equiv -1 \pmod{17}\\
+            g^{-12} = -1 \cdot 4 \equiv 13 \pmod{17}
+        \end{align*}
+    \end{solutionbox}
+
+    \part Que valent les produit $Ag^{-4}$, $Ag^{-8}$ et $Ag^{-12}$ modulo $p$ ?
+    \begin{solutionbox}{5cm}
+        \begin{align*}
+            Ag^{-4} = 7 \cdot 4 \equiv 28 \equiv 11 \pmod{17}\\
+            Ag^{-8} = 7 \cdot (-1) \equiv -7 \equiv 10 \pmod{17}\\
+            Ag^{-12} = 7 \cdot 13 \equiv 91 \equiv 6 \pmod{17}
+        \end{align*}
+    \end{solutionbox}
+    
+    \part Quel est le nombre secret $a$ choisi par Alice ?
+    \begin{solutionbox}{6cm}
+        $g^3 \equiv 10 \equiv Ag^{-8} \pmod{17}$ donc
+        $g^{3} g^{8} \equiv 10 \pmod{17}$ donc
+        $g^{11} \equiv 10 \pmod{17}$.
+        Le nombre secret $a$ choisi par Alice est donc $11$.
+    \end{solutionbox}
+    
+    \part Comment généraliser cet méthode pour des nombre $A, g$ et $p$ quelconques ?
+    \begin{solutionbox}{6cm}
+        On peut utiliser l'algorithme de Shanks's Baby-Step Giant-Step pour trouver $a$.
+        Voir slides.
+    \end{solutionbox}
+
+    \part Quel est la complexité de cette algorithme ? Quel taille de nombre $p$ faut-il pour qu'il soit difficile de trouver
+        $a$ à partir de $A, g, p$ avec un ordinateur personnel ($\pm 10^9$ opérations par secondes) ?
+    \begin{solutionbox}{5cm}
+        $\mathcal{O}(\sqrt(p)\log(p))$ opérations. Avec 18 chiffres, il faut $10^9$ opérations donc juste une seconde, c'est pas assez.
+        Avec 36 chiffres, il faut $10^{18}$ opérations donc un milliard de secondes soit un peu plus de 30 ans, c'est pas mal.
+    \end{solutionbox}
+   \end{parts}
