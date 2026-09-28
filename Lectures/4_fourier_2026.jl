@@ -1162,18 +1162,23 @@ La DFT est en fait une évaluation d'un polynômes aux différentes racines `N`i
   X_k & = \sum_{n=0}^{N-1} x_n z_{k,N}^{n} \qquad z_{k,N} = e^{-i 2\pi \frac{k}{N}}
 \end{align}
 ```
-La DFT peut aussi être vue comme un produit matriciel:
+La DFT peut aussi être vue comme un produit matriciel.
+En posant $z_N = e^{-i2\pi/N}$, la DFT s'écrit $X = F_N x$ avec
 ```math
-  X =
-  \begin{bmatrix}
-    1 & 1 & \cdots & 1 & 1\\
-    1 & z_N & \cdots & z_N^{N-2} & z_N^{N-1}\\
-    1 & z_N^2 & \cdots & z_N^{2(N-2)} & z_N^{2(N-1)}\\
-	\vdots & \vdots & \ddots & \vdots & \vdots\\
-    1 & z_N^{(N-1)2} & \cdots & z_N^{(N-1)(N-2)} & z_N^{(N-1)(N-1)}
-  \end{bmatrix}
-  x
+F_N =
+\begin{bmatrix}
+1 & 1 & 1 & \cdots & 1\\
+1 & z_N & z_N^{2} & \cdots & z_N^{N-1}\\
+1 & z_N^{2} & z_N^{4} & \cdots & z_N^{2(N-1)}\\
+\vdots & & & & \vdots\\
+1 & z_N^{N-1} & z_N^{2(N-1)} & \cdots & z_N^{(N-1)^2}
+\end{bmatrix},
+\qquad (F_N)_{k,n} = z_N^{kn}.
 ```
+C'est aussi l'évaluation du polynôme $\sum_n x_n z^n$ aux $N$ racines
+$N$-ièmes de l'unité.
+
+
 Un produit matriciel a complexité ``\Omega(n^2)``. Ça ne nous donne pas une complexité de ``\Omega(n \log n)``, il va falloir utiliser la structure assez spéciale de cette matrice...
 
 On a acquis une intuition géométrique sur les racines ``z_N``. On va s'en servir pour visualiser cette matrice.
@@ -3784,7 +3789,7 @@ version = "1.9.2+0"
 # ╟─78026d88-7051-11ef-29f0-67f85176a548
 # ╟─dc4c4d53-feb2-40ce-b20e-3386aab2a45f
 # ╟─5f9eeb76-0a9d-40ad-858e-4ab67af46427
-# ╠═222cfba3-88f7-4824-92ca-f9ab81a000c4
+# ╟─222cfba3-88f7-4824-92ca-f9ab81a000c4
 # ╟─ae2adccf-edfc-4cba-97d8-b440946c9b69
 # ╟─a33ebf12-5c62-4cc9-af1e-7bad9026db21
 # ╟─cd3b2930-2c33-4028-9b27-d25238c79bac
