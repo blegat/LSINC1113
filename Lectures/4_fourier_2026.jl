@@ -1615,21 +1615,21 @@ La ligne `k` (en commençant à `k = 1`) est une rotation de ``2\pi(k-1)/N`` rad
 qa(
 	html"Quel est la complexité de l'algorithme FFT.",
 	md"""
-Soit ``f_n`` le temps de calcul d'une transformée de fourier avec ``n`` points.
+Soit ``T_n`` le temps de calcul d'une transformée de fourier avec ``n`` points.
 Une fois avoir fait les appels récursifs, il reste un nombre linéaire d'opérations à faire. Soit ``\alpha, \beta`` tels qu'il reste ``\alpha n + \beta`` de temps de calcul après la récursion.
 ```math
 \begin{align}
-f_n
-& = 2f_{n/2} + \alpha n + \beta\\
-& = 2(2f_{n/4} + \alpha n/2 + \beta) + \alpha n + \beta\\
-& = 4f_{n/4}+ 2\alpha n + 2\beta\\
-& = 4(2f_{n/8} + \alpha n/4 + \beta) + \alpha n + \beta\\
-& = 8f_{n/8} + 3\alpha n + 3\beta\\
-& = 16f_{n/16} + 4\alpha n + 4\beta\\
+T_n
+& = 2T_{n/2} + \alpha n + \beta\\
+& = 2(2T_{n/4} + \alpha n/2 + \beta) + \alpha n + \beta\\
+& = 4T_{n/4}+ 2\alpha n + 3\beta\\
+& = 4(2T_{n/8} + \alpha n/4 + \beta) + 2\alpha n + 3\beta\\
+& = 8T_{n/8} + 3\alpha n + 7\beta\\
 & = \quad \vdots\\
-& = nf_{1} + \log_2(n)\alpha n + \log_2(n)\beta\\
+& = nT_{1} + \log_2(n)\alpha n + (n-1)\beta\\
 \end{align}
 ```
+En effet, le nombre d'étapes est ``j`` tel que ``\dfrac{n}{2^j}=1``, soit ``j=\log_2(n)``. 	
 On a donc une complexité de ``O(n\log(n))``.
 """,
 )
