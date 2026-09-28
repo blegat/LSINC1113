@@ -1124,7 +1124,7 @@ let
 	ξ = fftshift(fftfreq(N, fe_ab))
 	pics = abs.(X) .> 1e-9                     # on n'affiche que les cases non nulles
 
-	shannon = fe_ab > 2f2
+	shannon = fe_ab > 2 * f2
 	plot(ξ[pics], abs.(X[pics]),
 		seriestype = :sticks, marker = :circle, markersize = 6,
 		color = shannon ? :seagreen : :crimson, linewidth = 3,
