@@ -1074,27 +1074,108 @@ let
 	plot!(x[1:length(xs)], xs, label = "rééchantilloné")
 end
 
-# ╔═╡ 430da6d3-aea2-4ff3-8ac5-cee61932396d
+# ╔═╡ 9454bea3-5280-4e96-ab22-b4ad9aa08cfb
 md"""
-## L'exemple le plus basique
+### Exemple : Deux cosinus qui se confondent
+
+Prenons la somme de deux cosinus, l'un à 1 Hz et l'autre à 11 Hz :
+
+```math
+x(t) = a\cos(2\pi\cdot 1\cdot t) + b\cos(2\pi\cdot 11\cdot t), \qquad a = 1,\quad b = 3.
+```
+
+**En continu**, ce sont deux composantes bien distinctes. Le spectre a quatre pics : en ``\pm 1`` Hz (hauteur ``a/2``) et en ``\pm 11`` Hz (hauteur ``b/2``).
+
+**Échantillonnons à ``f_e = 10`` Hz**, c'est-à-dire aux instants ``t_n = n/10``. Pour le second cosinus,
+
+```math
+\cos\!\left(2\pi\cdot 11\cdot \tfrac{n}{10}\right)
+= \cos\!\left(2\pi \tfrac{n}{10} + 2\pi n\right)
+= \cos\!\left(2\pi \tfrac{n}{10}\right),
+```
+
+car on ajoute un nombre entier de tours. Les échantillons valent donc
+
+```math
+x_n = (a+b)\cos\!\left(2\pi \tfrac{n}{10}\right).
+```
+
+Ce sont ceux d'**un seul** cosinus à 1 Hz, d'amplitude ``a+b = 4``. La DFT ne montre rien à 11 Hz, qui est hors de la fenêtre ``[-f_e/2,\ f_e/2] = [-5,\ 5]``. Elle montre un seul pic en ``\pm 1`` Hz, de hauteur ``(a+b)/2 = 2`` au lieu de ``a/2 = 0.5`` : la composante à 11 Hz est tombée dans la même case que la vraie composante à 1 Hz, et les deux se sont **additionnées**.
+
+À partir des échantillons, on ne connaît plus que la somme ``a+b`` : impossible de distinguer ``a = 1,\ b = 3`` de ``a = 4,\ b = 0``. Le dégât est **irréversible**.
+
+Faites varier ``f_e`` ci-dessous. Le graphique montre le spectre ``|X_k|/N`` sur la fenêtre ``[-f_e/2,\ f_e/2]``. Les croix indiquent où se trouvent les pics du spectre **continu**, quand ils tombent dans la fenêtre.
 """
 
-# ╔═╡ 0b13d258-6a94-4f04-8928-5c923a3942f0
+# ╔═╡ d4afbe1d-e404-4a53-9e97-1fd1c0aa2719
+md"`f_e` = $(@bind fe_ab Slider(4:1:30, default=10, show_value = true)) Hz"
+
+# ╔═╡ d1c82070-05f0-4c1f-898f-58b7efa8e803
 let
-	f_0 = 4
-	f_e = 5
-	Δt = 1/f_e
-	duration = 1
-	t = range(start=0.0, step=Δt, length= duration*f_e)
-	xt = cos.(2*π*f_0.*t)
+	a, b = 1, 3
+	f1, f2 = 1, 11
+	durée = 4                                  # secondes → résolution Δξ = 1/durée = 0.25 Hz
+	N = durée * fe_ab
+	t = (0:N-1) ./ fe_ab
+	x = a .* cos.(2π * f1 .* t) .+ b .* cos.(2π * f2 .* t)
 
-	X = abs.(fft(xt))
-	retour = real.(ifft(fft(xt)))
-	plot(t,xt, label = "signal original")
-	plot!(t,retour,label = "return signal")
+	# Spectre normalisé, réordonné sur [-f_e/2, f_e/2)
+	X = fftshift(fft(x)) ./ N
+	ξ = fftshift(fftfreq(N, fe_ab))
+	pics = abs.(X) .> 1e-9                     # on n'affiche que les cases non nulles
 
+	shannon = fe_ab > 2f2
+	plot(ξ[pics], abs.(X[pics]),
+		seriestype = :sticks, marker = :circle, markersize = 6,
+		color = shannon ? :seagreen : :crimson, linewidth = 3,
+		label = "spectre des échantillons  |X_k|/N",
+		xlabel = "fréquence ξ (Hz)", ylabel = "amplitude",
+		xlim = (-fe_ab/2 - 0.5, fe_ab/2 + 0.5), ylim = (0, 3.4),
+		legend = :topright, size = (680, 340))
+	hline!([0], color = :black, linewidth = 0.5, label = nothing)
+
+	# Pics du spectre continu : ±f1 (hauteur a/2) et ±f2 (hauteur b/2)
+	vraies_f = [-f2, -f1, f1, f2]
+	vraies_h = [b/2, a/2, a/2, b/2]
+	dedans = abs.(vraies_f) .<= fe_ab/2
+	scatter!(vraies_f[dedans], vraies_h[dedans],
+		marker = :xcross, markersize = 9, color = :black,
+		label = "pics du signal continu")
+
+	title!("f_e = $(fe_ab) Hz  —  Shannon " * (shannon ? "respecté" : "violé"))
 end
-	
+
+# ╔═╡ 857b9fe2-7908-44f8-9125-878c147c4840
+let
+	f_alias(f) = abs(f - fe_ab * round(f / fe_ab))
+	alias_1, alias_11 = f_alias(1), f_alias(11)
+
+	if fe_ab > 22
+		md"""
+		**Règle de Shannon pour ce cas.** La plus haute fréquence du signal est ``f_{\max} = 11`` Hz : il faut ``f_e > 2 f_{\max} = 22`` Hz.
+
+		✅ Avec ``f_e = `` $(fe_ab) Hz, la règle est **respectée**. Les deux composantes restent à leur place, en ``\pm 1`` et ``\pm 11`` Hz, avec les hauteurs ``a/2 = 0.5`` et ``b/2 = 1.5`` : les barres coïncident avec les croix.
+		"""
+	elseif fe_ab == 22
+		md"""
+		**Règle de Shannon pour ce cas.** La plus haute fréquence du signal est ``f_{\max} = 11`` Hz : il faut ``f_e > 2 f_{\max} = 22`` Hz.
+
+		⚠️ Avec ``f_e = 22`` Hz, on est **pile à la limite**. Aux instants ``t_n = n/22``, le cosinus à 11 Hz vaut ``\cos(\pi n) = (-1)^n`` : il tombe sur le bord de la fenêtre, ``\pm 11`` Hz étant la même case, d'où une seule barre de hauteur ``b = 3``. Un sinus à 11 Hz, lui, vaudrait ``\sin(\pi n) = 0`` et disparaîtrait complètement : c'est pour cela que l'inégalité doit être stricte.
+		"""
+	elseif alias_1 == alias_11
+		md"""
+		**Règle de Shannon pour ce cas.** La plus haute fréquence du signal est ``f_{\max} = 11`` Hz : il faut ``f_e > 2 f_{\max} = 22`` Hz.
+
+		❌ Avec ``f_e = `` $(fe_ab) Hz, la règle est **violée**. D'après ``f_{\text{alias}} = \left|f - f_e\cdot\operatorname{round}(f/f_e)\right|``, la composante à 11 Hz est vue à $(alias_11) Hz, **exactement** comme celle à 1 Hz. Les deux tombent dans la même case et leurs amplitudes s'additionnent : une seule barre de hauteur ``(a+b)/2 = 2`` au lieu de ``a/2 = 0.5``.
+		"""
+	else
+		md"""
+		**Règle de Shannon pour ce cas.** La plus haute fréquence du signal est ``f_{\max} = 11`` Hz : il faut ``f_e > 2 f_{\max} = 22`` Hz.
+
+		❌ Avec ``f_e = `` $(fe_ab) Hz, la règle est **violée**. D'après ``f_{\text{alias}} = \left|f - f_e\cdot\operatorname{round}(f/f_e)\right|``, la composante à 11 Hz est vue à $(alias_11) Hz. Elle ne se superpose pas à celle à 1 Hz, mais elle apparaît à une fréquence où le signal continu n'a **rien** : c'est une fréquence fantôme, et rien dans les échantillons ne permet de savoir qu'elle venait de 11 Hz.
+		"""
+	end
+end
 
 # ╔═╡ a0000001-0000-4000-8000-000000000100
 md"""
@@ -3778,8 +3859,10 @@ version = "1.9.2+0"
 # ╟─56ff3957-0295-41fe-839f-12dae0fdd14f
 # ╟─4980c4ff-7da0-4747-b779-891569d604fd
 # ╠═5032f1f1-47a1-4ff3-b3fd-49d60e5e28a5
-# ╟─430da6d3-aea2-4ff3-8ac5-cee61932396d
-# ╠═0b13d258-6a94-4f04-8928-5c923a3942f0
+# ╠═9454bea3-5280-4e96-ab22-b4ad9aa08cfb
+# ╟─d4afbe1d-e404-4a53-9e97-1fd1c0aa2719
+# ╠═d1c82070-05f0-4c1f-898f-58b7efa8e803
+# ╟─857b9fe2-7908-44f8-9125-878c147c4840
 # ╟─a0000001-0000-4000-8000-000000000100
 # ╟─a0000001-0000-4000-8000-000000000101
 # ╟─a0000001-0000-4000-8000-000000000102
