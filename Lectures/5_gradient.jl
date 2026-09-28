@@ -19,6 +19,15 @@ end
 # ╔═╡ d776d4d6-825b-11ef-3d58-85ab2150ff5f
 using LinearAlgebra, Plots, Colors, ForwardDiff, PlutoUI
 
+# ╔═╡ 226c1b16-797a-4e1e-a18e-ac816d83d161
+md"""
+# Dérivée à une variable: rappel
+
+## TODO: définir la limite
+
+La dérivée univariée au point $a$ correspond à la pente de la **droite tangente** à la fonction en $a$.
+"""
+
 # ╔═╡ 812d53c7-1384-4c77-9185-cf3d6656b98b
 md"""
 # Dérivée à plusieurs variables
@@ -1509,7 +1518,8 @@ version = "1.13.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╟─812d53c7-1384-4c77-9185-cf3d6656b98b
+# ╟─226c1b16-797a-4e1e-a18e-ac816d83d161
+# ╠═812d53c7-1384-4c77-9185-cf3d6656b98b
 # ╠═8bb1be80-db20-4059-bd6e-64a256796a28
 # ╠═cdf52f5f-d541-48e7-99ca-b5d0ff2c2d17
 # ╟─b3c01426-9a70-448b-bf3e-901e3100082f
