@@ -1293,6 +1293,54 @@ Voilà la clé. Un problème de taille ``N`` se ramène à **deux** problèmes d
 Il y a ``\log_2 N`` niveaux de découpage, et chaque niveau coûte ``N`` : d'où le ``N \log N``.
 """
 
+# ╔═╡ 7a2d1871-a405-40d2-a448-f9d944478ef0
+md"""
+## 4.2 La structure cachée, en équations
+
+On note ``z_N = e^{-i2\pi/N}``, de sorte que ``X_k = \sum_{n=0}^{N-1} x_n\, z_N^{kn}``.
+
+**Séparer pairs et impairs.** On coupe la somme en ``n = 2m`` et ``n = 2m+1``, et on sort le facteur ``z_N^k`` de la seconde :
+```math
+X_k = \sum_{m=0}^{N/2-1} x_{2m}\, z_N^{2km} \;+\; z_N^{k} \sum_{m=0}^{N/2-1} x_{2m+1}\, z_N^{2km}.
+```
+Or ``z_N^2 = z_{N/2}`` : chaque somme est une **DFT de taille ``N/2``**,
+```math
+X_k = E_k + z_N^{k}\, O_k,
+\qquad
+E_k = \sum_{m=0}^{N/2-1} x_{2m}\, z_{N/2}^{km},
+\qquad
+O_k = \sum_{m=0}^{N/2-1} x_{2m+1}\, z_{N/2}^{km}.
+```
+
+**Obtenir la seconde moitié.** Les appels récursifs ne rendent que ``E_0,\dots,E_{N/2-1}`` et ``O_0,\dots,O_{N/2-1}``. Deux observations suffisent :
+- ``E`` et ``O`` sont ``N/2``-périodiques : ``E_{k+N/2} = E_k``, ``O_{k+N/2} = O_k`` ;
+- avancer de ``N/2`` fait faire un demi-tour au *twiddle factor* : ``z_N^{k+N/2} = -z_N^{k}``.
+
+D'où le **papillon** :
+```math
+\boxed{X_k = E_k + z_N^{k}\, O_k, \qquad X_{k+N/2} = E_k - z_N^{k}\, O_k, \qquad k = 0,\dots,N/2-1.}
+```
+C'est exactement ce que montraient les couleurs de la matrice : les parties mauve et bleue sont ``F_{N/2}`` appliquée aux pairs (``E``), les parties verte et rouge sont ``\pm z_N^k F_{N/2}`` appliquée aux impairs (``\pm z_N^k O``).
+
+Un problème de taille ``N`` coûte donc deux problèmes de taille ``N/2``, plus ``N/2`` multiplications et ``N`` additions. On s'arrête à la taille ``1``, où ``X_0 = x_0``.
+"""
+
+# ╔═╡ 7d4c4fd2-8d7b-4c6c-8ea6-d9030962a225
+md"""
+**Pseudo-code** (``N`` est une puissance de 2) :
+```
+FFT(x₀, …, x_{N-1}) :
+    si N = 1 : renvoyer (x₀)                 # DFT de taille 1
+    E ← FFT(x₀, x₂, …, x_{N-2})              # indices pairs
+    O ← FFT(x₁, x₃, …, x_{N-1})              # indices impairs
+    pour k = 0, …, N/2 − 1 :
+        t ← z_N^k · O_k                      # z_N = e^{-i2π/N}
+        X_k       ← E_k + t
+        X_{k+N/2} ← E_k − t                  # papillon
+    renvoyer (X₀, …, X_{N-1})
+```
+"""
+
 # ╔═╡ 59130f1a-4fcd-4ae1-9ecf-1818dfc07612
 md"## Utilitaires"
 
@@ -3900,6 +3948,8 @@ version = "1.9.2+0"
 # ╟─43c13895-a651-4e61-8fda-abdde42718da
 # ╟─a0000001-0000-4000-8000-000000000111
 # ╟─e965ef01-1fb1-4479-941d-68404ebaf735
+# ╟─7a2d1871-a405-40d2-a448-f9d944478ef0
+# ╟─7d4c4fd2-8d7b-4c6c-8ea6-d9030962a225
 # ╟─59130f1a-4fcd-4ae1-9ecf-1818dfc07612
 # ╠═583c3b75-71cf-48f6-b93d-2201c6c7d520
 # ╠═34c779d2-5a9d-4c98-ac28-e4be1a85da40
