@@ -23,9 +23,92 @@ using LinearAlgebra, Plots, Colors, ForwardDiff, PlutoUI
 md"""
 # Dérivée à une variable: rappel
 
-## TODO: définir la limite
+## Limite d'une fonction
 
-La dérivée univariée au point $a$ correspond à la pente de la **droite tangente** à la fonction en $a$.
+Soit $f : \mathbb{R} \to \mathbb{R}$ et $a \in \mathbb{R}$. On dit que $f$ tend vers $L$ lorsque $x$ tend vers $a$, et on note
+
+$$\lim_{x \to a} f(x) = L$$
+
+si $f(x)$ devient arbitrairement proche de $L$ dès que $x$ est suffisamment proche de $a$. Formellement: pour tout $\varepsilon > 0$, il existe $\delta > 0$ tel que
+
+$$0 < |x - a| < \delta \implies |f(x) - L| < \varepsilon$$
+
+La valeur $f(a)$ n'intervient pas dans la définition: $f$ ne doit même pas être définie en $a$. Par exemple, $\sin(x)/x$ n'est pas définie en $0$ mais $\lim_{x \to 0} \sin(x)/x = 1$.
+
+## Continuité
+
+Soit $f : D \to \mathbb{R}$ définie sur un domaine $D \subseteq \mathbb{R}$ et $a \in D$. On dit que $f$ est *continue en $a$* si
+
+$$\lim_{x \to a} f(x) = f(a)$$
+
+Contrairement à la limite, la valeur $f(a)$ intervient ici: la fonction doit être définie en $a$ et la limite doit être égale à cette valeur.
+Intuitivement, le graphe de $f$ ne fait pas de « saut » en $a$.
+
+On dit que $f$ est *continue* (sur $D$) si elle est continue en tout point $a \in D$.
+Par exemple, $|x|$ est continue sur $\mathbb{R}$, la fonction signe n'est pas continue en $0$, et $1/x$ est continue sur son domaine $\mathbb{R} \setminus \{0\}$.
+
+## Dérivée
+
+La dérivée de $f$ en $a$ est la limite, si elle existe, du *taux d'accroissement*:
+
+$$f'(a) = \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$$
+
+Si cette limite existe, on dit que $f$ est *dérivable* en $a$.
+Le quotient est la pente de la droite sécante passant par les points $(a, f(a))$ et $(a + h, f(a + h))$. Lorsque $h \to 0$, la sécante tend vers la tangente:
+la dérivée univariée au point $a$ correspond à la pente de la **droite tangente** à la fonction en $a$.
+"""
+
+# ╔═╡ 06bd7de8-5dc1-4dba-b136-07b1d5ace1cf
+md"a = $(@bind a_tan Slider(-3:0.1:3, default=1, show_value = true))"
+
+# ╔═╡ 4fc3db2a-cc21-404b-8526-41a69f340d30
+let
+	f(x) = sin(x) + x^2 / 5
+	pente = ForwardDiff.derivative(f, a_tan)
+	tangente(x) = f(a_tan) + pente * (x - a_tan)
+	x = range(-4, stop = 4, length = 200)
+	plot(x, f, color = Colors.JULIA_LOGO_COLORS.blue, label = "f(x)", legend = :topleft, ylims = (-2, 5))
+	plot!(range(a_tan - 1.5, stop = a_tan + 1.5, length = 2), tangente, color = Colors.JULIA_LOGO_COLORS.green, linewidth = 2, label = "tangente en a")
+	scatter!([a_tan], [f(a_tan)], color = Colors.JULIA_LOGO_COLORS.red, markerstrokewidth = 0, label = "(a, f(a))")
+	title!("f'(a) = $(round(pente, digits = 2))")
+end
+
+# ╔═╡ be1e91ed-fa62-4734-8340-a3cb0aa76ad7
+md"""
+La droite tangente (en vert) touche le graphe de $f$ au point $(a, f(a))$ et a pour équation $y = f(a) + f'(a)(x - a)$.
+La dérivée $f'(a)$ est donc la **pente** de la droite tangente: elle est positive quand $f$ croît en $a$, négative quand $f$ décroît, et nulle quand la tangente est horizontale.
+"""
+
+# ╔═╡ 0a1b6bb1-ff19-47cb-8058-2a44a39bd828
+md"""
+## Règles de dérivation: rappel
+
+En pratique, on ne calcule presque jamais une dérivée avec la limite: on combine des dérivées connues à l'aide des règles suivantes ($f$ et $g$ dérivables, $c \in \mathbb{R}$ une constante).
+
+$$\begin{aligned}
+\text{Somme:} \quad & (f + g)' = f' + g'\\
+\text{Constante:} \quad & (c f)' = c f'\\
+\text{Produit:} \quad & (f g)' = f' g + f g'\\
+\text{Quotient:} \quad & \left(\frac{f}{g}\right)' = \frac{f' g - f g'}{g^2} \quad (g \neq 0)\\
+\text{Composition (dérivée en chaîne):} \quad & \big(f(g(x))\big)' = f'(g(x)) \, g'(x)\\
+\text{Puissance:} \quad & \big(f^n\big)' = n f^{n-1} f'
+\end{aligned}$$
+
+Dérivées usuelles:
+
+$$\begin{aligned}
+(c)' &= 0 & (x^n)' &= n x^{n-1} \\
+(e^x)' &= e^x & (\ln x)' &= \frac{1}{x}\\
+(\sin x)' &= \cos x & (\cos x)' &= -\sin x 
+\end{aligned}$$
+
+Par exemple, en combinant produit et composition:
+
+$$\frac{d}{dx} \sin(\pi x) e^{-x^2 / 4} = \pi \cos(\pi x) e^{-x^2 / 4} - \sin(\pi x) \frac{x}{2} e^{-x^2 / 4}$$
+
+et avec le quotient:
+
+$$\frac{d}{dx} \frac{x^2}{1 + x^2} = \frac{2x (1 + x^2) - x^2 \cdot 2x}{(1 + x^2)^2} = \frac{2x}{(1 + x^2)^2}$$
 """
 
 # ╔═╡ 812d53c7-1384-4c77-9185-cf3d6656b98b
@@ -40,6 +123,35 @@ Pour une fonction bivariée, la dérivée dans une direction $d$ correspond à l
 
 # ╔═╡ 8bb1be80-db20-4059-bd6e-64a256796a28
 plotly()
+
+# ╔═╡ 3a2f67f9-252c-4623-ac2f-56be3e20c93d
+md"""
+Commençons par un exemple simple: le paraboloïde $f(x, y) = x^2 + y^2$. Ses dérivées partielles sont $\partial f / \partial x = 2x$ et $\partial f / \partial y = 2y$, et le plan tangent (en rouge) au point $(a, b)$ a pour équation
+
+$$z = f(a, b) + 2a (x - a) + 2b (y - b)$$
+
+Le plan tangent est horizontal en $(0, 0)$, le minimum de $f$, et de plus en plus incliné lorsqu'on s'en éloigne.
+"""
+
+# ╔═╡ 4a97d071-597c-4f0f-815e-e785acf09f3e
+md"a = $(@bind a_par Slider(-1.5:0.1:1.5, default=1, show_value = true))"
+
+# ╔═╡ 8db5b27c-a1df-4fd1-9934-d7bec7311b21
+md"b = $(@bind b_par Slider(-1.5:0.1:1.5, default=0.5, show_value = true))"
+
+# ╔═╡ 3ef56e48-011e-4a3f-941a-5b978c1aaa16
+let
+	f(x, y) = x^2 + y^2
+	x = y = range(-2, stop = 2, length = 41)
+	surface(x, y, f, colorbar = false, zlims = (-1, 8))
+	fab = f(a_par, b_par)
+	plan(x, y) = fab + 2a_par * (x - a_par) + 2b_par * (y - b_par)
+	Δ = 0.75
+	xp = range(a_par - Δ, stop = a_par + Δ, length = 3)
+	yp = range(b_par - Δ, stop = b_par + Δ, length = 3)
+	surface!(xp, yp, plan, color = [Colors.JULIA_LOGO_COLORS.red], colorbar = false) # works with plotly but not GR
+	scatter!([a_par], [b_par], [fab], color = :black, markersize = 3, label = "(a, b, f(a, b))")
+end
 
 # ╔═╡ b3c01426-9a70-448b-bf3e-901e3100082f
 begin
@@ -61,7 +173,7 @@ md"""
 
 Que vaut la dérivée dans la direction rouge `(1, 1)` si on connait les dérivée vertes en `x` : $\partial f/\partial x$ et en `y` : $\partial f / \partial y$ ?
 Un plan est défini par un point et deux vecteurs donc le plan bleu est entièrement défini par le point $(x, f(x))$ et les deux vecteurs $(1, 0, \partial f/\partial x)$ et $(0, 1, \partial f/\partial y)$.
-En utilisant la linéarité du plan, quelle est la valeur de $?$ pour que le vecteur $(1, 1, ?)$ soit dans le plan ?
+En utilisant la linéarité du plan, quelle est la valeur de $\alpha$ pour que le vecteur $(1, 1, \alpha)$ soit dans le plan ?
 
 $$(1, 1, \partial f/\partial x + \partial f/\partial y)$$
 
@@ -134,7 +246,7 @@ let
 end
 
 # ╔═╡ a608649d-9f55-4337-a530-4f6ea2c27e16
-md"Pour quels valeurs de `i_1`, `i_2`, `i_3`, `i_4` est ce que la fonction est continue en `(0, 0)` ? Vous y répondrez à la séance d'exercices! Ici, on se contentera de se fier au visuel."
+md"Pour quels valeurs de `i_1`, `i_2`, `i_3`, `i_4` est ce que la fonction est continue en `(0, 0)` ? Vous y répondrez en partie à la séance d'exercices! Ici, on se contentera de se fier au visuel."
 
 # ╔═╡ 4ffc0380-b4da-44fd-9f63-d0f2eca4b28f
 md"""
@@ -172,7 +284,7 @@ let
 end
 
 # ╔═╡ fd3a0cde-5ec0-4f3f-81b0-447d71971ab3
-md"**Théorème**: Si $f$ est continue en $a$ et que les dérivées partielles de $f$ sont définies dans un voisinage de $a$ et continues en $a$ alors $f$ est différentiable."
+md"**Théorème**: Si les dérivées partielles de $f$ sont définies dans un voisinage de $a$ et continues en $a$ alors $f$ est différentiable en $a$ (et donc en particulier continue en $a$)."
 
 # ╔═╡ 38c1fd0a-d148-47c2-bbe2-a23924073fe1
 md"""
@@ -196,10 +308,12 @@ $$\begin{align}
 
 Cette notation peut paraître mal choisie ! En effet, dans $\partial xy$ et $\partial yx$, les parties $xy$ et $yx$ ressemblent à des produits. Comme le produit est commutatif, on a à tendance à penser que dériver par $x$ puis $y$ est égal à dériver par $y$ puis $x$... À moins que ça soit vraiment égal ?
 
-**Théorème** Si $f$ est différentiable alors
-$$\frac{\partial^2}{\partial x\partial y} f = \frac{\partial^2}{\partial y\partial x} f$$.
+**Théorème (Schwarz)** Si les dérivées secondes de $f$ existent et sont continues dans un voisinage de $a$ alors
+$$\frac{\partial^2}{\partial x\partial y} f(a) = \frac{\partial^2}{\partial y\partial x} f(a).$$
 
-On aime mettre ces 4 valeurs dans une matrice nommée *Hessienne*. Par ce théorème, la matrice est donc symmétrique!
+Il ne suffit pas que $f$ soit différentiable: il existe des fonctions différentiables pour lesquelles les deux dérivées croisées sont différentes.
+
+On aime mettre ces 4 valeurs dans une matrice nommée *Hessienne*. Sous l'hypothèse de ce théorème, la matrice est donc symmétrique!
 
 $$\text{Hess}(f) = \begin{bmatrix}
   \frac{\partial^2}{\partial x^2} f & \frac{\partial^2}{\partial x \partial y} f\\
@@ -222,7 +336,7 @@ d^\top \nabla f
 =
 d_1 \cdot \partial f/\partial x_1 + \cdots + d_n \cdot \partial f/\partial x_n$$
 
-La Hessienne est toujours symmétrique et devient:
+La Hessienne est symmétrique (sous l'hypothèse du théorème de Schwarz) et devient:
 $$\text{Hess}(f) =
 \begin{bmatrix}
   \frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} &
@@ -235,6 +349,22 @@ $$\text{Hess}(f) =
   \frac{\partial^2 f}{\partial x_1 \partial x_n} & \frac{\partial^2 f}{\partial x_2x_n} &
   \cdots & \frac{\partial^2 f}{\partial x_{n-1} \partial x_n} & \frac{\partial^2 f}{\partial x_n^2}\\
 \end{bmatrix}$$
+"""
+
+# ╔═╡ 710bead1-c8b9-4042-bd52-fa208bacfcb1
+md"""
+## Extremum d'une fonction
+
+On étudie les points critiques, là où le gradient est nul (la fonction est plate).
+
+**Points critiques et nature des extremums**
+
+Un point critique de $f(x, y)$ est un point où les dérivées partielles de $f$ sont toutes nulles : $f_x = 0$ et $f_y = 0$ (où $f_x = \partial f / \partial x$, $f_{xx} = \partial^2 f / \partial x^2$, etc.). Pour déterminer la nature du point critique, on utilise la matrice Hessienne $H(f)$ au point critique $(a, b)$ :
+
+- Si $\det(H(f)(a, b)) > 0$ et $f_{xx}(a, b) > 0$, alors $(a, b)$ est un minimum local.
+- Si $\det(H(f)(a, b)) > 0$ et $f_{xx}(a, b) < 0$, alors $(a, b)$ est un maximum local.
+- Si $\det(H(f)(a, b)) < 0$, alors $(a, b)$ est un point-selle.
+- Si $\det(H(f)(a, b)) = 0$, le test est indéterminé.
 """
 
 # ╔═╡ 9bb14f1d-b7b5-43c1-a931-c5018f544806
@@ -251,8 +381,8 @@ function tangent_plane(f, x0, x1, y0, y1, cx, cy; Δ = 0.5, n = 32)
 	plane(x, y) = fc + grad' * [x - cx, y - cy]
 	plot!([cx, cx + 1], [cy, cy], [fc, fc + grad[1]], linewidth = 10, color = Colors.JULIA_LOGO_COLORS.green, label = "")
 	plot!([cx, cx], [cy, cy + 1], [fc, fc + grad[2]], linewidth = 10, color = Colors.JULIA_LOGO_COLORS.green, label = "")
-	return plot!([cx, cx+1], [cy, cy + 1], [fc, fc + grad[1] + grad[2]], linewidth = 10, color = Colors.JULIA_LOGO_COLORS.red, label = "")
-	surface!( # works with plotly but not GR
+	plot!([cx, cx+1], [cy, cy + 1], [fc, fc + grad[1] + grad[2]], linewidth = 10, color = Colors.JULIA_LOGO_COLORS.red, label = "")
+	return surface!( # works with plotly but not GR
 		range(cx - Δ, stop = cx + Δ, length = 3),
 		range(cy - Δ, stop = cy + Δ, length = 3),
 		plane,
@@ -281,9 +411,6 @@ function tangent_line(f, x0, x1, c; n = 100)
 	plot!([c + 1, c + 1], [f(c), tangente(c + 1)], color = Colors.JULIA_LOGO_COLORS.red, label = "")
 	scatter!([c], [pente], markerstrokewidth = 0, color = Colors.JULIA_LOGO_COLORS.red, label = "")
 end
-
-# ╔═╡ cdf52f5f-d541-48e7-99ca-b5d0ff2c2d17
-tangent_line(x -> sin(x * π) * exp(-x^2 / 10), x0, x1, cx)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1519,9 +1646,16 @@ version = "1.13.0+0"
 
 # ╔═╡ Cell order:
 # ╟─226c1b16-797a-4e1e-a18e-ac816d83d161
+# ╟─06bd7de8-5dc1-4dba-b136-07b1d5ace1cf
+# ╟─4fc3db2a-cc21-404b-8526-41a69f340d30
+# ╟─be1e91ed-fa62-4734-8340-a3cb0aa76ad7
+# ╟─0a1b6bb1-ff19-47cb-8058-2a44a39bd828
 # ╠═812d53c7-1384-4c77-9185-cf3d6656b98b
 # ╠═8bb1be80-db20-4059-bd6e-64a256796a28
-# ╠═cdf52f5f-d541-48e7-99ca-b5d0ff2c2d17
+# ╟─3a2f67f9-252c-4623-ac2f-56be3e20c93d
+# ╟─4a97d071-597c-4f0f-815e-e785acf09f3e
+# ╟─8db5b27c-a1df-4fd1-9934-d7bec7311b21
+# ╠═3ef56e48-011e-4a3f-941a-5b978c1aaa16
 # ╟─b3c01426-9a70-448b-bf3e-901e3100082f
 # ╟─674be307-64c1-4485-ad25-a59ff6840df8
 # ╠═fd74a3bd-e20c-43dd-badc-b1e861e69660
@@ -1541,6 +1675,7 @@ version = "1.13.0+0"
 # ╟─fd3a0cde-5ec0-4f3f-81b0-447d71971ab3
 # ╟─38c1fd0a-d148-47c2-bbe2-a23924073fe1
 # ╟─942a8fe6-e911-41ae-a186-9cea58731eef
+# ╟─710bead1-c8b9-4042-bd52-fa208bacfcb1
 # ╟─9bb14f1d-b7b5-43c1-a931-c5018f544806
 # ╠═73248509-2b7b-4d79-9bc1-4689d843b73e
 # ╠═d776d4d6-825b-11ef-3d58-85ab2150ff5f
