@@ -1,0 +1,136 @@
+\titledquestion{Intégration multivariée}
+Calculez l'intégrale double suivante :
+$$\iint_D xy \, dy \, dx$$
+où $D$ est le domaine défini par $0 \leq x \leq 1$ et $x \leq y \leq 2x$.
+
+\begin{parts}
+    \part Dessinez le domaine d'intégration $D$ dans le plan $(x, y)$.
+    \begin{solutionbox}{18cm}
+        Le domaine $D$ est délimité par :
+        \begin{itemize}
+            \item $x = 0$ (ligne verticale)
+            \item $x = 1$ (ligne verticale)
+            \item $y = x$ (droite passant par l'origine)
+            \item $y = 2x$ (droite passant par l'origine avec pente 2)
+        \end{itemize}
+        
+        Le domaine est un triangle entre ces lignes pour $x \in [0, 1]$.
+        Pour $x = 0$, on a $y \in [0, 0]$ (un point).
+        Pour $x = 1$, on a $y \in [1, 2]$.
+        Le domaine est la région entre les droites $y = x$ et $y = 2x$ pour $x \in [0, 1]$.
+        
+        \begin{center}
+            \begin{tikzpicture}
+                \begin{axis}[
+                    axis lines=middle,
+                    xlabel={$x$},
+                    ylabel={$y$},
+                    xmin=-0.2, xmax=1.2,
+                    ymin=-0.2, ymax=2.2,
+                    domain=0:1,
+                    samples=100,
+                    width=12cm,
+                    height=8cm,
+                    legend pos=north west
+                ]
+                    % Définir les chemins pour le remplissage
+                    \addplot[name path=lower, domain=0:1, draw=none] {x};
+                    \addplot[name path=upper, domain=0:1, draw=none] {2*x};
+                    
+                    % Remplir le domaine entre les deux courbes
+                    \addplot[fill=gray!30, draw=none] fill between[of=lower and upper];
+                    
+                    % Tracer les droites
+                    \addplot[domain=0:1, thick, blue] {x};
+                    \addplot[domain=0:1, thick, red] {2*x};
+                    
+                    % Tracer les lignes verticales
+                    \draw[thick, dashed] (axis cs:0,0) -- (axis cs:0,2);
+                    \draw[thick, dashed] (axis cs:1,0) -- (axis cs:1,2);
+                    
+                    % Légende
+                    \addlegendentry{$y = x$}
+                    \addlegendentry{$y = 2x$}
+                \end{axis}
+            \end{tikzpicture}
+        \end{center}
+    \end{solutionbox}
+    
+    \part Effectuez le calcul de cette intégrale dans l'ordre $dy \, dx$.
+    \begin{solutionbox}{21cm}
+        \begin{align*}
+            \iint_D xy \, dx \, dy &= \int_0^1 \int_x^{2x} xy \, dy \, dx
+        \end{align*}
+        
+        Pour l'intégrale intérieure, on intègre par rapport à $y$ en traitant $x$ comme une constante :
+        \begin{align*}
+            \int_x^{2x} xy \, dy &= x \int_x^{2x} y \, dy\\
+            &= x \left[ \frac{y^2}{2} \right]_{y=x}^{y=2x}\\
+            &= x \left( \frac{(2x)^2}{2} - \frac{x^2}{2} \right)\\
+            &= x \left( \frac{4x^2}{2} - \frac{x^2}{2} \right)
+            = x \cdot \frac{3x^2}{2}
+            = \frac{3x^3}{2}
+        \end{align*}
+        
+        Donc :
+        \begin{align*}
+            \iint_D xy \, dx \, dy &= \int_0^1 \frac{3x^3}{2} \, dx\\
+            &= \frac{3}{2} \int_0^1 x^3 \, dx\\
+            &= \frac{3}{2} \left[ \frac{x^4}{4} \right]_0^1
+            = \frac{3}{2} \cdot \frac{1}{4}
+            = \frac{3}{8}
+        \end{align*}
+    \end{solutionbox}
+    
+    \part Changez l'ordre d'intégration et recalculez l'intégrale dans l'ordre $dx \, dy$.
+    \begin{solutionbox}{21cm}
+        Pour changer l'ordre d'intégration, il faut exprimer le domaine en fonction de $y$ d'abord.
+        
+        Le domaine $D$ est délimité par :
+        \begin{itemize}
+            \item $y = x$ (donc $x = y$)
+            \item $y = 2x$ (donc $x = y/2$)
+            \item $x = 0$ et $x = 1$
+        \end{itemize}
+        
+        Pour un $y$ fixé, les bornes en $x$ sont :
+        \begin{itemize}
+            \item Pour $y \in [0, 1]$ : $x$ varie de $y/2$ (ligne $y = 2x$) à $y$ (ligne $y = x$)
+            \item Pour $y \in [1, 2]$ : $x$ varie de $y/2$ (ligne $y = 2x$) à $1$ (ligne $x = 1$)
+        \end{itemize}
+        
+        Donc :
+        \begin{align*}
+            \iint_D xy \, dx \, dy &= \int_0^1 \int_{y/2}^y xy \, dx \, dy + \int_1^2 \int_{y/2}^1 xy \, dx \, dy
+        \end{align*}
+        
+        Pour la première intégrale ($y \in [0, 1]$) :
+        \begin{align*}
+            \int_{y/2}^y xy \, dx &= y \int_{y/2}^y x \, dx
+            = y \left[ \frac{x^2}{2} \right]_{x=y/2}^{x=y}\\
+            &= y \left( \frac{y^2}{2} - \frac{(y/2)^2}{2} \right)
+            = y \left( \frac{y^2}{2} - \frac{y^2}{8} \right)
+            = y \cdot \frac{3y^2}{8}
+            = \frac{3y^3}{8}
+        \end{align*}
+        
+        Pour la deuxième intégrale ($y \in [1, 2]$) :
+        \begin{align*}
+            \int_{y/2}^1 xy \, dx &= y \int_{y/2}^1 x \, dx
+            = y \left[ \frac{x^2}{2} \right]_{x=y/2}^{x=1}\\
+            &= y \left( \frac{1}{2} - \frac{(y/2)^2}{2} \right)
+            = y \left( \frac{1}{2} - \frac{y^2}{8} \right)
+            = \frac{y}{2} - \frac{y^3}{8}
+        \end{align*}
+        
+        Donc :
+        \begin{align*}
+            \iint_D xy \, dx \, dy &= \int_0^1 \frac{3y^3}{8} \, dy + \int_1^2 \left( \frac{y}{2} - \frac{y^3}{8} \right) \, dy\\
+            &= \frac{3}{8} \int_0^1 y^3 \, dy + \frac{1}{2} \int_1^2 y \, dy - \frac{1}{8} \int_1^2 y^3 \, dy\\
+            &= \frac{3}{8} \left[ \frac{y^4}{4} \right]_0^1 + \frac{1}{2} \left[ \frac{y^2}{2} \right]_1^2 - \frac{1}{8} \left[ \frac{y^4}{4} \right]_1^2\\
+            &= \frac{3}{8} \cdot \frac{1}{4} + \frac{1}{2} \left( \frac{4}{2} - \frac{1}{2} \right) - \frac{1}{8} \left( \frac{16}{4} - \frac{1}{4} \right)\\
+            &= \frac{3}{32} + \frac{1}{2} \cdot \frac{3}{2} - \frac{1}{8} \cdot \frac{15}{4}
+            = \frac{3}{8}
+        \end{align*}
+    \end{solutionbox}
+\end{parts}
