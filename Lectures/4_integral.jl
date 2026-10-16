@@ -333,6 +333,70 @@ dessin(-2, y -> -√y, 0, 4)
 # ╔═╡ 6b3ae83f-342b-4724-8bc6-0d7b85aefc01
 dessin(y -> √y, 2, 0, 4)
 
+# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c01
+md"""
+## Aire d'un domaine
+L'aire d'un domaine ``D \subset \mathbb{R}^2`` est l'intégrale de la fonction constante égale à ``1`` sur ``D``:
+```math
+\text{Aire}(D) = \iint_D 1 \,\text{d}x\,\text{d}y.
+```
+En effet, l'intégrale de ``f`` sur ``D`` est la limite de sommes ``\sum f(x_i, y_i)\,\Delta x\,\Delta y``; avec ``f = 1``, on somme simplement les aires ``\Delta x\,\Delta y`` des petits rectangles qui recouvrent ``D``.
+"""
+
+# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c02
+md"""
+## Changement de variables en coordonnées polaires
+Les coordonnées polaires ``(r, \theta)`` sont liées aux coordonnées cartésiennes par
+```math
+x = r\cos\theta, \qquad y = r\sin\theta.
+```
+
+**Théorème (changement de variables polaires).** Soit ``D`` un domaine du plan décrit en coordonnées polaires par ``(r, \theta) \in \Delta``. Alors, pour toute fonction ``f`` intégrable sur ``D``,
+```math
+\iint_D f(x, y) \,\text{d}x\,\text{d}y
+=
+\iint_\Delta f(r\cos\theta, r\sin\theta)\, r \,\text{d}r\,\text{d}\theta.
+```
+
+Le facteur ``r`` est la valeur absolue du déterminant jacobien de la transformation:
+```math
+\left|\det\begin{pmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta}\\
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{pmatrix}\right|
+=
+\left|\det\begin{pmatrix}
+\cos\theta & -r\sin\theta\\
+\sin\theta & r\cos\theta
+\end{pmatrix}\right|
+= r\cos^2\theta + r\sin^2\theta = r.
+```
+Intuitivement, un petit « rectangle polaire » de côtés ``\text{d}r`` et ``r\,\text{d}\theta`` a pour aire ``r\,\text{d}r\,\text{d}\theta``.
+"""
+
+# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c03
+md"""
+## Aire d'un disque de rayon ``R``
+Le disque de rayon ``R`` centré à l'origine est ``D = \{(x, y) : x^2 + y^2 \le R^2\}``. En coordonnées polaires, il correspond au rectangle
+```math
+\Delta = \{(r, \theta) : 0 \le r \le R,\ 0 \le \theta \le 2\pi\}.
+```
+En combinant l'aire comme intégrale de ``1`` et le changement de variables polaires (avec ``f = 1``):
+```math
+\begin{align}
+\text{Aire}(D)
+& = \iint_D 1 \,\text{d}x\,\text{d}y
+= \iint_\Delta r \,\text{d}r\,\text{d}\theta\\
+& = \int_{\theta=0}^{2\pi} \int_{r=0}^{R} r \,\text{d}r\,\text{d}\theta
+= \int_{\theta=0}^{2\pi} \left[\frac{r^2}{2}\right]_{r=0}^{R} \text{d}\theta\\
+& = \int_{\theta=0}^{2\pi} \frac{R^2}{2} \,\text{d}\theta
+= \frac{R^2}{2}\cdot 2\pi
+= \pi R^2.
+\end{align}
+```
+On retrouve bien la formule ``\text{Aire} = \pi R^2``.
+"""
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1643,6 +1707,9 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╠═920374f2-dab8-46a4-b6f7-8fea7664b47f
 # ╠═9d923110-2b2a-4c83-a0ca-a91b5b47f6fd
 # ╠═6b3ae83f-342b-4724-8bc6-0d7b85aefc01
+# ╟─a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c01
+# ╟─a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c02
+# ╟─a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c03
 # ╟─234efaaa-0906-4e2a-9a06-aeec91fbe9ef
 # ╠═2ebca4fb-28db-485d-a44e-b21f42c7d474
 # ╠═872bd97a-a265-4fc4-8785-f48be67f557d
