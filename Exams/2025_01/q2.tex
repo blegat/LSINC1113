@@ -1,0 +1,91 @@
+\titledquestion{Analyse multivariée}
+Soit une fonction
+\begin{align*}
+    f: \R^2 \to \R^2: (x_1,x_2) \mapsto
+    f(x_1,x_2) & = (f_1(x_1, x_2), f_2(x_1, x_2))\\
+    & = (\exp(x_1) + \exp(x_2), (\exp(x_1) + \exp(x_2))^2).
+\end{align*}
+Vous aimeriez calculer la Jacobienne de cette matrice:
+\begin{align*}
+    \partial f / \partial x =
+    \begin{bmatrix}
+        \partial f_1 / \partial x_1 & \partial f_1 / \partial x_2\\
+        \partial f_2 / \partial x_1 & \partial f_2 / \partial x_2
+    \end{bmatrix}.
+\end{align*}
+Vous remarquez que la fonction $g(x_1, x_2) = \exp(x_1) + \exp(x_2)$ apparaissant plusieurs fois.
+Afin d'exploiter cette structure du problème dans le calcul de la Jacobienne,
+vous décidez de reformulez $f$ comme la composition de deux fonctions:
+$f(x_1, x_2) = h(g(x_1, x_2))$ où $h(y) = (h_1(y), h_2(y)) = (y, y^2)$.
+
+Vous considérez alors les Jacobiennes:
+\begin{align*}
+    \partial g / \partial x & = \begin{bmatrix}
+        \partial g / \partial x_1 & \partial g / \partial x_2
+    \end{bmatrix}\\
+    \partial h / \partial y & = \begin{bmatrix}
+        \partial h_1 / \partial y \\ \partial h_2 / \partial y
+    \end{bmatrix}
+\end{align*}
+
+\begin{parts}
+    \part Étant donné une valeur $x_1 = 1$ et $x_2 = 0$, pour quelles valeurs faut-il évaluer
+    les Jacobiennes $\partial g / \partial x$ et $\partial h / \partial y$ ?
+    \part Comment combiner ces deux Jacobiennes pour obtenir la Jacobienne $\partial f / \partial x$ ?
+\begin{solutionbox}{10cm}
+    On évalue $\partial g / \partial x$ à $x = (1, 0)$ et $\partial h / \partial y$
+    à $y = g(1, 0) = e + 1$.
+    On a alors
+    \begin{align*}
+        \partial f / \partial x &=
+        \left.
+    \begin{bmatrix}
+        \partial h_1 / \partial y \\ \partial h_2 / \partial y
+    \end{bmatrix}
+        \right|_{y = e + 1}
+        \left.
+    \begin{bmatrix}
+        \partial g / \partial x_1 & \partial g / \partial x_2
+    \end{bmatrix}
+        \right|_{x = (1, 0)}
+    \end{align*}
+\end{solutionbox}
+
+Vous aimeriez à présent calculer la dérivée de $a(x) = f_1(x) + f_2(x)$.
+On peut voir cela comme la composition de 2 fonctions : $s(f(x))$
+où $s(z_1, z_2) = z_1 + z_2$.
+On a donc aussi $a(x) = s(h(g(x)))$.
+
+    \part Comment calculer la dérivée du gradient $\nabla a(x)$ comme le produit de 3 matrices.
+    Préciser pour quelle valeur ces matrices doivent être évaluées en fonction de $x$.
+\begin{solutionbox}{8cm}
+    \begin{align*}
+        \partial a / \partial x & =
+        \left. \partial s / \partial z \right|_{z=h(g(x))}
+        \left. \partial h / \partial y \right|_{y=g(x)}
+        \partial g / \partial x\\
+        & =
+        \begin{bmatrix}
+            1 & 1
+        \end{bmatrix}
+        \left.
+    \begin{bmatrix}
+        \partial h_1 / \partial y \\ \partial h_2 / \partial y
+    \end{bmatrix} \right|_{y = g(x)}
+    \begin{bmatrix}
+        \partial g / \partial x_1 & \partial g / \partial x_2
+    \end{bmatrix}.
+    \end{align*}
+\end{solutionbox}
+    \part En généralisant à $g(x_1,\ldots,x_n) = \exp(x_1) + \cdots \exp(x_n)$,
+    $h(y) = (y, y^2, \ldots, y^n)$ et $s(z_1, \ldots, z_n) = z_1 + \cdots + z_n$,
+    quelle est la complexité de forward et reverse différentiation ? Lequel sera plus rapide pour un large $n$ ?
+\begin{solutionbox}{8cm}
+    Forward évalue le produit de droite à gauche. Il forme donc d'abord $\partial f / \partial x$ qui est une matrice $n \times n$
+    (complexité $\Theta(n^2)$) puis il multiplie avec un vecteur (complexité $\Theta(n^2)$).
+    Reverse évalue le produit de gauche à droite. Il fait d'abord le produit scalaire des deux vecteur $\partial s / \partial z$
+    et $\partial h / \partial y$ (complexité $\Theta(n)$) puis le produit de ce scalaire avec le vecteur $\partial g / \partial x$
+    (complexité $\Theta(n)$).
+    Reverse a une complexité linéaire et est donc plus rapide pour de grand $n$ que forward qui a une complexité quadratique.
+\end{solutionbox}
+\end{parts}
