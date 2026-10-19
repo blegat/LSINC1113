@@ -10,6 +10,33 @@ using Plots, Colors
 # ╔═╡ 86374740-9a8e-11ef-3ad2-950a7b092eb9
 md"# Intégrale bivariée"
 
+# ╔═╡ 62989353-30c3-40df-ba82-d4fcaa30a363
+md"""
+## Rappels : intégrale d'une variable
+
+**Primitive.** Soit ``f`` une fonction définie sur un intervalle ``I``. Une fonction ``F`` est une *primitive* de ``f`` sur ``I`` si ``F`` est dérivable et
+```math
+F'(x) = f(x) \quad \text{pour tout } x \in I.
+```
+Deux primitives d'une même fonction diffèrent d'une constante. Par exemple, ``x^2/2`` et ``x^2/2 + 3`` sont toutes deux des primitives de ``x``.
+
+**Aire sous une courbe.** Pour ``f`` continue sur ``[a, b]``, l'intégrale
+```math
+\int_a^b f(x) \,\text{d}x
+```
+est l'aire (signée) entre le graphe de ``f`` et l'axe des ``x``, pour ``x`` allant de ``a`` à ``b``. On l'obtient en découpant ``[a, b]`` en petits intervalles de largeur ``\Delta x`` et en sommant les aires des rectangles ``f(x_k)\,\Delta x``, puis en faisant tendre ``\Delta x`` vers ``0``. Les parties où ``f < 0`` comptent négativement.
+
+**Théorème fondamental de l'analyse.** Si ``F`` est dérivable sur ``[a, b]`` et que ``F'`` est continue, alors
+```math
+\int_a^b F'(x) \,\text{d}x = F(b) - F(a) = [F(x)]_{x=a}^b.
+```
+En pratique, pour calculer ``\int_a^b f(x) \,\text{d}x``, on cherche une primitive ``F`` de ``f`` et on l'évalue aux bornes. Par exemple,
+```math
+\int_0^1 x \,\text{d}x = \left[\frac{x^2}{2}\right]_{x=0}^1 = \frac{1}{2}.
+```
+C'est exactement ce calcul qu'on va répéter, une variable à la fois, pour les intégrales bivariées.
+"""
+
 # ╔═╡ 8e2594c3-1c6e-4085-b7c3-5682317ae547
 md"""
 Nous avons vu comment les dérivées univariées étaient généralisées au dérivées multivariées via les dérivées partielles.
@@ -256,6 +283,70 @@ Il se peut aussi qu'on ne puisse pas combiner les intégrales obtenues après av
 Les dessins correspondants sont:
 """
 
+# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c01
+md"""
+## Aire d'un domaine
+L'aire d'un domaine ``D \subset \mathbb{R}^2`` est l'intégrale de la fonction constante égale à ``1`` sur ``D``:
+```math
+\text{Aire}(D) = \iint_D 1 \,\text{d}x\,\text{d}y.
+```
+En effet, l'intégrale de ``f`` sur ``D`` est la limite de sommes ``\sum f(x_i, y_i)\,\Delta x\,\Delta y``; avec ``f = 1``, on somme simplement les aires ``\Delta x\,\Delta y`` des petits rectangles qui recouvrent ``D``.
+"""
+
+# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c02
+md"""
+## Changement de variables en coordonnées polaires
+Les coordonnées polaires ``(r, \theta)`` sont liées aux coordonnées cartésiennes par
+```math
+x = r\cos\theta, \qquad y = r\sin\theta.
+```
+
+**Théorème (changement de variables polaires).** Soit ``D`` un domaine du plan décrit en coordonnées polaires par ``(r, \theta) \in \Delta``. Alors, pour toute fonction ``f`` intégrable sur ``D``,
+```math
+\iint_D f(x, y) \,\text{d}x\,\text{d}y
+=
+\iint_\Delta f(r\cos\theta, r\sin\theta)\, r \,\text{d}r\,\text{d}\theta.
+```
+
+Le facteur ``r`` est la valeur absolue du déterminant jacobien de la transformation:
+```math
+\left|\det\begin{pmatrix}
+\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta}\\
+\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{pmatrix}\right|
+=
+\left|\det\begin{pmatrix}
+\cos\theta & -r\sin\theta\\
+\sin\theta & r\cos\theta
+\end{pmatrix}\right|
+= r\cos^2\theta + r\sin^2\theta = r.
+```
+Intuitivement, un petit « rectangle polaire » de côtés ``\text{d}r`` et ``r\,\text{d}\theta`` a pour aire ``r\,\text{d}r\,\text{d}\theta``.
+"""
+
+# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c03
+md"""
+## Aire d'un disque de rayon ``R``
+Le disque de rayon ``R`` centré à l'origine est ``D = \{(x, y) : x^2 + y^2 \le R^2\}``. En coordonnées polaires, il correspond au rectangle
+```math
+\Delta = \{(r, \theta) : 0 \le r \le R,\ 0 \le \theta \le 2\pi\}.
+```
+En combinant l'aire comme intégrale de ``1`` et le changement de variables polaires (avec ``f = 1``):
+```math
+\begin{align}
+\text{Aire}(D)
+& = \iint_D 1 \,\text{d}x\,\text{d}y
+= \iint_\Delta r \,\text{d}r\,\text{d}\theta\\
+& = \int_{\theta=0}^{2\pi} \int_{r=0}^{R} r \,\text{d}r\,\text{d}\theta
+= \int_{\theta=0}^{2\pi} \left[\frac{r^2}{2}\right]_{r=0}^{R} \text{d}\theta\\
+& = \int_{\theta=0}^{2\pi} \frac{R^2}{2} \,\text{d}\theta
+= \frac{R^2}{2}\cdot 2\pi
+= \pi R^2.
+\end{align}
+```
+On retrouve bien la formule ``\text{Aire} = \pi R^2``.
+"""
+
 # ╔═╡ 234efaaa-0906-4e2a-9a06-aeec91fbe9ef
 md"## Utilitaires"
 
@@ -332,70 +423,6 @@ dessin(-2, y -> -√y, 0, 4)
 
 # ╔═╡ 6b3ae83f-342b-4724-8bc6-0d7b85aefc01
 dessin(y -> √y, 2, 0, 4)
-
-# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c01
-md"""
-## Aire d'un domaine
-L'aire d'un domaine ``D \subset \mathbb{R}^2`` est l'intégrale de la fonction constante égale à ``1`` sur ``D``:
-```math
-\text{Aire}(D) = \iint_D 1 \,\text{d}x\,\text{d}y.
-```
-En effet, l'intégrale de ``f`` sur ``D`` est la limite de sommes ``\sum f(x_i, y_i)\,\Delta x\,\Delta y``; avec ``f = 1``, on somme simplement les aires ``\Delta x\,\Delta y`` des petits rectangles qui recouvrent ``D``.
-"""
-
-# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c02
-md"""
-## Changement de variables en coordonnées polaires
-Les coordonnées polaires ``(r, \theta)`` sont liées aux coordonnées cartésiennes par
-```math
-x = r\cos\theta, \qquad y = r\sin\theta.
-```
-
-**Théorème (changement de variables polaires).** Soit ``D`` un domaine du plan décrit en coordonnées polaires par ``(r, \theta) \in \Delta``. Alors, pour toute fonction ``f`` intégrable sur ``D``,
-```math
-\iint_D f(x, y) \,\text{d}x\,\text{d}y
-=
-\iint_\Delta f(r\cos\theta, r\sin\theta)\, r \,\text{d}r\,\text{d}\theta.
-```
-
-Le facteur ``r`` est la valeur absolue du déterminant jacobien de la transformation:
-```math
-\left|\det\begin{pmatrix}
-\frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta}\\
-\frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
-\end{pmatrix}\right|
-=
-\left|\det\begin{pmatrix}
-\cos\theta & -r\sin\theta\\
-\sin\theta & r\cos\theta
-\end{pmatrix}\right|
-= r\cos^2\theta + r\sin^2\theta = r.
-```
-Intuitivement, un petit « rectangle polaire » de côtés ``\text{d}r`` et ``r\,\text{d}\theta`` a pour aire ``r\,\text{d}r\,\text{d}\theta``.
-"""
-
-# ╔═╡ a1f0c2d4-5b6e-4c7a-8d90-1e2f3a4b5c03
-md"""
-## Aire d'un disque de rayon ``R``
-Le disque de rayon ``R`` centré à l'origine est ``D = \{(x, y) : x^2 + y^2 \le R^2\}``. En coordonnées polaires, il correspond au rectangle
-```math
-\Delta = \{(r, \theta) : 0 \le r \le R,\ 0 \le \theta \le 2\pi\}.
-```
-En combinant l'aire comme intégrale de ``1`` et le changement de variables polaires (avec ``f = 1``):
-```math
-\begin{align}
-\text{Aire}(D)
-& = \iint_D 1 \,\text{d}x\,\text{d}y
-= \iint_\Delta r \,\text{d}r\,\text{d}\theta\\
-& = \int_{\theta=0}^{2\pi} \int_{r=0}^{R} r \,\text{d}r\,\text{d}\theta
-= \int_{\theta=0}^{2\pi} \left[\frac{r^2}{2}\right]_{r=0}^{R} \text{d}\theta\\
-& = \int_{\theta=0}^{2\pi} \frac{R^2}{2} \,\text{d}\theta
-= \frac{R^2}{2}\cdot 2\pi
-= \pi R^2.
-\end{align}
-```
-On retrouve bien la formule ``\text{Aire} = \pi R^2``.
-"""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1679,6 +1706,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 
 # ╔═╡ Cell order:
 # ╟─86374740-9a8e-11ef-3ad2-950a7b092eb9
+# ╟─62989353-30c3-40df-ba82-d4fcaa30a363
 # ╟─8e2594c3-1c6e-4085-b7c3-5682317ae547
 # ╠═9bfd2996-3213-40f2-bf70-9b7b4d2ee0c4
 # ╟─38c1498b-426c-408a-b779-229179b72ac8
