@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v1.0.4
+# v1.1.0
 
 using Markdown
 using InteractiveUtils
@@ -592,6 +592,18 @@ _copy(m::Config) = m
 _copy(m::Matrix) = copy(m)
 end
 
+# ╔═╡ 7080a31b-82da-4ca2-9ddb-1a48c0685d68
+md"""
+* Voir [West, chapitres 1–2](https://www.dwest.web.illinois.edu/igt/)
+* ou [Cormen et al., chapitres 22–24](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/)
+"""
+
+# ╔═╡ 912276f9-96d4-407d-bbde-c643c81a15ec
+md"""
+* Douglas B. West. [*Introduction to Graph Theory*](https://www.dwest.web.illinois.edu/igt/).
+* Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest et Clifford Stein. [*Introduction to Algorithms*, quatrième édition](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/). MIT Press, 2022.
+"""
+
 # ╔═╡ faca26cb-14a3-4a45-ba0b-ec3cd57d8d29
 hbox(
     [
@@ -694,6 +706,14 @@ Pour fusionner, il ne faut qu'updater une seule entrée du tableau, la racine d'
 # ╔═╡ 9cd44e27-1c13-4831-a17b-bff99514194e
 md"""
 De façon surprenante, si on met à jour le valeur dans le tableau pour mettre directement le root après l'avoir calculé, la complexité passe à ``O(|V| \alpha(|V|))`` où ``\alpha`` est la réciproque de la [fonction d'Ackermann](https://fr.wikipedia.org/wiki/Fonction_d%27Ackermann), une fonction qui augmente extrèmement lentement donc en pratique, c'est presque ``O(|V|)``.
+"""
+
+# ╔═╡ 84926c9f-5ed7-4720-8153-01700575d3c5
+md"""
+**Théorème** [West, théorème 1.2.26](https://www.dwest.web.illinois.edu/igt/)
+Considérons un graphe avec une seule composante connectée.
+Il existe un circuit Eulérienne si et seulement si tous les noeuds ont un degré pair.
+Si tous les noeuds ont un degré pair sauf 2 alors il n'existe pas de circuit mais une piste Eulérienne.
 """
 
 # ╔═╡ 0d914458-7ab1-4d0e-afc6-1bd0db52076a
@@ -1209,26 +1229,6 @@ minimax(2, 2, 2, scaling = 1.7)
 # ╔═╡ 9e9f07dd-edcb-471c-9fb4-613553e10353
 minimax(3, 2, 2; vert = -350, w = 1400, h = 900, dy = 170, Δy = 70, scaling = 0.8, damping = 1)
 
-# ╔═╡ 7080a31b-82da-4ca2-9ddb-1a48c0685d68
-md"""
-* Voir [West, chapitres 1–2](https://www.dwest.web.illinois.edu/igt/)
-* ou [Cormen et al., chapitres 22–24](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/)
-"""
-
-# ╔═╡ 84926c9f-5ed7-4720-8153-01700575d3c5
-md"""
-**Théorème** [West, théorème 1.2.26](https://www.dwest.web.illinois.edu/igt/)
-Considérons un graphe avec une seule composante connectée.
-Il existe un circuit Eulérienne si et seulement si tous les noeuds ont un degré pair.
-Si tous les noeuds ont un degré pair sauf 2 alors il n'existe pas de circuit mais une piste Eulérienne.
-"""
-
-# ╔═╡ 912276f9-96d4-407d-bbde-c643c81a15ec
-md"""
-* Douglas B. West. [*Introduction to Graph Theory*](https://www.dwest.web.illinois.edu/igt/).
-* Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest et Clifford Stein. [*Introduction to Algorithms*, quatrième édition](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/). MIT Press, 2022.
-"""
-
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1245,13 +1245,13 @@ SimpleWeightedGraphs = "47aef6b3-ad0c-573a-a1e2-d07658019622"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
-PlotlyLight = "~0.13.1"
 Colors = "~0.13.4"
 DataStructures = "~0.19.6"
 Formatting = "~0.4.3"
 GraphPlot = "~0.6.2"
 Graphs = "~1.15.0"
 Luxor = "~4.5.0"
+PlotlyLight = "~0.13.1"
 PlutoUI = "~0.7.84"
 SimpleWeightedGraphs = "~1.6.0"
 StaticArrays = "~1.9.24"
