@@ -17,19 +17,22 @@ macro bind(def, element)
 end
 
 # ╔═╡ f83fdf0a-a2f5-4d72-9297-a409cf4e2bbb
-using PlutoUI, Graphs, GraphPlot, Colors, DataStructures, SimpleWeightedGraphs
-
-# ╔═╡ bd9ab2c4-b098-11ef-3c1e-7fe1458a8556
-include("utils.jl")
+using PlutoUI,
+    PlutoUI.ExperimentalLayout,
+    Graphs,
+    GraphPlot,
+    Colors,
+    DataStructures,
+    SimpleWeightedGraphs
 
 # ╔═╡ c9595f48-bfec-443e-8f8f-94ed0c5a9530
-section("Graph Theory")
+md"# Graph Theory"
 
 # ╔═╡ 15f7cc14-7663-4ad2-9cfe-9ee8aada601c
-frametitle("Seven Bridges of Königsberg")
+md"# Seven Bridges of Königsberg"
 
 # ╔═╡ b65dd471-10da-4b3a-a14b-cfbb70e70050
-frametitle("Définition")
+md"# Définition"
 
 # ╔═╡ d7bbc61f-5cc6-4090-8cc4-313187f28bab
 let
@@ -43,13 +46,13 @@ let
 end
 
 # ╔═╡ b52b2192-df63-4095-aa15-6d3ccafc92ba
-frametitle("Graphes et polyhèdres")
+md"# Graphes et polyhèdres"
 
 # ╔═╡ e41498fa-8fed-4354-bb3b-a2fc8afeacd9
-frametitle("Terminologie des parcours")
+md"# Terminologie des parcours"
 
 # ╔═╡ c41901fb-6570-487d-bd77-4708d1f0b627
-frametitle("Degré d'un noeud")
+md"# Degré d'un noeud"
 
 # ╔═╡ fe642397-9ae1-42b5-9d0e-d2b96cfb178b
 let
@@ -63,7 +66,7 @@ let
 end
 
 # ╔═╡ 043ff87b-41e4-49c2-aaee-bee39f088b58
-frametitle("Composante connexe")
+md"# Composante connexe"
 
 # ╔═╡ 9e065cf0-7483-4ec2-809c-cdd7d22a5564
 let
@@ -80,22 +83,22 @@ let
 end
 
 # ╔═╡ cbc8da76-9adf-4670-b07c-0f5366b55547
-frametitle("Calcul de composantes connexes")
+md"# Calcul de composantes connexes"
 
 # ╔═╡ b184882e-f2ed-4e9c-b763-0173711d6fac
-frametitle("Disjoint-Set datastructure")
+md"# Disjoint-Set datastructure"
 
 # ╔═╡ 8e7b6a51-1f8e-43d7-846b-a9e7596052b9
-frametitle("Piste Eulérienne")
+md"# Piste Eulérienne"
 
 # ╔═╡ d884c51e-9ddd-4dc4-9f9c-e461f0455a17
-frametitle("Arbres et forêts")
+md"# Arbres et forêts"
 
 # ╔═╡ ceb5aea4-5a69-47cf-bedd-17d47a6e07a8
 gplot(uniform_tree(10))
 
 # ╔═╡ b94745d7-ffda-4190-82af-8ee2fe9ea165
-frametitle("Spanning tree")
+md"# Spanning tree"
 
 # ╔═╡ 944b6ad9-731b-4479-94bd-e61876987917
 function spanning_forest(g, edges_it = edges(g))
@@ -109,25 +112,25 @@ function spanning_forest(g, edges_it = edges(g))
 end
 
 # ╔═╡ 3c09769f-13b2-4713-8d2e-06abd7735c33
-frametitle("Minimum spanning tree")
+md"# Minimum spanning tree"
 
 # ╔═╡ 3eb8d016-d1a1-4e4f-a307-e2c439c502e4
 kruskal(g) = spanning_forest(g, sort(collect(edges(g)), by = weight))
 
 # ╔═╡ 8c384e86-18d4-419b-977b-c5d5bfd1318f
-frametitle("Graphes dirigés")
+md"# Graphes dirigés"
 
 # ╔═╡ 49092fe9-7c24-4564-9d2a-aa313d54ed8a
 gplot(random_regular_digraph(16, 2))
 
 # ╔═╡ 264eb1b6-0e3f-4d67-b8b0-5f0831d18b95
-frametitle("Strongly connected components")
+md"# Strongly connected components"
 
 # ╔═╡ 66c7051b-c377-4376-a472-b2bd5c788267
-frametitle("Directed Acyclic Graph (DAG)")
+md"# Directed Acyclic Graph (DAG)"
 
 # ╔═╡ 71566570-7d26-4fba-8f9a-8726fb97f2d8
-frametitle("Suite de Fibonacci")
+md"# Suite de Fibonacci"
 
 # ╔═╡ 2f905018-1d7b-43dc-b576-e4080dc946ee
 function fib(n)
@@ -139,13 +142,13 @@ function fib(n)
 end
 
 # ╔═╡ a95116d6-614a-4a8a-b3a6-5a96e9b3c439
-frametitle("Visualisation des appels récursifs")
+md"# Visualisation des appels récursifs"
 
 # ╔═╡ 3c82aba6-0539-4578-ad04-648eb3bcf400
-frametitle("Nombre d'appels")
+md"# Nombre d'appels"
 
 # ╔═╡ 30861bc6-4af9-43dc-a1f5-fed9bb157564
-frametitle("Bottom-Up / Dynamic Programming")
+md"# Bottom-Up / Dynamic Programming"
 
 # ╔═╡ 9b024507-48e2-4247-aa4e-ed0958af7b2d
 function fib_bottom_up(n)
@@ -158,7 +161,7 @@ function fib_bottom_up(n)
 end
 
 # ╔═╡ a9379cc3-6ca8-4aed-81f7-992f3664ceb3
-frametitle("Top-Down / Mémoïzation")
+md"# Top-Down / Mémoïzation"
 
 # ╔═╡ c395343c-3f7c-4dfe-bc0f-8950afc115bf
 function fib!(cache, n)
@@ -176,13 +179,13 @@ function cached_fib(n)
 end
 
 # ╔═╡ 16c5f723-77d4-4bee-86c6-90a1b597e7d9
-frametitle("Une IA pour le jeu Puissance 4")
+md"# Une IA pour le jeu Puissance 4"
 
 # ╔═╡ 54d0cbaf-4bf7-4508-b706-b5042dda1644
-frametitle("Puissance 2 de 2 colonnes de hauteur 2")
+md"# Puissance 2 de 2 colonnes de hauteur 2"
 
 # ╔═╡ 73d104ac-7aff-46cc-95b5-a67b6811f64d
-frametitle("Puissance 2 de 2 colonnes de hauteur 3")
+md"# Puissance 2 de 2 colonnes de hauteur 3"
 
 # ╔═╡ 3de604e8-20b6-4ef5-9952-b8f27c28fef1
 begin
@@ -194,10 +197,10 @@ begin
 end
 
 # ╔═╡ 1308d56a-f91a-4fe2-8f5d-7d7a15b8f040
-frametitle("Puissance $longueur : sans mémoïzation")
+md"# Puissance $longueur : sans mémoïzation"
 
 # ╔═╡ a7530e0a-a3b5-46c8-9666-fb0219d7ba04
-frametitle("Mémoïsation pour Puissance 4")
+md"# Mémoïsation pour Puissance 4"
 
 # ╔═╡ 0a7e65f5-da36-4331-8463-221051286728
 begin
@@ -216,13 +219,13 @@ begin
 end
 
 # ╔═╡ 3f813480-726b-42e0-a648-e3ad76abcf9d
-frametitle("Mémoïsation pour Puissance $mem_longueur")
+md"# Mémoïsation pour Puissance $mem_longueur"
 
 # ╔═╡ a436f564-8418-477c-9b0d-9d791c893bb1
-frametitle("Pièces de monnaie")
+md"# Pièces de monnaie"
 
 # ╔═╡ 9db78023-e29c-41e5-9102-870692111f39
-frametitle("Depth-First Search (DFS)")
+md"# Depth-First Search (DFS)"
 
 # ╔═╡ 6dc95039-9e2a-47e0-8250-9c5ad8a2af0c
 function dfs!(path, g::DiGraph, current, target)
@@ -250,7 +253,7 @@ function dfs(g, current, target)
 end
 
 # ╔═╡ 2c7c9b52-0d27-4dc8-ae69-29a6edc87041
-frametitle("Breadth-First Search (BFS)")
+md"# Breadth-First Search (BFS)"
 
 # ╔═╡ fb29e166-b361-49e3-bc5c-042d409023f1
 function bfs(g::DiGraph, source)
@@ -271,7 +274,7 @@ function bfs(g::DiGraph, source)
 end
 
 # ╔═╡ 670aaab7-a101-4dea-ba97-80f1a5346122
-frametitle("Dijkstra")
+md"# Dijkstra"
 
 # ╔═╡ ab3997f3-83ef-4435-bb90-7cef1c7bcdcf
 function dijkstra(g::SimpleWeightedGraph, source)
@@ -296,10 +299,10 @@ function dijkstra(g::SimpleWeightedGraph, source)
 end
 
 # ╔═╡ 634dea01-3832-49e7-90af-4e1b834cead7
-frametitle("Max Flow / Min Cut")
+md"# Max Flow / Min Cut"
 
 # ╔═╡ 75bb5e30-76b8-486b-b3fa-9979aaf830a5
-section("Utils")
+md"# Utils"
 
 # ╔═╡ accdf77c-fc4b-4777-bebf-9d69ebb36526
 import StaticArrays, Luxor, Formatting, Random, PlotlyLight
@@ -590,10 +593,15 @@ _copy(m::Matrix) = copy(m)
 end
 
 # ╔═╡ faca26cb-14a3-4a45-ba0b-ec3cd57d8d29
-HAlign(md"""
-Est-il possible de prendre tous les ponts de la ville une et une seule fois (le point de départ est au choix) ?
-""",
-img("Konigsberg_bridges"))
+hbox(
+    [
+        md"""
+        Est-il possible de prendre tous les ponts de la ville une et une seule fois (le point de départ est au choix) ?
+        """,
+        LocalResource(joinpath(@__DIR__, "..", "images", "Konigsberg_bridges.png")),
+    ];
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
+)
 
 # ╔═╡ 8bec0324-274c-4ae6-99f9-08b613460064
 md"""
@@ -661,10 +669,13 @@ Supposons qu'on ait 4 noeuds. On démarre avec le tableau ``(1, 2, 3, 4)`` signi
 """
 
 # ╔═╡ 269320fe-a575-4fe4-86b6-67b0dd4484a5
-qa(md"Quelle est la complexité de cet algorithm ?", md"""
+PlutoUI.details(
+    md"Quelle est la complexité de cet algorithm ?",
+    md"""
 À la 3ième étape, on doit mettre à jours deux éléments du tableau. Dans le pire cas, si on doit fusionner deux composante connexes dont la taille est ``O(|V|)``, la complexité d'une fusion peut être ``O(|V|)``.
 Comme on a ``|E|`` fusion, la complexité de l'algorithm est ``O(|V|\cdot |E|)``.
-""")
+""",
+)
 
 # ╔═╡ caa3a9dd-e7d6-493b-9586-8d08d9c8b9e5
 md"""
@@ -673,9 +684,12 @@ Pour le noeud 4, on encode donc qu'il est dans la même connected component que 
 """
 
 # ╔═╡ fb0dc703-d81e-40e3-9cee-59744a2359c1
-qa(md"Quelle est complexité après cette amélioration ?", md"""
+PlutoUI.details(
+    md"Quelle est complexité après cette amélioration ?",
+    md"""
 Pour fusionner, il ne faut qu'updater une seule entrée du tableau, la racine d'un des deux noeuds de l'arête. Seulement, il pourrait faloir ``O(|V|)`` étapes pour trouver la racine. On a donc toujours ``O(|V|\cdot|E|)``.
-""")
+""",
+)
 
 # ╔═╡ 9cd44e27-1c13-4831-a17b-bff99514194e
 md"""
@@ -683,7 +697,10 @@ De façon surprenante, si on met à jour le valeur dans le tableau pour mettre d
 """
 
 # ╔═╡ 0d914458-7ab1-4d0e-afc6-1bd0db52076a
-qa(md"Proof", md"Pour chaque noeud de degré pair, quand on arrive à ce noeud, on saura le quitter par une arête non-utilisé. Son degré d'arête non-utilisé va être diminué par deux et donc rester pair. On va alors s'arêter sur le noeud de départ si tous les degrés sont pairs. Si 2 degrés sont impairs, on doit partir d'un noeud à degré impair et on arrivera à l'autre noeud à degré impair. Ceci construit un circuit ou piste et laisse le graphe avec un degré pair d'arêtes non-utilisées à chaque noeud. On peut alors trouver un autre circuit avec la même approche et continuer à construire de nouveaux circuit jusqu'à ce que tous les degrés soient zero. Si le graphe a une seule composante connecté, on sait ensuite fusionner tous ces circuits en un seul circuit.")
+PlutoUI.details(
+    md"Proof",
+    md"Pour chaque noeud de degré pair, quand on arrive à ce noeud, on saura le quitter par une arête non-utilisé. Son degré d'arête non-utilisé va être diminué par deux et donc rester pair. On va alors s'arêter sur le noeud de départ si tous les degrés sont pairs. Si 2 degrés sont impairs, on doit partir d'un noeud à degré impair et on arrivera à l'autre noeud à degré impair. Ceci construit un circuit ou piste et laisse le graphe avec un degré pair d'arêtes non-utilisées à chaque noeud. On peut alors trouver un autre circuit avec la même approche et continuer à construire de nouveaux circuit jusqu'à ce que tous les degrés soient zero. Si le graphe a une seule composante connecté, on sait ensuite fusionner tous ces circuits en un seul circuit.",
+)
 
 # ╔═╡ 4253daed-b737-49bf-9927-6b9db39d43c1
 md"""
@@ -707,7 +724,10 @@ Bien qu'un algorithme greedy n'arrive souvent pas à la solution optimale, on pe
 """
 
 # ╔═╡ b5088341-c171-45bc-ab93-c49059da6c6a
-qa(md"Quelle est la complexité de Kruskal ?", md"``O(|E|\log(|E|))`` to sort the edges then ``O(|E|\alpha(|V|))`` for the selection of edge with the Disjoint-Set datastructure.")
+PlutoUI.details(
+    md"Quelle est la complexité de Kruskal ?",
+    md"``O(|E|\log(|E|))`` to sort the edges then ``O(|E|\alpha(|V|))`` for the selection of edge with the Disjoint-Set datastructure.",
+)
 
 # ╔═╡ dc4766e9-e4a7-4b8b-a6db-360df927cc5d
 md"""
@@ -768,19 +788,28 @@ md"""
 """
 
 # ╔═╡ 877e5e67-b8a2-4d42-8043-47057a6df1ad
-HAlign(md"Colonnes = $slider_ncols", md"Hauteur = $slider_nrows")
+hbox(
+    (md"Colonnes = $slider_ncols", md"Hauteur = $slider_nrows");
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
+)
 
 # ╔═╡ a252ae16-783c-4e8f-a467-1bcbf1e12565
 md"Longueur = $slider_longueur" # Cols(md"Longueur = $slider_longueur", md"Gagnant patient ? $checkbox_patient")
 
 # ╔═╡ 9e45076a-a26d-4964-a31f-da58f40f9d50
-HAlign(md"Colonnes = $slider_wooclap_ncols", md"Hauteur = $slider_wooclap_nrows")
+hbox(
+    (md"Colonnes = $slider_wooclap_ncols", md"Hauteur = $slider_wooclap_nrows");
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
+)
 
 # ╔═╡ 9e3a4cb5-5ed9-42ac-b0d1-11aa5189089c
 md"Quelle **structure de donnée** utiliser pour la mémoïsation : état du jeu → action optimale ?"
 
 # ╔═╡ 7613cf26-b429-4483-bf55-bb110e49f45e
-HAlign(md"Colonnes = $slider_mem_ncols", md"Hauteur = $slider_mem_nrows")
+hbox(
+    (md"Colonnes = $slider_mem_ncols", md"Hauteur = $slider_mem_nrows");
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
+)
 
 # ╔═╡ ff30250c-8844-45c5-b5fb-2f09bf05ac4e
 md"Longueur = $slider_mem_longueur" # Cols(md"Longueur = $slider_mem_longueur", md"Gagnant patient ? $checkbox_mem_patient")
@@ -800,17 +829,19 @@ On a donc les arêtes ``(n, n - 10)``, ``(n, n - 5)``, ``(n, n - 5)`` et ``(n, n
 """
 
 # ╔═╡ 1e6c4a4a-6c76-4f55-ac9d-bc93ccedc190
-qa(md"Est-ce que cette formule donne le bon résultat ?",
-md"""
-Non. Ça considère plusieurs fois la même combinaison. Par exemple, ``x_3`` serait calculé comme ``x_2 + x_1 = 2 + 1 = 3`` alors que ``x_3 = 2``. Le problème c'est que ça considère que prendre une pièce de 2 € puis une pièce de 1 € est différent d'une pièce de 1 € puis une pièce de 2 €.
+PlutoUI.details(
+    md"Est-ce que cette formule donne le bon résultat ?",
+    md"""
+    Non. Ça considère plusieurs fois la même combinaison. Par exemple, ``x_3`` serait calculé comme ``x_2 + x_1 = 2 + 1 = 3`` alors que ``x_3 = 2``. Le problème c'est que ça considère que prendre une pièce de 2 € puis une pièce de 1 € est différent d'une pièce de 1 € puis une pièce de 2 €.
 
-Il y a une symmétrie dans le problème due au fait qu'on ne se souce pas de l'ordre des pièces et on aimerait casser cette symmétrie.
-Pour cela, on empêche de considérer les solutions où une pièce/billet arrive après une de moins grande valeur. Donc on ne peut pas prendre une pièce de 1 € puis une de 2 €.
+    Il y a une symmétrie dans le problème due au fait qu'on ne se souce pas de l'ordre des pièces et on aimerait casser cette symmétrie.
+    Pour cela, on empêche de considérer les solutions où une pièce/billet arrive après une de moins grande valeur. Donc on ne peut pas prendre une pièce de 1 € puis une de 2 €.
 
-Au noeud 2, on ne peut que prendre l'arête correspondant à la pièce de 2 € si on n'a pas encore pris de pièce de 1 € avant.
-Seulement, la possibilité de prendre une arête ne dépend que du noeud, pas du passé des arêtes déjà prises.
-On a donc besoin de considérer un graphe différent.
-""")
+    Au noeud 2, on ne peut que prendre l'arête correspondant à la pièce de 2 € si on n'a pas encore pris de pièce de 1 € avant.
+    Seulement, la possibilité de prendre une arête ne dépend que du noeud, pas du passé des arêtes déjà prises.
+    On a donc besoin de considérer un graphe différent.
+    """,
+)
 
 # ╔═╡ f4562517-53ec-429c-a398-3f146a82df22
 md"""
@@ -818,13 +849,15 @@ Considérons la valeur ``y_{n,k}`` qui correspond à la façon de faire la somme
 """
 
 # ╔═╡ 174b7c95-a9f7-4cfd-a679-8000a26b39c9
-qa(md"Quelle est la formule pour ``y_{n,10}`` ? Quel est le graphe ? Est-ce que la bonne valeur est calculée ?",
-md"""
-```math
-y_{n, 10} = y_{n - 10, 10} + y_{n - 5, 5} + y_{n - 2, 2} + y_{n - 1, 1}.
-```
-Le graphe a donc les arêtes ``((n, 10), (n - 10, 10))``, ... La bonne valeur est maintenant calculée, on a bien ``y_{3, 2} = y_{1, 2} + y_{2, 1} = 1 + 1 = 2``.
-""")
+PlutoUI.details(
+    md"Quelle est la formule pour ``y_{n,10}`` ? Quel est le graphe ? Est-ce que la bonne valeur est calculée ?",
+    md"""
+    ```math
+    y_{n, 10} = y_{n - 10, 10} + y_{n - 5, 5} + y_{n - 2, 2} + y_{n - 1, 1}.
+    ```
+    Le graphe a donc les arêtes ``((n, 10), (n - 10, 10))``, ... La bonne valeur est maintenant calculée, on a bien ``y_{3, 2} = y_{1, 2} + y_{2, 1} = 1 + 1 = 2``.
+    """,
+)
 
 # ╔═╡ 783532d8-910e-434d-bf59-0c8dc75cfef3
 md"""
@@ -838,28 +871,37 @@ Modifier l'implémentation pour utiliser cette formule. Est-ce plus rapide ? Pou
 """
 
 # ╔═╡ d8d21aa6-36b8-4498-82e5-5fcbbd9dbe46
-qa(md"Quelle est la complexité de cet algorithme ?", md"???")
+PlutoUI.details(md"Quelle est la complexité de cet algorithme ?", md"???")
 
 # ╔═╡ 46192b0c-e856-4e96-94bc-d691d201b391
-qa(md"Trouve-t-il le plus court chemin ?", md"Non, l'algorithme DFS a d'autres utilité comme le calcul de composantes fortement connexes ou tri topologique mais pas le calcul de plus court chemin. Un exception est le calcul de plus cours chemin dans un DAG. On peut alors le calculer en top-down avec memoïsation ce qui ressemble à un DFS.")
+PlutoUI.details(
+    md"Trouve-t-il le plus court chemin ?",
+    md"Non, l'algorithme DFS a d'autres utilité comme le calcul de composantes fortement connexes ou tri topologique mais pas le calcul de plus court chemin. Un exception est le calcul de plus cours chemin dans un DAG. On peut alors le calculer en top-down avec memoïsation ce qui ressemble à un DFS.",
+)
 
 # ╔═╡ 03986809-5a0d-4029-af2c-55eaf68ff5e2
 md"L'algorithme BFS résoud le problème de shortest path dans un graphe dirigé dont tous les poids sont 1."
 
 # ╔═╡ 18e81794-8275-4f90-a18a-8052aaf34bc6
-qa(md"Quelle est la complexité de l'algorithme BFS ?", md"???")
+PlutoUI.details(md"Quelle est la complexité de l'algorithme BFS ?", md"???")
 
 # ╔═╡ 2b1634c2-71fd-4fc3-afda-04721bef791d
 md"L'algorithme de Dijkstra résoud le problème de shortest path dans un graph dirigé quand tous les poids sont positifs."
 
 # ╔═╡ f34ffdae-4c4f-4358-9b7d-4125e82e781d
-qa(md"Quelle est la complexité de l'algorithme Dijkstra ?", md"???")
+PlutoUI.details(md"Quelle est la complexité de l'algorithme Dijkstra ?", md"???")
 
 # ╔═╡ e37ed884-1fd7-4fbe-ac7f-9931d595b3d3
-qa(md"Un fois qu'un noeud `v` est retourné par `dequeue!`, peut-il encore satisfaire `d < dist[next]` pour `v == next` par la suite ?", md"Non, les noeuds suivant retournés par `dequeue!` auront une valeur dans `dist` plus élevée donc `d` sera encore plus élevé donc on aura `d > d[v]` durant le reste de l'algorithme.")
+PlutoUI.details(
+    md"Un fois qu'un noeud `v` est retourné par `dequeue!`, peut-il encore satisfaire `d < dist[next]` pour `v == next` par la suite ?",
+    md"Non, les noeuds suivant retournés par `dequeue!` auront une valeur dans `dist` plus élevée donc `d` sera encore plus élevé donc on aura `d > d[v]` durant le reste de l'algorithme.",
+)
 
 # ╔═╡ 61dc575d-44cb-4afb-be2b-c9a1c15e86de
-qa(md"Que se peut-il se passer si une des arêtes a un poids négatif ?", md"L'algorithme peut ne jamais terminer... Il faut alors utiliser l'algorithme de Bellman-Ford (qui ne fait pas partie du cours 😢)")
+PlutoUI.details(
+    md"Que se peut-il se passer si une des arêtes a un poids négatif ?",
+    md"L'algorithme peut ne jamais terminer... Il faut alors utiliser l'algorithme de Bellman-Ford (qui ne fait pas partie du cours 😢)",
+)
 
 # ╔═╡ 0d96847c-6ff2-4811-baec-50705344ce0e
 md"""
@@ -1081,15 +1123,18 @@ function play(nrows, ncols, cols)
 end
 
 # ╔═╡ 9e114f3b-77f2-4b06-bff2-35e36c806b56
-HAlign(
-	md"tour = $slider_tour",
-	HTML(html(draw(play(nrows, ncols, cols[1:tour]), longueur)))
+hbox(
+    (md"tour = $slider_tour", HTML(html(draw(play(nrows, ncols, cols[1:tour]), longueur))));
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
 # ╔═╡ 35cffe19-61e3-4eb1-9ec1-aeb36f91c93b
-HAlign(
-	md"tour = $slider_mem_tour",
-	HTML(html(draw(play(mem_nrows, mem_ncols, mem_cols[1:mem_tour]), mem_longueur)))
+hbox(
+    [
+        md"tour = $slider_mem_tour",
+        HTML(html(draw(play(mem_nrows, mem_ncols, mem_cols[1:mem_tour]), mem_longueur))),
+    ];
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
 # ╔═╡ 1f057543-d832-42e3-9d5d-32ba4c825e63
@@ -2274,7 +2319,6 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─75bb5e30-76b8-486b-b3fa-9979aaf830a5
 # ╠═f83fdf0a-a2f5-4d72-9297-a409cf4e2bbb
 # ╠═accdf77c-fc4b-4777-bebf-9d69ebb36526
-# ╠═bd9ab2c4-b098-11ef-3c1e-7fe1458a8556
 # ╠═b01e3f5a-ad9f-4557-ba62-30e9c57b8532
 # ╠═fdd9318e-ee09-4eab-9322-ad97b03da002
 # ╠═039d5065-4ab2-4787-86e2-5612cfcd01b4
