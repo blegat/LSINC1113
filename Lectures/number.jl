@@ -17,16 +17,13 @@ macro bind(def, element)
 end
 
 # ╔═╡ 06679a09-47d7-4024-8232-4954c08747a0
-using PlutoUI, Primes, DataFrames, Luxor, Colors, LinearAlgebra
-
-# ╔═╡ 1b1d5c9b-5fc7-480e-9649-e9c44a49c38d
-include("utils.jl")
+using PlutoUI, PlutoUI.ExperimentalLayout, Primes, DataFrames, Luxor, Colors, LinearAlgebra
 
 # ╔═╡ 736307ec-a2a4-11ef-0f85-ad1a0093e06a
 md"# La théorie des nombres"
 
 # ╔═╡ bbc907b1-63f8-435a-badc-11ed88bd6cf5
-frametitle("Exemples")
+md"# Exemples"
 
 # ╔═╡ cbabee34-2ca2-4ad4-93ba-2ec3c941da5e
 md"""
@@ -40,7 +37,7 @@ Reformulation: pour tout nombre ``0 \le j < 7``, existe-t-il ``x`` et ``y`` tels
 """
 
 # ╔═╡ 909b8a36-79bb-4c1a-9dd7-4acaffc0434e
-frametitle("Théorème de Bézout")
+md"# Théorème de Bézout"
 
 # ╔═╡ 08b18315-c28e-44ed-beb2-5b17421b0224
 md"""
@@ -50,14 +47,16 @@ md"""
 """
 
 # ╔═╡ 7bad8c6c-45c7-402f-ad59-6857e9268901
-qa(md"Comment prouver que l'égalité ``ax + by = c`` implique que ``\text{gcd}(a, b)`` divise ``c`` ?",
-md"""
-Soit ``g = \text{gcd}(a, b)``. Par définition, il existe ``\alpha, \beta`` tels que ``a = \alpha g`` et ``b = \beta g``.
-On a alors ``c = ax + by = (\alpha x + \beta y) g`` ce qui implique que ``c`` est un multiple de ``g``.
-""",)
+PlutoUI.details(
+    md"Comment prouver que l'égalité ``ax + by = c`` implique que ``\text{gcd}(a, b)`` divise ``c`` ?",
+    md"""
+    Soit ``g = \text{gcd}(a, b)``. Par définition, il existe ``\alpha, \beta`` tels que ``a = \alpha g`` et ``b = \beta g``.
+    On a alors ``c = ax + by = (\alpha x + \beta y) g`` ce qui implique que ``c`` est un multiple de ``g``.
+    """,
+)
 
 # ╔═╡ cd481f6c-66f4-4ebf-9769-c3edc24f403b
-frametitle("Algorithme d'Euclide : élaboration")
+md"# Algorithme d'Euclide : élaboration"
 
 # ╔═╡ 37585789-bd43-4ce5-b550-ad712b70d226
 md"""
@@ -65,19 +64,23 @@ md"""
 """
 
 # ╔═╡ 6e59ee60-ef73-45ca-86eb-4d8a44c73771
-qa(md"**Observation clé** Que dit le théorème de Bézout par rapport à ``\text{gcd}(a, d)`` et ``r``.",
-md"""
-Le reste ``r`` est **divisible** par ``\text{gcd}(a, d)``.
-Le nombre ``\text{gcd}(a, d)`` divise donc les 3 nombres, ``a``, ``d`` et ``r`` et donc ``\text{gcd}(a, d) = \text{gcd}(a, d, r)``.
-""")
+PlutoUI.details(
+    md"**Observation clé** Que dit le théorème de Bézout par rapport à ``\text{gcd}(a, d)`` et ``r``.",
+    md"""
+    Le reste ``r`` est **divisible** par ``\text{gcd}(a, d)``.
+    Le nombre ``\text{gcd}(a, d)`` divise donc les 3 nombres, ``a``, ``d`` et ``r`` et donc ``\text{gcd}(a, d) = \text{gcd}(a, d, r)``.
+    """,
+)
 
 # ╔═╡ d6b89fda-308f-43da-8028-1a812b4516cf
-qa(md"**Observation clé** Que dit le théorème de Bézout par rapport à ``\text{gcd}(d, r)`` et ``a``.",
-md"""
-Le nombre ``a`` est **divisible** par ``\text{gcd}(d, r)``.
-Le nombre ``\text{gcd}(d, r)`` divise donc les 3 nombres, ``a``, ``d`` et ``r`` et donc ``\text{gcd}(d, r) = \text{gcd}(a, d, r)``.
-En combinant ça avec l'observation précédente, on a ``\text{gcd}(a, d) = \text{gcd}(d, r)``. On peut généraliser cela en le lemme suivant:
-""")
+PlutoUI.details(
+    md"**Observation clé** Que dit le théorème de Bézout par rapport à ``\text{gcd}(d, r)`` et ``a``.",
+    md"""
+    Le nombre ``a`` est **divisible** par ``\text{gcd}(d, r)``.
+    Le nombre ``\text{gcd}(d, r)`` divise donc les 3 nombres, ``a``, ``d`` et ``r`` et donc ``\text{gcd}(d, r) = \text{gcd}(a, d, r)``.
+    En combinant ça avec l'observation précédente, on a ``\text{gcd}(a, d) = \text{gcd}(d, r)``. On peut généraliser cela en le lemme suivant:
+    """,
+)
 
 # ╔═╡ d1b260fb-7500-47fb-bb48-21b5857ab55a
 md"""
@@ -85,21 +88,25 @@ md"""
 """
 
 # ╔═╡ 9207b107-e1b0-4328-a004-f4b8152b423f
-qa(md"**Observation clé** Si ``a > b``, trouver un mono-variant.",
-md"""
-On a ``(a, b) > (b, r)``. En effet, ``a > b`` par supposition et ``b > r`` par définition de l'algorithme d'Euclide.
-Notons que même si la supposition ``a > b`` n'est pas vraie, elle le devient pour ``\text{gcd}(b, r)``.
-""")
+PlutoUI.details(
+    md"**Observation clé** Si ``a > b``, trouver un mono-variant.",
+    md"""
+    On a ``(a, b) > (b, r)``. En effet, ``a > b`` par supposition et ``b > r`` par définition de l'algorithme d'Euclide.
+    Notons que même si la supposition ``a > b`` n'est pas vraie, elle le devient pour ``\text{gcd}(b, r)``.
+    """,
+)
 
 # ╔═╡ 48eba223-6cce-4aa2-9977-4883ba7903fc
-qa(md"**Observation finale** Si ``a`` et ``b`` sont positifs et qu'on effectue la substitution ``(a, b) \to (b, r)`` récursivement, le mono-variant impose qu'on ne puisse itérer qu'un nombre fini de fois, que va-t-il se passer ?",
-md"""
-La paire ``(a, b)`` va diminuer strictement (c'est à dire d'au moins 1) à chaque itération. Pourtant, ce sont des nombres entier positifs donc ils ne peuvent diminuer strictement qu'un nombre fini de fois. C'est une contradiction, comme cela se fait-il ?
-À un moment ``b`` vaudra 0, on ne pourra alors plus faire de division Euclidienne. On utilisera alors le fait que ``\text{gcd}(a, 0) = a``.
-""")
+PlutoUI.details(
+    md"**Observation finale** Si ``a`` et ``b`` sont positifs et qu'on effectue la substitution ``(a, b) \to (b, r)`` récursivement, le mono-variant impose qu'on ne puisse itérer qu'un nombre fini de fois, que va-t-il se passer ?",
+    md"""
+    La paire ``(a, b)`` va diminuer strictement (c'est à dire d'au moins 1) à chaque itération. Pourtant, ce sont des nombres entier positifs donc ils ne peuvent diminuer strictement qu'un nombre fini de fois. C'est une contradiction, comme cela se fait-il ?
+    À un moment ``b`` vaudra 0, on ne pourra alors plus faire de division Euclidienne. On utilisera alors le fait que ``\text{gcd}(a, 0) = a``.
+    """,
+)
 
 # ╔═╡ bd0c0258-7040-42e7-a20e-532b55af3a62
-frametitle("Algorithme d'Euclide : implémentation")
+md"# Algorithme d'Euclide : implémentation"
 
 # ╔═╡ 97736c6a-3f5d-4978-8dd2-0a11c09ba9f0
 function pgcd(a, b)
@@ -125,7 +132,7 @@ pgcd(gcd_a, gcd_b)
 md"The complexity is difficult to evaluate but can be shown to be ``O(\log(\min(a, b)))``."
 
 # ╔═╡ 0ee6972c-5069-4ba0-887f-be64c7d000d0
-frametitle("Arithmétique modulaire : somme")
+md"# Arithmétique modulaire : somme"
 
 # ╔═╡ f4f49568-dcf2-4c76-ba66-065d2fda7a4a
 md"""
@@ -136,7 +143,7 @@ a \equiv \alpha \pmod{n} \quad \text{et} \quad b \equiv \beta \pmod{n}
 """
 
 # ╔═╡ 09f44611-ba21-4982-ba1b-0691124642fc
-frametitle("Arithmétique modulaire : produit")
+md"# Arithmétique modulaire : produit"
 
 # ╔═╡ 642d545f-b1b9-49da-8a03-ad63e3214f59
 md"""
@@ -159,7 +166,7 @@ a \mid n \quad \text{et} \quad b \mid n \quad \Rightarrow \quad (ab/\text{gcd}(a
 """
 
 # ╔═╡ c3411941-d77f-46cb-8378-23998a1a4828
-frametitle("Division par 3 et 9")
+md"# Division par 3 et 9"
 
 # ╔═╡ a826d9d1-47db-4645-be6e-3ae0ed8d4e18
 md"""
@@ -182,7 +189,7 @@ Est-ce que 2345 est divisible par 11?
 """
 
 # ╔═╡ 83852dd5-3546-45af-a845-b01dab0aa2a6
-frametitle("Inverse et division modulaire")
+md"# Inverse et division modulaire"
 
 # ╔═╡ e1aafab7-c4f3-45ac-81ee-7f875ac7c8c6
 md"""
@@ -193,19 +200,23 @@ md"""
 """
 
 # ╔═╡ 9752afbb-96e6-4f96-92cb-09654cf46155
-qa(md"Est-ce que l'inverse modulaire existe toujours ?",
-md"""
-Par le théorème de Bézout, il existe si et seulement si ``\text{gcd}(a, n) \mid 1``, c'est à dire que ``\text{gcd}(a, n) = 1``.
-""")
+PlutoUI.details(
+    md"Est-ce que l'inverse modulaire existe toujours ?",
+    md"""
+    Par le théorème de Bézout, il existe si et seulement si ``\text{gcd}(a, n) \mid 1``, c'est à dire que ``\text{gcd}(a, n) = 1``.
+    """,
+)
 
 # ╔═╡ a7985d16-500b-4024-aaa1-78e654b94be4
-qa(md"Comment trouver l'inverse modulaire ?",
-md"""
-Si on avait les coefficients ``x`` et ``y`` tels que ``xa + yn = 1``, l'inverse serait ``x``. Dans l'algorithme d'Euclide, on ne garde que le **reste** et on oublie le **quotient**. Il faudrait combiner les quotients des différentes opérations pour trouver ``x``.
-""")
+PlutoUI.details(
+    md"Comment trouver l'inverse modulaire ?",
+    md"""
+    Si on avait les coefficients ``x`` et ``y`` tels que ``xa + yn = 1``, l'inverse serait ``x``. Dans l'algorithme d'Euclide, on ne garde que le **reste** et on oublie le **quotient**. Il faudrait combiner les quotients des différentes opérations pour trouver ``x``.
+    """,
+)
 
 # ╔═╡ 2cb5c6e0-b431-4d2e-b023-cd2131112eca
-frametitle("Algorithme d'Euclide étendu")
+md"# Algorithme d'Euclide étendu"
 
 # ╔═╡ b319619e-8f8d-4650-8fb4-76e5ba953470
 md"""
@@ -240,7 +251,7 @@ md"Pas une solution unique:"
 gcdx(gcd_a, gcd_b)
 
 # ╔═╡ 2c34c17e-12de-43ea-870c-818c97647836
-frametitle("Inversion modulaire par Euclide étendu")
+md"# Inversion modulaire par Euclide étendu"
 
 # ╔═╡ ca8905ef-97a3-424c-bb2e-559f7151585b
 md"""
@@ -282,7 +293,7 @@ md"S'il y avait 364 jours par ans, les fêtes seraient toujours le même jour de
 gcd(364, 7)
 
 # ╔═╡ d8a28762-8aab-49e9-b9ac-38901d34abff
-frametitle("Fast powering")
+md"# Fast powering"
 
 # ╔═╡ e505716d-af01-455f-a55a-a9c225822ad5
 md"""
@@ -290,19 +301,23 @@ Comment calculer ``a^m`` pour un large ``m`` ?
 """
 
 # ╔═╡ a7d06375-e4dd-47b1-8aba-11dc4d62954b
-qa(md"Supposons que ``m`` est pair, c'est à dire ``m = 2k``...",
-md"""
-On a ``a^{2k} = (a^k)^2``. Si ``b = a^k``, on calcule le produit ``b \times b``.
-""")
+PlutoUI.details(
+    md"Supposons que ``m`` est pair, c'est à dire ``m = 2k``...",
+    md"""
+    On a ``a^{2k} = (a^k)^2``. Si ``b = a^k``, on calcule le produit ``b \times b``.
+    """,
+)
 
 # ╔═╡ 6332b2f2-ed2f-448a-b1df-247b110e335b
-qa(md"Que faire si que ``m`` est impair, c'est à dire ``m = 2k + 1``...",
-md"""
-Si ``b = a^{2k}``, calcule le produit ``b \times a``.
-""")
+PlutoUI.details(
+    md"Que faire si que ``m`` est impair, c'est à dire ``m = 2k + 1``...",
+    md"""
+    Si ``b = a^{2k}``, calcule le produit ``b \times a``.
+    """,
+)
 
 # ╔═╡ 6107d03d-1e45-4eb9-b8e2-51e4a72485e6
-frametitle("Recursive implementation")
+md"# Recursive implementation"
 
 # ╔═╡ 58da5ba4-c858-4684-a9f4-5a39fdc4fb03
 function fast_power(prod_func::Function, a, power)
@@ -323,10 +338,13 @@ end
 @time fast_power(*, big(2), power)
 
 # ╔═╡ a4698418-ebf7-4992-a3ba-a15ff282bf87
-qa(md"Quelle est la complexité temporelle ?", md"Si ``n`` est impair, au coup suivant, il est pair donc il n'est impair qu'au pire une fois sur deux. En ``l`` multiplication, on divise ``m`` au moins par ``2^{l/2}`` donc on a une complexité logarithmique ``\Theta(\log(m))``  en supposant que `prod_func` a une complexité ``\Theta(1)``.")
+PlutoUI.details(
+    md"Quelle est la complexité temporelle ?",
+    md"Si ``n`` est impair, au coup suivant, il est pair donc il n'est impair qu'au pire une fois sur deux. En ``l`` multiplication, on divise ``m`` au moins par ``2^{l/2}`` donc on a une complexité logarithmique ``\Theta(\log(m))``  en supposant que `prod_func` a une complexité ``\Theta(1)``.",
+)
 
 # ╔═╡ 59817f59-429b-4f17-a46a-185571fd1e5a
-frametitle("Fast modular powering")
+md"# Fast modular powering"
 
 # ╔═╡ 8670abc2-63e6-496a-b20c-812197acd9ad
 fast_mod_power(a, power, n) = fast_power((a, b) -> mod(a * b, n), a, power)
@@ -347,7 +365,9 @@ md"Et modulo 999 ?"
 md"Par l'algo d'Euclide, ``\text{gcd}(n, n - 1) = 1`` donc ``\text{gcd}(1000, 999) = 1``."
 
 # ╔═╡ 9d4858f8-e63d-46e0-a6cc-992d3cc4a9a4
-qa(md"Comment trouver `mod(2^power, 999000)` en utilisant `pow_1000` et `pow_999` ?", md"
+PlutoUI.details(
+    md"Comment trouver `mod(2^power, 999000)` en utilisant `pow_1000` et `pow_999` ?",
+    md"
 On peut utiliser une astuce similaire à l'interpolation Lagrangienne.
 On veut trouver ``x`` et ``y`` tels que
 ```math
@@ -355,13 +375,14 @@ On veut trouver ``x`` et ``y`` tels que
 ```
 On veut que ``x \equiv 0 \pmod{999}`` et ``x \equiv 1 \pmod{1000}``.
 On utilise donc ``x = 999x'`` avec ``x' \equiv (999)^{-1} \pmod{1000}``.
-")
+",
+)
 
 # ╔═╡ 6f10de7b-ce05-4f82-82e7-4110be44e8cc
 mod(pow_1000 * 999 * modinv(999, 1000) + pow_999 * 1000 * modinv(1000, 999), 999000)
 
 # ╔═╡ c2fab245-8a98-4b41-ade2-c5b16e9c39f9
-frametitle("Chinese remainder theorem")
+md"# Chinese remainder theorem"
 
 # ╔═╡ 821de132-559b-4420-b866-e97134c5bd9a
 function chinese_remainder_theorem(r, n)
@@ -389,13 +410,16 @@ md"`primes_upper` = $(@bind primes_upper Slider(50:300, default = 100, show_valu
 prime_list = primes(3, primes_upper)
 
 # ╔═╡ 61462af5-69bd-42be-8918-7992c79ee00d
-qa(md"Comment savoir si `prime_list` contient assez de nombres pour avoir la bonne réponse ?", md"On a la bonne réponse modulo `prod(prime_list)` donc si `prod(prime_list) > 2^power`, on a la bonne réponse.")
+PlutoUI.details(
+    md"Comment savoir si `prime_list` contient assez de nombres pour avoir la bonne réponse ?",
+    md"On a la bonne réponse modulo `prod(prime_list)` donc si `prod(prime_list) > 2^power`, on a la bonne réponse.",
+)
 
 # ╔═╡ 592ae01b-2819-402d-9538-17018df5c34b
-frametitle("Fibonacci sequence")
+md"# Fibonacci sequence"
 
 # ╔═╡ 594829e2-585b-4d48-bb6e-b35d9543cfbe
-frametitle("Fast powering for matrices")
+md"# Fast powering for matrices"
 
 # ╔═╡ 72ec8410-05d9-475a-93d4-47153cc0ce31
 fib_rec(n) = (n == 0 ? 0 : (n == 1 ? 1 : fib_rec(n - 1) + fib_rec(n - 2)))
@@ -428,7 +452,7 @@ end
 @time fib_pow(20000)
 
 # ╔═╡ 4714b7d7-32ee-42a1-bfa5-93eafda739d3
-frametitle("Diagonalization to speed up powering")
+md"# Diagonalization to speed up powering"
 
 # ╔═╡ b5f3620d-0942-41bb-80b0-d2ddcfe65090
 E = eigen([1 1; 1 0])
@@ -455,7 +479,7 @@ end
 @time fib_pow(20000)
 
 # ╔═╡ 6c3bca1a-3109-4e48-97e1-e0ed4599ffb2
-frametitle("Closed form solution")
+md"# Closed form solution"
 
 # ╔═╡ 1ca71c26-f98c-4126-a1c5-98786fde7e9b
 md"""
@@ -496,7 +520,7 @@ fib_closed(n) = (((1 + √big(5)) / 2)^n - ((1 - √big(5)) / 2)^n) / √big(5)
 @time fib_pow(20000)
 
 # ╔═╡ 8f6ba1c4-a971-4dc4-ac5d-2f30790aecde
-frametitle("Fermat’s Little Theorem")
+md"# Fermat’s Little Theorem"
 
 # ╔═╡ bc58ba24-90f0-4913-8f66-10bb6cb54076
 md"""
@@ -509,7 +533,7 @@ b^{p - 1} \equiv 1 \pmod{p}
 """
 
 # ╔═╡ 82ba8fe1-435e-422b-abb7-cb50a7a85e1e
-frametitle("Dicrete logarithm")
+md"# Dicrete logarithm"
 
 # ╔═╡ 8b16a522-9be4-4286-b64d-3d1bbdef7142
 md"""
@@ -529,7 +553,7 @@ function discrete_log(a, g, p)
 end
 
 # ╔═╡ 64eb4b52-4946-467c-867a-a6fc437b15f6
-frametitle("Meet in the middle approach")
+md"# Meet in the middle approach"
 
 # ╔═╡ a7d9703a-5121-4b43-8cd4-2acf9a0d91ef
 md"""
@@ -582,7 +606,7 @@ L'identification des collision peut se faire en ``\mathcal{O}(\sqrt{n}\log(n))``
 """
 
 # ╔═╡ ee43c389-55f4-4cf9-a8db-ce37d1b89db4
-frametitle("Shanks's Babystep–Giantstep Algorithm")
+md"# Shanks's Babystep–Giantstep Algorithm"
 
 # ╔═╡ 4853f4ef-fbb8-48c3-9523-13ab4969d097
 function baby_steps(g, n, p)
@@ -617,10 +641,10 @@ function shanks_discrete_log(a, g, p)
 end
 
 # ╔═╡ 1e27eedc-5308-4608-863f-fb81d60acdf0
-qa(md"Quelle est la complexité?", md"``\mathcal{O}(\sqrt{p}\log(p))``")
+PlutoUI.details(md"Quelle est la complexité?", md"``\mathcal{O}(\sqrt{p}\log(p))``")
 
 # ╔═╡ a293bb0e-078d-4335-a446-3096a79c03bc
-frametitle("Diffie-Hellman")
+md"# Diffie-Hellman"
 
 # ╔═╡ c5e906c8-0f73-4955-baa7-337195329e04
 md"""
@@ -642,22 +666,21 @@ A' \equiv B^a \pmod{p} \qquad B' \equiv A^b \pmod{p}
 """
 
 # ╔═╡ 227e415e-ab17-4f3a-b695-9573c9ee2b57
-qa(md"What is the relation between ``A'`` and ``B'`` ?",
-md"""
-```math
-A' \equiv (g^b)^a \equiv g^{ab} \equiv (g^{a})^b \equiv B' \pmod{p}
-```
-Alice et Bob ont donc maintenant la même clef! Il est cependant difficile de trouver ``A'`` depuis ``A`` et ``B`` sans connaitre les secrets ``a`` ou ``b`` si le Discrete Logarithm Problem est difficile.
-""")
+PlutoUI.details(
+    md"What is the relation between ``A'`` and ``B'`` ?",
+    md"""
+    ```math
+    A' \equiv (g^b)^a \equiv g^{ab} \equiv (g^{a})^b \equiv B' \pmod{p}
+    ```
+    Alice et Bob ont donc maintenant la même clef! Il est cependant difficile de trouver ``A'`` depuis ``A`` et ``B`` sans connaitre les secrets ``a`` ou ``b`` si le Discrete Logarithm Problem est difficile.
+    """,
+)
 
 # ╔═╡ 3da58487-192f-458a-9d47-7a4ce98b6da3
-section("Utils")
+md"# Utils"
 
 # ╔═╡ 7f9bd301-355b-43f5-b168-22fac9e52511
 Primes.primes(10)
-
-# ╔═╡ bafc9870-3823-4d1d-b0b7-94c69ee764d5
-import DocumenterCitations
 
 # ╔═╡ b57adc77-3783-4958-91a0-e90782338755
 slider_a = @bind a Slider(1:100, default=11, show_value = true)
@@ -772,66 +795,72 @@ end
 fib_picker = @bind fib_n Slider(1:12, default = 10, show_value = true)
 
 # ╔═╡ 708c442b-cbff-4e1a-b70d-e704453cfd3d
-HAlign(
-md"""
-Équation de récurrence:
-```math
-x_{k+1} = x_k + x_{k-1}
-```
-Reformulation sans ``(k-1)``
-```math
-\begin{align}
-x_{k+1} & = x_k + y_{k}\\
-y_{k+1} & = x_k
-\end{align}
-```
-Forme matricielle:
-```math
-\begin{bmatrix}
-x_{k+1}\\
-y_{k+1}
-\end{bmatrix}
-=
-\begin{bmatrix}
-1 & 1\\
-1 & 0
-\end{bmatrix}
-\begin{bmatrix}
-x_{k}\\
-y_{k}
-\end{bmatrix}
-```
-Matrix power:
-```math
-\begin{bmatrix}
-x_n\\
-y_n
-\end{bmatrix}
-=
-\begin{bmatrix}
-1 & 1\\
-1 & 0
-\end{bmatrix}^n
-\begin{bmatrix}
-x_0\\
-y_0
-\end{bmatrix}
-```
-""",
-md"""
-`n` = $(fib_picker)\
+hbox(
+    [
+        md"""
+        Équation de récurrence:
+        ```math
+        x_{k+1} = x_k + x_{k-1}
+        ```
+        Reformulation sans ``(k-1)``
+        ```math
+        \begin{align}
+        x_{k+1} & = x_k + y_{k}\\
+        y_{k+1} & = x_k
+        \end{align}
+        ```
+        Forme matricielle:
+        ```math
+        \begin{bmatrix}
+        x_{k+1}\\
+        y_{k+1}
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        1 & 1\\
+        1 & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+        x_{k}\\
+        y_{k}
+        \end{bmatrix}
+        ```
+        Matrix power:
+        ```math
+        \begin{bmatrix}
+        x_n\\
+        y_n
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        1 & 1\\
+        1 & 0
+        \end{bmatrix}^n
+        \begin{bmatrix}
+        x_0\\
+        y_0
+        \end{bmatrix}
+        ```
+        """,
+        md"""
+        `n` = $(fib_picker)\
 
-$(draw_fib(fib_n))
-""",
+        $(draw_fib(fib_n))
+        """,
+    ];
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
 # ╔═╡ 57816e2c-a675-43e7-b674-2877ffcf1415
 p_picker = @bind p Slider(primes(20), default = 11, show_value = true)
 
 # ╔═╡ 0e3fb524-bea1-4ef0-9589-36230a84e949
-gp_picker = HAlign(
-	md"`g` = $(@bind g Slider(2:(p-1), default = 2, show_value = true))",
-	md"`p` = $p_picker",
+gp_picker = hbox(
+    [
+        md"`g` = $(@bind g Slider(2:(p-1), default = 2, show_value = true))",
+        md"`p` = $p_picker",
+    ];
+    style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
 # ╔═╡ 4cff1d10-422f-4b12-b790-a589c972fbb7
@@ -886,26 +915,20 @@ shanks_x = shanks_discrete_log(3, g, p)
 # ╔═╡ ab467d70-ceb1-40e5-b8fe-82e2f1bd95fd
 fast_mod_power(g, shanks_x, p)
 
-# ╔═╡ ba16d83d-21a5-4f0c-807b-674a167da4dc
-biblio = load_biblio!()
-
-# ╔═╡ 6c3595d2-4f68-44da-90e7-dc9c68479bcf
-cite(args...) = bibcite(biblio, args...)
-
 # ╔═╡ 3df688c8-1c52-462d-88be-daa153333c60
 md"""
-* Théorie des nombres: $(cite("hoffstein2014Introduction", "1.2, 1.3, 1.4, 1.5, 2.2, 2.3"))
-* Discrete Logarithme Problem et Diffie-Hellman: $(cite("hoffstein2014Introduction", "2.2, 2.3, 2.6, 2.7, 2.8"))
+* Théorie des nombres: [Hoffstein et al., 1.2, 1.3, 1.4, 1.5, 2.2, 2.3](https://doi.org/10.1007/978-1-4939-1711-2)
+* Discrete Logarithme Problem et Diffie-Hellman: [Hoffstein et al., 2.2, 2.3, 2.6, 2.7, 2.8](https://doi.org/10.1007/978-1-4939-1711-2)
 """
 
 # ╔═╡ a7afc0cb-a980-4f4f-b782-9791d932ee52
 md"""
-Voir $(cite("hoffstein2014Introduction", "Section 2.8")).
+Voir [Hoffstein et al., Section 2.8](https://doi.org/10.1007/978-1-4939-1711-2).
 """
 
 # ╔═╡ ed023033-1044-4d48-aab1-39e9300043f7
 md"""
-**Fermat's little theorem** $(cite("hoffstein2014Introduction", "Theorem 1.24"))
+**Fermat's little theorem** [Hoffstein et al., Theorem 1.24](https://doi.org/10.1007/978-1-4939-1711-2)
 
 ```math
 \text{Si} \quad p \text{ est premier}\quad \text{et} \quad p \nmid g,\quad \text{alors} \quad
@@ -914,34 +937,35 @@ g^{p - 1} \equiv 1 \pmod{p}.
 """
 
 # ╔═╡ bcf73ad7-a08b-4cbb-bcd2-d0abc002e7e2
-qa(md"Quelle est la complexité spatiale et temporelle de `discrete_log` ?", md"""
-``\mathcal{O}(p)`` temporelle et ``\Omega(1)`` spatiale. Voir $(cite("hoffstein2014Introduction", "Proposition 2.19")).
-""")
+PlutoUI.details(
+    md"Quelle est la complexité spatiale et temporelle de `discrete_log` ?",
+    md"""
+``\mathcal{O}(p)`` temporelle et ``\Omega(1)`` spatiale. Voir [Hoffstein et al., Proposition 2.19](https://doi.org/10.1007/978-1-4939-1711-2).
+""",
+)
 
 # ╔═╡ bc9a718f-4b97-4e15-acf8-d180abc5b6d5
-qa(md"Est-ce une complexité linéaire ou exponentielle en fonction de la taille de l'input",
-md"""
-La taille est proportionnelle à ``\log_2(p)`` donc on être linéaire en ``p`` c'est être proportionnel à ``2^{\log_2(p)}`` et donc la complexité est exponentielle en la taille de l'input ! $(cite("hoffstein2014Introduction", "Section 2.6"))
-""")
+PlutoUI.details(
+    md"Est-ce une complexité linéaire ou exponentielle en fonction de la taille de l'input",
+    md"""
+    La taille est proportionnelle à ``\log_2(p)`` donc on être linéaire en ``p`` c'est être proportionnel à ``2^{\log_2(p)}`` et donc la complexité est exponentielle en la taille de l'input ! [Hoffstein et al., Section 2.6](https://doi.org/10.1007/978-1-4939-1711-2)
+    """,
+)
 
 # ╔═╡ 1072a756-5026-4de9-93a8-f942d54c474a
-md"""Voir $(cite("hoffstein2014Introduction", "Section 2.7"))"""
+md"""Voir [Hoffstein et al., Section 2.7](https://doi.org/10.1007/978-1-4939-1711-2)"""
 
 # ╔═╡ 35b7b8b7-bff6-4f64-91b9-b65035162365
-md"""Voir $(cite("hoffstein2014Introduction", "Section 2.3"))"""
-
-# ╔═╡ 8a5a251f-5373-445a-97b1-4d652c6b7ba8
-refs(keys) = bibrefs(biblio, keys)
+md"""Voir [Hoffstein et al., Section 2.3](https://doi.org/10.1007/978-1-4939-1711-2)"""
 
 # ╔═╡ 41cf9efd-65e5-4abb-94d3-e824780e659c
-refs(["hoffstein2014Introduction"])
+md"Jeffrey Hoffstein, Jill Pipher et Joseph H. Silverman. [*An Introduction to Mathematical Cryptography*](https://doi.org/10.1007/978-1-4939-1711-2). Springer, 2014."
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-DocumenterCitations = "daee34ce-89f3-4625-b898-19384cb65244"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Luxor = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
@@ -950,7 +974,6 @@ Primes = "27ebfcd6-29c5-5fa9-bf4b-fb8fc14df3ae"
 [compat]
 Colors = "~0.12.11"
 DataFrames = "~1.7.0"
-DocumenterCitations = "~1.3.5"
 Luxor = "~4.1.0"
 PlutoUI = "~0.7.60"
 Primes = "~0.5.6"
@@ -962,23 +985,13 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.7"
 manifest_format = "2.0"
-project_hash = "ac1471e25fb09e7b5045e691de8d2b60f0992157"
-
-[[deps.ANSIColoredPrinters]]
-git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
-uuid = "a4c015fc-c6ff-483c-b24f-f7ea428134e9"
-version = "0.0.1"
+project_hash = "5a33f058eeafc8b3d06fd6b90f7a237f064d7961"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
 git-tree-sha1 = "6e1d2a35f2f90a4bc7c2ed98079b2ba09c35b83a"
 uuid = "6e696c72-6542-2067-7265-42206c756150"
 version = "1.3.2"
-
-[[deps.AbstractTrees]]
-git-tree-sha1 = "2d9c9a55f9c93e8887ad391fbae72f8ef55e1177"
-uuid = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
-version = "0.4.5"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -991,24 +1004,6 @@ version = "1.11.0"
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 version = "1.11.0"
-
-[[deps.BibInternal]]
-deps = ["TestItems"]
-git-tree-sha1 = "b3107800faf461eca3281f89f8d768f4b3e99969"
-uuid = "2027ae74-3657-4b95-ae00-e2f7d55c3e64"
-version = "0.3.7"
-
-[[deps.BibParser]]
-deps = ["BibInternal", "DataStructures", "Dates", "JSONSchema", "TestItems", "YAML"]
-git-tree-sha1 = "33478bed83bd124ea8ecd9161b3918fb4c70e529"
-uuid = "13533e5b-e1c2-4e57-8cef-cac5e52f6474"
-version = "0.2.2"
-
-[[deps.Bibliography]]
-deps = ["BibInternal", "BibParser", "DataStructures", "Dates", "FileIO", "YAML"]
-git-tree-sha1 = "520c679daed011ce835d9efa7778863aad6687ed"
-uuid = "f1be7e48-bf82-45af-a471-ae754a193061"
-version = "0.2.20"
 
 [[deps.Bzip2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1027,12 +1022,6 @@ deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jl
 git-tree-sha1 = "009060c9a6168704143100f36ab08f06c2af4642"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.18.2+1"
-
-[[deps.CodecZlib]]
-deps = ["TranscodingStreams", "Zlib_jll"]
-git-tree-sha1 = "bce6804e5e6044c6daab27bb533d1295e4a2e759"
-uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.7.6"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
@@ -1092,24 +1081,6 @@ version = "1.0.0"
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 version = "1.11.0"
-
-[[deps.DocStringExtensions]]
-deps = ["LibGit2"]
-git-tree-sha1 = "2fb1e02f2b635d0845df5d7c167fec4dd739b00d"
-uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
-version = "0.9.3"
-
-[[deps.Documenter]]
-deps = ["ANSIColoredPrinters", "AbstractTrees", "Base64", "CodecZlib", "Dates", "DocStringExtensions", "Downloads", "Git", "IOCapture", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "MarkdownAST", "Pkg", "PrecompileTools", "REPL", "RegistryInstances", "SHA", "TOML", "Test", "Unicode"]
-git-tree-sha1 = "d0ea2c044963ed6f37703cead7e29f70cba13d7e"
-uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-version = "1.8.0"
-
-[[deps.DocumenterCitations]]
-deps = ["AbstractTrees", "Bibliography", "Dates", "Documenter", "Logging", "Markdown", "MarkdownAST", "OrderedCollections", "Unicode"]
-git-tree-sha1 = "5a72f3f804deb1431cb79f5636163e4fdf8ed8ed"
-uuid = "daee34ce-89f3-4625-b898-19384cb65244"
-version = "1.3.5"
 
 [[deps.Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
@@ -1178,18 +1149,6 @@ deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Li
 git-tree-sha1 = "9b02998aba7bf074d14de89f9d37ca24a1a0b046"
 uuid = "78b55507-aeef-58d4-861c-77aaff3498b1"
 version = "0.21.0+0"
-
-[[deps.Git]]
-deps = ["Git_jll"]
-git-tree-sha1 = "04eff47b1354d702c3a85e8ab23d539bb7d5957e"
-uuid = "d7ba0133-e1db-5d97-8f8c-041e4b3a1eb2"
-version = "1.3.1"
-
-[[deps.Git_jll]]
-deps = ["Artifacts", "Expat_jll", "JLLWrappers", "LibCURL_jll", "Libdl", "Libiconv_jll", "OpenSSL_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "ea372033d09e4552a04fd38361cd019f9003f4f4"
-uuid = "f8c6e375-362e-5223-8a59-34ff63f689eb"
-version = "2.46.2+0"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
@@ -1278,24 +1237,6 @@ git-tree-sha1 = "31e996f0a15c7b280ba9f76636b3ff9e2ae58c9a"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.4"
 
-[[deps.JSON3]]
-deps = ["Dates", "Mmap", "Parsers", "PrecompileTools", "StructTypes", "UUIDs"]
-git-tree-sha1 = "1d322381ef7b087548321d3f878cb4c9bd8f8f9b"
-uuid = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
-version = "1.14.1"
-
-    [deps.JSON3.extensions]
-    JSON3ArrowExt = ["ArrowTypes"]
-
-    [deps.JSON3.weakdeps]
-    ArrowTypes = "31f734f8-188a-4ce0-8406-c8a06bd891cd"
-
-[[deps.JSONSchema]]
-deps = ["Downloads", "JSON", "JSON3", "URIs"]
-git-tree-sha1 = "243f1cdb476835d7c249deb9f29ad6b7827da7d3"
-uuid = "7d188eb4-7ad8-530c-ae41-71a32a6d4692"
-version = "1.4.1"
-
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "25ee0be4d43d0269027024d75a24c24d6c6e590c"
@@ -1330,11 +1271,6 @@ version = "2.10.2+1"
 git-tree-sha1 = "dda21b8cbd6a6c40d9d02a73230f9d70fed6918c"
 uuid = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 version = "1.4.0"
-
-[[deps.LazilyInitializedFields]]
-git-tree-sha1 = "0f2da712350b020bc3957f269c9caad516383ee0"
-uuid = "0e77f7df-68c5-4e49-93ce-4cd80f5598bf"
-version = "1.3.0"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
@@ -1445,12 +1381,6 @@ deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 version = "1.11.0"
 
-[[deps.MarkdownAST]]
-deps = ["AbstractTrees", "Markdown"]
-git-tree-sha1 = "465a70f0fc7d443a00dcdc3267a497397b8a3899"
-uuid = "d0879d2d-cac2-40c8-9cee-1863dc0c7391"
-version = "0.1.2"
-
 [[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
@@ -1540,10 +1470,12 @@ version = "0.43.4+0"
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 version = "1.11.0"
-weakdeps = ["REPL"]
 
     [deps.Pkg.extensions]
     REPLExt = "REPL"
+
+    [deps.Pkg.weakdeps]
+    REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
@@ -1591,11 +1523,6 @@ deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 version = "1.11.0"
 
-[[deps.REPL]]
-deps = ["InteractiveUtils", "Markdown", "Sockets", "StyledStrings", "Unicode"]
-uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
-version = "1.11.0"
-
 [[deps.Random]]
 deps = ["SHA"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
@@ -1605,12 +1532,6 @@ version = "1.11.0"
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
-
-[[deps.RegistryInstances]]
-deps = ["LazilyInitializedFields", "Pkg", "TOML", "Tar"]
-git-tree-sha1 = "ffd19052caf598b8653b99404058fce14828be51"
-uuid = "2792f1a3-b283-48e8-9a74-f99dce5104f3"
-version = "0.1.0"
 
 [[deps.Requires]]
 deps = ["UUIDs"]
@@ -1638,10 +1559,6 @@ version = "1.4.7"
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 version = "1.11.0"
 
-[[deps.Sockets]]
-uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
-version = "1.11.0"
-
 [[deps.SortingAlgorithms]]
 deps = ["DataStructures"]
 git-tree-sha1 = "66e0a8e672a0bdfca2c3f5937efb8538b9ddc085"
@@ -1660,27 +1577,11 @@ version = "1.11.1"
     [deps.Statistics.weakdeps]
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
-[[deps.StringEncodings]]
-deps = ["Libiconv_jll"]
-git-tree-sha1 = "b765e46ba27ecf6b44faf70df40c57aa3a547dcb"
-uuid = "69024149-9ee7-55f6-a4c4-859efe599b68"
-version = "0.3.7"
-
 [[deps.StringManipulation]]
 deps = ["PrecompileTools"]
 git-tree-sha1 = "a6b1675a536c5ad1a60e5a5153e1fee12eb146e3"
 uuid = "892a3eda-7b42-436c-8928-eab12a02cf0e"
 version = "0.4.0"
-
-[[deps.StructTypes]]
-deps = ["Dates", "UUIDs"]
-git-tree-sha1 = "159331b30e94d7b11379037feeb9b690950cace8"
-uuid = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
-version = "1.11.0"
-
-[[deps.StyledStrings]]
-uuid = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
-version = "1.11.0"
 
 [[deps.TOML]]
 deps = ["Dates"]
@@ -1708,16 +1609,6 @@ version = "1.10.0"
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 version = "1.11.0"
-
-[[deps.TestItems]]
-git-tree-sha1 = "42fd9023fef18b9b78c8343a4e2f3813ffbcefcb"
-uuid = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
-version = "1.0.0"
-
-[[deps.TranscodingStreams]]
-git-tree-sha1 = "0c45878dcfdcfa8480052b6ab162cdd138781742"
-uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.11.3"
 
 [[deps.Tricks]]
 git-tree-sha1 = "7822b97e99a1672bfb1b49b668a6d46d58d8cbcb"
@@ -1803,12 +1694,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "e92a1a012a10506618f10b7047e478403a046c77"
 uuid = "c5fb5394-a638-5e4d-96e5-b29de1b5cf10"
 version = "1.5.0+0"
-
-[[deps.YAML]]
-deps = ["Base64", "Dates", "Printf", "StringEncodings"]
-git-tree-sha1 = "dea63ff72079443240fbd013ba006bcbc8a9ac00"
-uuid = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
-version = "0.4.12"
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
@@ -1946,7 +1831,6 @@ version = "3.5.0+0"
 # ╟─d8a28762-8aab-49e9-b9ac-38901d34abff
 # ╟─e505716d-af01-455f-a55a-a9c225822ad5
 # ╟─c8f85081-3659-4796-8550-2e708b09c8d7
-# ╠═7881bb75-3ef9-496e-860b-03ced6b593c5
 # ╟─a7d06375-e4dd-47b1-8aba-11dc4d62954b
 # ╟─6332b2f2-ed2f-448a-b1df-247b110e335b
 # ╟─6107d03d-1e45-4eb9-b8e2-51e4a72485e6
@@ -2041,7 +1925,6 @@ version = "3.5.0+0"
 # ╟─3da58487-192f-458a-9d47-7a4ce98b6da3
 # ╠═7f9bd301-355b-43f5-b168-22fac9e52511
 # ╠═06679a09-47d7-4024-8232-4954c08747a0
-# ╠═bafc9870-3823-4d1d-b0b7-94c69ee764d5
 # ╠═b57adc77-3783-4958-91a0-e90782338755
 # ╠═18031ccb-657f-409a-9080-9a0ada3ae8b5
 # ╠═256c8009-4d2b-42f8-adaa-6f238ef22c6d
@@ -2051,9 +1934,5 @@ version = "3.5.0+0"
 # ╠═8315b53f-abca-483d-bbf6-7e9193e751c9
 # ╠═0c8ab02e-80b0-44d6-a4a8-c813aac38209
 # ╠═57816e2c-a675-43e7-b674-2877ffcf1415
-# ╠═1b1d5c9b-5fc7-480e-9649-e9c44a49c38d
-# ╠═ba16d83d-21a5-4f0c-807b-674a167da4dc
-# ╠═6c3595d2-4f68-44da-90e7-dc9c68479bcf
-# ╠═8a5a251f-5373-445a-97b1-4d652c6b7ba8
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

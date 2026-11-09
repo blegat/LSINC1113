@@ -447,33 +447,6 @@ let
 	"""
 end
 
-# ╔═╡ 0f87464a-1a55-4f7c-8a88-bf514f5177a0
-begin
-    struct Join
-		list
-	    Join(a) = new(a)
-	    Join(a, b, args...) = Join(tuple(a, b, args...))
-    end
-	function Base.show(io::IO, mime::MIME"text/html", d::Join)
-		for el in d.list
-			show(io, mime, el)
-		end
-	end
-end
-
-# ╔═╡ 9e6732a7-d2df-465f-a7fa-c119a64deb9a
-begin
-	struct HTMLTag
-		tag::String
-		parent
-	end
-	function Base.show(io::IO, mime::MIME"text/html", d::HTMLTag)
-		write(io, "<", d.tag, ">")
-		show(io, mime, d.parent)
-		write(io, "</", d.tag, ">")
-	end
-end
-
 # ╔═╡ 0e9e8c6e-83ff-4c4c-b9d1-19a0593a3cba
 f(i, j, n) = cispi(-2 * i * j / n)
 
@@ -573,25 +546,22 @@ let
 	p
 end
 
-# ╔═╡ b0a265b8-e3fd-4a6c-b813-904d18ea83e7
-function qa(question, answer)
-	return HTMLTag("details", Join(HTMLTag("summary", question), answer))
-end
-
 # ╔═╡ 1dfad36a-05a5-4108-8c67-d4c866be89c0
-qa(
-	html"Quel est la complexité de la convolution vs produit classique s'ils sont discrets de longueur n ?",
-	md"Convolution: ``\Theta(n^2)``, produit classique: ``\Theta(n)``. On verra que la complexité de la FFT est ``\Theta(n \log(n))`` donc ``f \ast g`` a une complexité de ``\Theta(n^2)`` et ``\mathcal{F}^{-1}(\mathcal{F}(f) \cdot \mathcal{F}(g))`` a une complexité de ``\Theta(n + 3n \log(n)) = \Theta(n\log(n))`` ce qui est plus rapide pour un nombre ``n`` suffisamment grand.",
+PlutoUI.details(
+    html"Quel est la complexité de la convolution vs produit classique s'ils sont discrets de longueur n ?",
+    md"Convolution: ``\Theta(n^2)``, produit classique: ``\Theta(n)``. On verra que la complexité de la FFT est ``\Theta(n \log(n))`` donc ``f \ast g`` a une complexité de ``\Theta(n^2)`` et ``\mathcal{F}^{-1}(\mathcal{F}(f) \cdot \mathcal{F}(g))`` a une complexité de ``\Theta(n + 3n \log(n)) = \Theta(n\log(n))`` ce qui est plus rapide pour un nombre ``n`` suffisamment grand.",
 )
 
 # ╔═╡ 13d00d91-dae3-451c-924a-6b120c0a605d
-qa(
-	html"Pourquoi obtient-on le même résultat avec la convolution et la cross-corrélation ?",
-	md"Parce que la gaussienne est symmétrique !",
+PlutoUI.details(
+    html"Pourquoi obtient-on le même résultat avec la convolution et la cross-corrélation ?",
+    md"Parce que la gaussienne est symmétrique !",
 )
 
 # ╔═╡ 6b9a064c-1097-4754-af85-5dcaa435b893
-qa(md"Quelle est la complexité de FIR ? et de de FFT ?", md"""
+PlutoUI.details(
+    md"Quelle est la complexité de FIR ? et de de FFT ?",
+    md"""
 **FIR**: ``(f \ast g)_{k,l} = \sum_{i=1}^n\sum_{j=1}^n f_{i,j} g_{k - i, l -j}``
 Pour une pair ``k,l``, c'est ``n^2`` opérations.
 Comme il y a ``n`` valeurs de ``k`` et idem pour ``l``, je dois faire cette double somme ``n^2`` fois.
@@ -604,10 +574,13 @@ Donc la complexité totale c'est ``n^4``.
 * La complexité de la FT inverse ``\mathcal{F}^{-1}(\ldots)`` est ``n^2\log(n^2)``
 Au total, ``3n^2\log(n^2) + n^2``. Notons que ``\log(n^2) = 2\log(n)``.
 En ignorant les constantes, on a donc ``n^2\log(n) + n^2``.
-""")
+""",
+)
 
 # ╔═╡ 976ac813-8f46-4912-a04a-ec586155867d
-qa(md"Quelle est la complexité du produit de polynômes avec ou sans la FFT ?", md"""
+PlutoUI.details(
+    md"Quelle est la complexité du produit de polynômes avec ou sans la FFT ?",
+    md"""
 **Sans FFT**: ``(f \ast g)_{k} = \sum_{i=1}^n f_{i} g_{l - i}``
 Pour un ``k``, c'est ``n`` opérations.
 Comme il y a ``n`` valeurs de ``k``, je dois faire cette somme ``n`` fois.
@@ -620,90 +593,91 @@ Donc la complexité totale c'est ``n^2``.
 * La complexité de la FT inverse ``\mathcal{F}^{-1}(\ldots)`` est ``n\log(n``
 Au total, ``3n\log(n) + n``.
 En ignorant les constantes, on a donc ``n\log(n) + n``.
-""")
+""",
+)
 
 # ╔═╡ 87dbf272-1d03-4f9e-b7e1-9b76197b0a83
-qa(
-	html"Comment utiliser cela pour calculer le produit de grand nombres ?",
-	md"Un nombre représenté par les chiffres ``a_na_{n-1}\cdots a_1a_0`` est égal à ``a_n 10^n + a_{n-1} 10^{n-1} + \cdots + a_1 10 + a_0`` ou encore ``p(10)`` où ``p(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0``. Le produit de nombre peut donc être calculé via un produit de polynôme!",
+PlutoUI.details(
+    html"Comment utiliser cela pour calculer le produit de grand nombres ?",
+    md"Un nombre représenté par les chiffres ``a_na_{n-1}\cdots a_1a_0`` est égal à ``a_n 10^n + a_{n-1} 10^{n-1} + \cdots + a_1 10 + a_0`` ou encore ``p(10)`` où ``p(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0``. Le produit de nombre peut donc être calculé via un produit de polynôme!",
 )
 
 # ╔═╡ 3524f1bf-8e39-4d04-9dc3-e434e65db409
-qa(
-	html"Que vaut la distance entre deux valeurs successive en temporel et en fréquentiel pour les signaux discrets ?",
-	md"""
-L'échelle temporelle ou fréquentielle n'est pas contenue dans ``X_k`` ou ``x_n``.
-Par contre, elles sont étroitement liées. On a
-```math
-\frac{k}{N}n = \frac{k}{N\Delta t} n\Delta t
-```
-Si on décide que l'écart temporel entre ``x_n`` et ``x_{n+1}`` est ``\Delta t``, on a ``t = n\Delta t``. Il faut alors que ``\xi = \frac{k}{N\Delta t}`` et donc l'écart fréquentiel entre ``X_k`` et ``X_{k+1}`` est ``\frac{1}{N\Delta t}``.
-""",
+PlutoUI.details(
+    html"Que vaut la distance entre deux valeurs successive en temporel et en fréquentiel pour les signaux discrets ?",
+    md"""
+    L'échelle temporelle ou fréquentielle n'est pas contenue dans ``X_k`` ou ``x_n``.
+    Par contre, elles sont étroitement liées. On a
+    ```math
+    \frac{k}{N}n = \frac{k}{N\Delta t} n\Delta t
+    ```
+    Si on décide que l'écart temporel entre ``x_n`` et ``x_{n+1}`` est ``\Delta t``, on a ``t = n\Delta t``. Il faut alors que ``\xi = \frac{k}{N\Delta t}`` et donc l'écart fréquentiel entre ``X_k`` et ``X_{k+1}`` est ``\frac{1}{N\Delta t}``.
+    """,
 )
 
 # ╔═╡ 57373c5b-a34a-4e48-af42-27a0bd05a173
-qa(
-	html"Que vaut le signal en dehors de ses N points ?",
-	md"""On a
-```math
-\begin{align}
-  X_{k + N} & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{(k + N)}{N} n}\\
-  & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{k}{N} n} e^{-i2\pi n}\\
-  & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{k}{N} n}\\
-  & = X_k
-\end{align}
-```
-Le signal est donc périodique !
-Plus précisément, la discrétisation en temporelle rend le signal fréquentiel périodique et la discrétisation en fréquentiel rend le signal temporel périodique.
-""",
+PlutoUI.details(
+    html"Que vaut le signal en dehors de ses N points ?",
+    md"""On a
+    ```math
+    \begin{align}
+      X_{k + N} & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{(k + N)}{N} n}\\
+      & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{k}{N} n} e^{-i2\pi n}\\
+      & = \sum_{n=0}^{N-1} x_n e^{-i 2\pi \frac{k}{N} n}\\
+      & = X_k
+    \end{align}
+    ```
+    Le signal est donc périodique !
+    Plus précisément, la discrétisation en temporelle rend le signal fréquentiel périodique et la discrétisation en fréquentiel rend le signal temporel périodique.
+    """,
 )
 
 # ╔═╡ b915e8c7-bc11-4f3f-88f0-a82dfe447643
-qa(
-	html"Que va-t-il advenir de la deuxième moitié du signal ?",
-	md"""
-Le nouveau signal de `0` à `t_max/2` sera la somme du signal de `0` à `t_max/2` et du signal de `t_max/2` à `t_max`.
-""",
+PlutoUI.details(
+    html"Que va-t-il advenir de la deuxième moitié du signal ?",
+    md"""
+    Le nouveau signal de `0` à `t_max/2` sera la somme du signal de `0` à `t_max/2` et du signal de `t_max/2` à `t_max`.
+    """,
 )
 
 # ╔═╡ ae2adccf-edfc-4cba-97d8-b440946c9b69
-qa(
-	html"Qu'observe-t-on dans la matrice ci-dessous ?",
-	md"""
-La partie mauve et bleue sont égales. La partie rouge est l'opposée de la partie verte.
-""",
+PlutoUI.details(
+    html"Qu'observe-t-on dans la matrice ci-dessous ?",
+    md"""
+    La partie mauve et bleue sont égales. La partie rouge est l'opposée de la partie verte.
+    """,
 )
 
 # ╔═╡ 7c96fc08-da4a-48e6-a43e-cd24c9aaef42
-qa(
-	html"Qu'observe-t-on en comparant cela à la matrice 2 fois plus petite ?",
-	md"""
-Les parties mauve et bleue sont égale à `F(N ÷ 2)`.
-La ligne `k` (en commençant à `k = 1`) est une rotation de ``2\pi(k-1)/N`` radians (donc une multiplication par ``z^{-(k-1)}``) par rapport à `F(N ÷ 2)`.
-""",
+PlutoUI.details(
+    html"Qu'observe-t-on en comparant cela à la matrice 2 fois plus petite ?",
+    md"""
+    Les parties mauve et bleue sont égale à `F(N ÷ 2)`.
+    La ligne `k` (en commençant à `k = 1`) est une rotation de ``2\pi(k-1)/N`` radians (donc une multiplication par ``z^{-(k-1)}``) par rapport à `F(N ÷ 2)`.
+    """,
 )
 
 # ╔═╡ e965ef01-1fb1-4479-941d-68404ebaf735
-qa(
-	html"Quel est la complexité de l'algorithme FFT.",
-	md"""
-Soit ``f_n`` le temps de calcul d'une transformée de fourier avec ``n`` points.
-Une fois avoir fait les appels récursifs, il reste un nombre linéaire d'opérations à faire. Soit ``\alpha, \beta`` tels qu'il reste ``\alpha n + \beta`` de temps de calcul après la récursion.
-```math
-\begin{align}
-f_n
-& = 2f_{n/2} + \alpha n + \beta\\
-& = 2(2f_{n/4} + \alpha n/2 + \beta) + \alpha n + \beta\\
-& = 4f_{n/4}+ 2\alpha n + 2\beta\\
-& = 4(2f_{n/8} + \alpha n/4 + \beta) + \alpha n + \beta\\
-& = 8f_{n/8} + 3\alpha n + 3\beta\\
-& = 16f_{n/16} + 4\alpha n + 4\beta\\
-& = \quad \vdots\\
-& = nf_{1} + \log_2(n)\alpha n + \log_2(n)\beta\\
-\end{align}
-```
-On a donc une complexité de ``O(n\log(n))``.
-""",
+PlutoUI.details(
+    html"Quel est la complexité de l'algorithme FFT.",
+    md"""
+    Soit ``f_n`` le temps de calcul d'une transformée de fourier avec ``n`` points.
+    Une fois avoir fait les appels récursifs, il reste un nombre linéaire d'opérations à faire. Soit ``\alpha, \beta`` tels qu'il reste ``\alpha n + \beta`` de temps de calcul après la récursion.
+    ```math
+    \begin{align}
+    f_n
+    & = 2f_{n/2} + \alpha n + \beta\\
+    & = 2(2f_{n/4} + \alpha n/2 + \beta) + \alpha n + \beta\\
+    & = 4f_{n/4}+ 2\alpha n + 2\beta\\
+    & = 4(2f_{n/8} + \alpha n/4 + \beta) + \alpha n + \beta\\
+    & = 8f_{n/8} + 3\alpha n + 3\beta\\
+    & = 16f_{n/16} + 4\alpha n + 4\beta\\
+    & = \quad \vdots\\
+    & = nf_{1} + \log_2(n)\alpha n + \log_2(n)\beta\\
+    \end{align}
+    ```
+    On a donc une complexité de ``O(n\log(n))``.
+    """,
 )
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -2819,13 +2793,10 @@ version = "1.9.2+0"
 # ╠═e3a7dd72-f106-4865-8b24-d86056782160
 # ╠═fad9cc89-a76c-4b93-9051-5f47b1251ab5
 # ╠═1817a169-0afc-4fff-be23-1ea510ff337a
-# ╠═0f87464a-1a55-4f7c-8a88-bf514f5177a0
-# ╠═9e6732a7-d2df-465f-a7fa-c119a64deb9a
 # ╠═0e9e8c6e-83ff-4c4c-b9d1-19a0593a3cba
 # ╠═5e5ff9b1-0a78-4e9c-9c90-4fb80b0dbe21
 # ╠═0d9e0a31-b229-4d06-92c9-0136404399da
 # ╠═f80595c3-6bbb-4b62-b03b-1c80cecaf7f9
 # ╠═792723a3-0011-422e-bbf4-798624913780
-# ╠═b0a265b8-e3fd-4a6c-b813-904d18ea83e7
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
