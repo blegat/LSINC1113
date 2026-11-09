@@ -4,7 +4,7 @@ The html versions accessible here are static, see [here](Lectures) for details o
 ## Lectures
 
 * Les nombres complexes [html](Lectures/complex.html) [pdf](Lectures/complex.pdf)
-* À la fréquence de Fourier [html](Lectures/fourier.html) [pdf](Lectures/fourier.pdf)
+* À la fréquence de Fourier [html](Lectures/fourier.html) [pdf](Lectures/fourier.pdf) [html 2026](Lectures/fourier_2026.html) [pdf 2026](Lectures/fourier_2026.pdf)
 * Dérivée à plusieurs variables [html](Lectures/gradient.html) [pdf](Lectures/gradient.pdf)
 * Intégrale bivariée [html](Lectures/integral.html) [pdf](Lectures/integral.pdf)
 * Graph Theory [html](Lectures/graph.html) [pdf](Lectures/graph.pdf)
