@@ -20,12 +20,12 @@ See the README in each subfolder for more details and troubleshooting:
 | S3    | 28/09/2026 | Fourier            | Fourier                 | 🚀 FFTB   |
 | S4    | 05/10/2026 | Gradient           | Gradient                |           |
 | S5    | 12/10/2026 | Intégrale          | Intégrale               | 🏁 FFTB   |
-| S6    | 19/10/2026 | Intégrale/Graphes  | Graphes/Spanning        | 🚀 graph  |
+| S6    | 19/10/2026 | Intégrale          | Intégrale               | 🚀 graph  |
 |       | 26/10/2026 | 🎃                 |                         |           |
-| S7    | 02/11/2026 | Graphes            | Shortest Path           |           |
+| S7    | 02/11/2026 | Graphes            | Spanning                |           |
 | S8    | 09/11/2026 | Graphes            | DAG                     |           |
-| S9    | 16/11/2026 | Graphes            |  Max-Flow               | 🏁 graph  |
-| S10   | 23/11/2026 | Th. Nombres        | Th. Nomb.               | 🚀 crypto |
-| S11   | 30/11/2026 | Th. nombres        | Recurrence              |           |
-| S12   | 07/12/2026 | Crypto             | Th. nombres             |           |
-| S13   | 14/12/2026 |                    | Th. nombres             | 🏁 crypto |
+| S9    | 16/11/2026 | Graphes            | Shortest Path           | 🏁 graph  |
+| S10   | 23/11/2026 | Graphes            | Max-Flow                | 🚀 crypto |
+| S11   | 30/11/2026 | Th. Nombres        | Recurrence              |           |
+| S12   | 07/12/2026 | Th. Nombres        | Th. nombres             |           |
+| S13   | 14/12/2026 | Crypto             | Th. nombres             | 🏁 crypto |
