@@ -809,7 +809,7 @@ md"""
 
 # ╔═╡ 877e5e67-b8a2-4d42-8043-47057a6df1ad
 hbox(
-    (md"Colonnes = $slider_ncols", md"Hauteur = $slider_nrows");
+    [md"Colonnes = $slider_ncols", md"Hauteur = $slider_nrows"];
     style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
@@ -818,7 +818,7 @@ md"Longueur = $slider_longueur" # Cols(md"Longueur = $slider_longueur", md"Gagna
 
 # ╔═╡ 9e45076a-a26d-4964-a31f-da58f40f9d50
 hbox(
-    (md"Colonnes = $slider_wooclap_ncols", md"Hauteur = $slider_wooclap_nrows");
+    [md"Colonnes = $slider_wooclap_ncols", md"Hauteur = $slider_wooclap_nrows"];
     style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
@@ -827,7 +827,7 @@ md"Quelle **structure de donnée** utiliser pour la mémoïsation : état du jeu
 
 # ╔═╡ 7613cf26-b429-4483-bf55-bb110e49f45e
 hbox(
-    (md"Colonnes = $slider_mem_ncols", md"Hauteur = $slider_mem_nrows");
+    [md"Colonnes = $slider_mem_ncols", md"Hauteur = $slider_mem_nrows"];
     style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
@@ -1144,7 +1144,7 @@ end
 
 # ╔═╡ 9e114f3b-77f2-4b06-bff2-35e36c806b56
 hbox(
-    (md"tour = $slider_tour", HTML(html(draw(play(nrows, ncols, cols[1:tour]), longueur))));
+    [md"tour = $slider_tour", HTML(html(draw(play(nrows, ncols, cols[1:tour]), longueur)))];
     style = Dict("justify-content" => "space-around", "align-items" => "center"),
 )
 
