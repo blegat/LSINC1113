@@ -1,0 +1,39 @@
+\titledquestion{Théorie des nombres}
+
+Vous êtes en exploration sur la planète Mercure avec votre collègue pendant un an.
+Comme il y a 88 jours par an sur Mercure, vous avez décidé de changer le calendrier en 11 semaines de 8 jours.
+Après un certain temps, vous êtes persuadé d'être le deuxième jour de la semaine et votre collègue pense être le premier jour de la semaine.
+Suite à une vive discussion, vous vous rendez compte que vous avez tous les deux raison, mais que votre collègue a choisi de séparer l'année en 8 semaines de 11 jours.
+
+\begin{parts}
+    \part Déterminez vous êtes quel jour de l'année.
+    \begin{solutionbox}{6cm}
+        Comme on travaille modulo, c'est plus simple de dire que le
+        premier jour est le jour 0.
+        Les deuxièmes jours pour moi sont tous les 8 jours donc:
+        $(1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89)$.
+        Les premiers jours de semaine pour mon collègue sont
+        $(0, 11, 22, 33, 44, 55, 66, 77)$.
+        On trouve donc 33 en commun.
+        On est donc le 34ième jour de l'année (on doit faire +1 car 0 est le premier jour).
+    \end{solutionbox}
+    \part Après le succès de votre exploration sur Mercure, vous voilà parti pour l'exploration de la planète Vénus ayant 10759 jours par an.
+    Vous décidez d'utiliser des semaines de 7 jours mais vos collègues ont décidé d'utiliser des semaines de 29 et 53 jours.
+    Vous arrivez à la même situation que précédemment où vous pensez être le 1er jour de l'année mais vos deux collègues pensent être le 2ième jour et le 3ième jour de l'année respectivement.
+    Par contre, cette fois-ci, vous avez pensé à prendre votre ordinateur portable avec vous.
+    Vous ne devez pas trouver le jour de l'année mais décrivez l'algorithme que vous utiliseriez pour le calculer.
+    \begin{solutionbox}{6.5cm}
+        On utilise le théorème des restes chinois,
+        on trouve
+        \begin{align*}
+            & 0 \cdot 1537 \cdot (1537^{-1} \pmod{7})
+            + 1 \cdot 371 \cdot (371^{-1} \pmod{29})\\
+            & + 2 \cdot 203 \cdot (203^{-1} \pmod{53})\\
+            & 0 \cdot 1537 \cdot 2 + 1 \cdot 371 \cdot 24 + 2 \cdot 203 \cdot 47 + \equiv 49505 \pmod{10759}\\
+            & \equiv 27986 \pmod{10759}\\
+            & \equiv 6468 \pmod{10759}.
+        \end{align*}
+        Donc vous êtes le 6469ième jour de l'année.
+        Pour trouver l'inverse modulo on utilise l'algorithme d'Euclide étendu.
+    \end{solutionbox}
+\end{parts}
